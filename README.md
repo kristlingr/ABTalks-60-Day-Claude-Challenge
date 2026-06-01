@@ -10,4 +10,4 @@ Twinkle Grover is a Data Scientist at EXL Service with a strong background in he
 
 ## Day 01
 
-- Poster documentation: [day-01/output/poster.svg](day-01/output/poster.svg)
+- Poster documentation: [day-01/output/AI Personality Profile .jpeg](day-01/output/AI Personality Profile .jpeg)
