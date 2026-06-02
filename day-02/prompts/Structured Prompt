@@ -1,10 +1,395 @@
 You're an AI educator explaining prompt engineering to complete beginners. Provide a concise, accessible explanation in three sections, plus a LinkedIn-ready image concept.
 Structure and deliverable details:  
 
-Section 1: Explanation - Define Prompt Engineering in simple language. - Explain why it matters when using AI tools (e.g., Claude). - Include one concrete example of a weak prompt and why it’s weak. - Include one concrete example of an improved prompt and why it’s better. - List three practical benefits of writing better prompts.
+## Canvas & Layout
 
-Section 2: Weak vs Improved Prompt Example - Present a short, concrete pair:   - Weak Prompt: a single, vague instruction.   - Improved Prompt: the same task reframed with specifics (role, scope, constraints, desired output). - Briefly explain why the improved version is more effective.  
+* Create a **vertical LinkedIn infographic**
+* Size: **1400 × 3200 px** (larger canvas for readability)
+* Portrait orientation
+* Premium educational infographic
+* Corporate SaaS design
+* Clean grid system
+* Consistent spacing throughout
+* Large header section (20–25% of total height)
+* Multiple content cards with rounded corners
+* Plenty of whitespace
+* High-resolution output
 
-Section 3: Detailed Image Generation Prompt - Provide a ready-to-use prompt for generating a square LinkedIn image (1080×1080) with a Claude-inspired brown, beige, and cream palette. - Visual requirements:   - Professional and minimal design   - Main title: "Prompt Engineering"   - Visual comparison area showing:     - Weak Prompt → Basic Output     - Engineered Prompt → Better Output   - Include a modern AI/productivity theme   - Include the heading: "abtalks 60 days Claude challenge"   - Additional tips for the image generator (aspect ratio, style notes, font suggestions, metadata for consistent rendering)  Tone and length: - Keep concise and beginner-friendly, roughly 750–1100 words total.  
+## Color Palette
 
-Deliverable: - A clean, bullet-point friendly write-up suitable for onboarding materials.
+* Dark Brown: #622B14
+* Olive Green: #546B41
+* Beige: #978F66
+* Light Cream: #E4D6A9
+* Sage Green: #99AD7A
+* Soft white background
+* Subtle gradients
+* Warm Claude-inspired aesthetics
+
+---
+
+## Typography
+
+* Inter Bold
+* Manrope
+* Plus Jakarta Sans
+* Large readable headings
+* Clear hierarchy
+* Professional corporate style
+* Sharp text rendering
+
+# HEADER (Large Hero Section)
+
+### Main Title
+
+PROMPT ENGINEERING
+FOR DATA ANALYSIS
+
+### Subtitle
+
+abtalks 60 Days Claude Challenge
+
+### Header Design
+
+* Large centered title
+* AI neural network icon on left
+* Analytics dashboard icon on right
+* Circuit-board pattern background
+* Dark brown gradient banner
+* Professional hero section
+* Premium SaaS appearance
+
+---
+
+# UNDERSTANDING PROMPT ENGINEERING FOR DATA ANALYSIS
+
+## What is Prompt Engineering?
+
+Prompt Engineering is the practice of writing clear, structured instructions that help AI understand objectives and generate accurate, relevant, and actionable outputs.
+
+### Icon
+
+* Lightbulb
+* AI brain
+* Chat prompt symbol
+
+---
+
+## Why Does It Matter?
+
+Good prompts help AI tools deliver better results throughout the analytics workflow.
+
+### Feature Cards
+
+* Data Analysis
+* SQL Query Creation
+* Python Code Generation
+* Dashboard Design
+* Insight Generation
+* Business Recommendations
+
+---
+
+## Better Prompts Lead To
+
+### Benefit Icons
+
+* More Accurate Insights
+* Better Code Quality
+* Less Rework
+* Faster Decision Making
+
+---
+
+# CORE PRINCIPLES OF PROMPT ENGINEERING
+
+## Principle 1 — Be Specific
+
+❌ Analyze this dataset.
+
+✅ Analyze employee utilization data and identify productivity trends, workload imbalances, and underutilized resources.
+
+---
+
+## Principle 2 — Provide Context
+
+❌ Explain customer churn.
+
+✅ Explain customer churn for a SaaS subscription company operating on a monthly billing model.
+
+---
+
+## Principle 3 — Define a Role
+
+Examples:
+
+* Senior Data Analyst
+* Data Scientist
+* Business Intelligence Consultant
+
+---
+
+## Principle 4 — Specify Output Format
+
+Examples:
+
+* Bullet Points
+* Executive Summary
+* KPI Table
+* SQL Query
+* Python Code
+* Dashboard Recommendations
+
+---
+
+## Principle 5 — Add Constraints
+
+Examples:
+
+* Maximum 200 words
+* Beginner-friendly language
+* Provide 5 recommendations
+* Avoid technical jargon
+
+---
+
+# PROMPT ENGINEERING FORMULA
+
+### Visual Formula
+
+Role
++
+Task
++
+Context
++
+Constraints
++
+Output Format
+
+### Example Prompt
+
+Act as a Senior Data Analyst.
+
+Analyze employee performance data containing employee ID, department, project hours, and utilization percentage.
+
+Identify:
+
+* Top performers
+* Underutilized employees
+* Workload imbalances
+
+Provide:
+
+* 5 recommendations
+* Business-friendly summary
+* KPI table
+
+---
+
+# WEAK VS IMPROVED DATA ANALYSIS PROMPT
+
+## Weak Prompt
+
+Analyze this dataset.
+
+### Why It's Weak
+
+* No context
+* No objective
+* No output format
+* AI must make assumptions
+
+---
+
+## Improved Prompt
+
+Act as a Senior Data Analyst.
+
+Analyze employee utilization data containing:
+
+* Employee ID
+* Project Name
+* Hours Worked
+* Date
+
+Identify:
+
+* Utilization trends
+* Underutilized resources
+* Workload imbalances
+
+Provide:
+
+* 5 recommendations
+* Bullet-point findings
+* Suggested visualizations
+
+### Why It's Better
+
+* Defines role
+* Provides context
+* Specifies objective
+* Defines output
+* Produces actionable insights
+
+---
+
+# WEAK VS IMPROVED PROMPT COMPARISON
+
+## Weak Prompt
+
+Explain customer churn.
+
+---
+
+## Improved Prompt
+
+Act as a Customer Analytics Specialist.
+
+Explain customer churn for business stakeholders using simple language.
+
+Include:
+
+* Definition
+* Three common causes
+* Three churn metrics
+* Two retention strategies
+* Bullet-point format
+* Maximum 250 words
+
+---
+
+# WHY IT WORKS BETTER
+
+### Key Benefits
+
+* Role improves expertise
+* Context improves relevance
+* Constraints improve focus
+* Output formatting improves readability
+* Specific requirements reduce ambiguity
+
+---
+
+# THREE PRACTICAL BENEFITS OF BETTER PROMPTS
+
+### Card 1
+
+Better Insights
+
+Structured prompts uncover deeper patterns, trends, and relationships hidden in data.
+
+---
+
+### Card 2
+
+Faster Analysis
+
+Clear prompts reduce back-and-forth clarification and generate useful outputs faster.
+
+---
+
+### Card 3
+
+Smarter Decisions
+
+Better analysis leads to more actionable recommendations and stronger business outcomes.
+
+---
+
+# BOTTOM VISUAL COMPARISON
+
+## Left Side
+
+### Weak Prompt
+
+Analyze this dataset.
+
+### Basic Output
+
+* Generic observations
+* Limited insights
+* No recommendations
+
+Visual:
+
+* Chat bubble
+* Dataset icon
+
+---
+
+## Right Side
+
+### Engineered Prompt
+
+Act as a Senior Data Analyst.
+
+Identify:
+
+* Trends
+* Anomalies
+* KPIs
+* Recommendations
+
+### Better Output
+
+* Actionable insights
+* Business recommendations
+* Decision-ready analysis
+
+Visual:
+
+* Analytics dashboard
+* KPI cards
+* Charts
+* Trend lines
+
+### KPI Widgets
+
+Revenue ↑ 18%
+
+Utilization 82%
+
+Projects 24
+
+---
+
+# FOOTER
+
+### Three Benefit Pills
+
+✓ Better Insights
+
+✓ Faster Analysis
+
+✓ Smarter Decisions
+
+### Footer Quote
+
+"Great prompts don't just get answers—they drive insights, actions, and impact."
+
+---
+
+## Rendering Instructions
+
+* Ultra-sharp typography
+* All text fully visible
+* No cropped content
+* No spelling mistakes
+* Premium LinkedIn learning content
+* Modern SaaS infographic style
+* Dashboard-inspired visuals
+* Realistic KPI widgets
+* Vector illustration style
+* Consistent iconography
+* Perfect alignment
+* Print-quality export
+* 1400×3200 px
+* High readability
+* Professional educational infographic
+* No watermark
+* No placeholder text
+* Large hero header with prominent title and subtitle
+* Ensure the header occupies significantly more space than standard infographic headers for maximum visual impact.
+
