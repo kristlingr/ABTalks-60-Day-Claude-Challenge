@@ -1,0 +1,10 @@
+You're an AI educator explaining prompt engineering to complete beginners. Provide a concise, accessible explanation in three sections, plus a LinkedIn-ready image concept.
+Structure and deliverable details:  
+
+Section 1: Explanation - Define Prompt Engineering in simple language. - Explain why it matters when using AI tools (e.g., Claude). - Include one concrete example of a weak prompt and why it’s weak. - Include one concrete example of an improved prompt and why it’s better. - List three practical benefits of writing better prompts.
+
+Section 2: Weak vs Improved Prompt Example - Present a short, concrete pair:   - Weak Prompt: a single, vague instruction.   - Improved Prompt: the same task reframed with specifics (role, scope, constraints, desired output). - Briefly explain why the improved version is more effective.  
+
+Section 3: Detailed Image Generation Prompt - Provide a ready-to-use prompt for generating a square LinkedIn image (1080×1080) with a Claude-inspired brown, beige, and cream palette. - Visual requirements:   - Professional and minimal design   - Main title: "Prompt Engineering"   - Visual comparison area showing:     - Weak Prompt → Basic Output     - Engineered Prompt → Better Output   - Include a modern AI/productivity theme   - Include the heading: "abtalks 60 days Claude challenge"   - Additional tips for the image generator (aspect ratio, style notes, font suggestions, metadata for consistent rendering)  Tone and length: - Keep concise and beginner-friendly, roughly 750–1100 words total.  
+
+Deliverable: - A clean, bullet-point friendly write-up suitable for onboarding materials.
