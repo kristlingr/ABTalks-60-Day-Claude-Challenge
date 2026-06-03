@@ -1,0 +1,268 @@
+
+📘 Role Prompting & Zero-Shot Prompting — Learning Notes
+1. What is Prompt Engineering?
+Prompt Engineering is the practice of designing clear instructions that help AI generate accurate, relevant, and useful responses.
+
+Goal:
+Convert a vague question into a structured request.
+
+Example:
+
+❌ Weak Prompt
+
+Tell me about machine learning.
+✅ Better Prompt
+
+Explain machine learning to a healthcare insurance analyst transitioning into data science.
+Include examples and a learning roadmap.
+2. Zero-Shot Prompting
+Definition
+Zero-Shot Prompting means giving AI a task without providing any examples.
+
+The model uses its pre-trained knowledge to complete the task.
+
+Structure
+Task + Instructions
+Example
+Summarize this article in 5 bullet points.
+No examples are given.
+
+Advantages
+✅ Fast
+
+✅ Easy to write
+
+✅ Works for most tasks
+
+✅ Great for brainstorming
+
+Limitations
+❌ May not follow desired format
+
+❌ Output quality can vary
+
+❌ Complex reasoning may be weaker
+
+Best Use Cases
+Summarization
+
+Explanations
+
+Brainstorming
+
+Research
+
+Quick learning
+
+3. Role Prompting
+Definition
+Role Prompting means assigning a role, expertise, or perspective to the AI before giving a task.
+
+Instead of asking:
+
+Explain Power BI.
+You ask:
+
+Act as a Senior Business Intelligence Consultant.
+
+Explain Power BI for an insurance analyst.
+Why It Works
+Role Prompting helps AI:
+
+Understand context
+
+Adjust tone
+
+Use domain knowledge
+
+Produce expert-level answers
+
+Formula
+You are a [ROLE].
+
+Context:
+[BACKGROUND]
+
+Task:
+[REQUEST]
+
+Output:
+[FORMAT]
+4. Role Prompting Framework
+Step 1 → Choose Role
+Examples:
+
+Data Scientist
+Healthcare Analyst
+Career Coach
+Product Manager
+SQL Architect
+Step 2 → Provide Context
+Example:
+
+I have 7 years of healthcare insurance experience.
+Step 3 → Define Objective
+Example:
+
+Suggest machine learning projects.
+Step 4 → Add Constraints
+Example:
+
+Beginner friendly
+Claims dataset only
+Step 5 → Define Output
+Example:
+
+Provide answer in table format.
+5. Prompt Anatomy
+A strong prompt contains:
+
+Role
+Context
+Task
+Constraints
+Output Format
+Example
+You are a Senior Data Scientist.
+
+Context:
+I have 7 years of healthcare insurance experience.
+
+Task:
+Suggest ML projects using claims data.
+
+Constraints:
+Beginner to intermediate level.
+
+Output:
+Table with project name, business value and difficulty.
+6. Prompt Quality Ladder
+Level 1
+Teach me SQL.
+Level 2
+Teach me SQL for healthcare analytics.
+Level 3
+Act as a Senior SQL Trainer.
+
+Teach SQL for healthcare analytics using claims data examples.
+Provide exercises after each topic.
+The more context you provide, the better the response.
+
+7. Combining Zero-Shot + Role Prompting
+This is one of the most effective techniques.
+
+Formula
+Role + Task + Constraints + Format
+Example:
+
+Act as a LinkedIn Branding Expert.
+
+Write a LinkedIn post about AI automation.
+
+Requirements:
+- Professional tone
+- 200 words
+- Include CTA
+No examples needed.
+
+8. High-Performance Prompt Framework
+RCTOF Framework
+R → Role
+Who should AI become?
+
+Act as a Senior Healthcare Data Scientist.
+C → Context
+What background should AI know?
+
+I work in healthcare insurance.
+T → Task
+What should AI do?
+
+Suggest projects.
+O → Output
+How should answer look?
+
+Provide a comparison table.
+F → Format
+Specific structure.
+
+Markdown table.
+9. Role Library
+Learning
+Act as an AI Mentor.
+SQL
+Act as a Senior SQL Architect.
+Power BI
+Act as a BI Solution Architect.
+Python
+Act as a Python Coach.
+Machine Learning
+Act as a Lead Data Scientist.
+Career Growth
+Act as a Healthcare Analytics Hiring Manager.
+Interview Preparation
+Act as a Fortune 500 Interviewer.
+LinkedIn
+Act as a Personal Branding Strategist.
+10. Common Mistakes
+Mistake 1
+Too vague
+
+❌
+
+Help me.
+Mistake 2
+No role
+
+❌
+
+Explain claims data.
+Mistake 3
+No output format
+
+❌
+
+Create roadmap.
+Mistake 4
+No context
+
+❌
+
+Suggest projects.
+11. Golden Prompt Template
+You are a [ROLE].
+
+Context:
+[BACKGROUND]
+
+Objective:
+[WHAT I WANT]
+
+Constraints:
+[RULES]
+
+Think step-by-step.
+
+Output Format:
+[EXACT STRUCTURE]
+12. Key Takeaways
+Remember:
+Zero-Shot = Task without examples.
+
+Role Prompting = Assign expertise/persona.
+
+Context improves relevance.
+
+Constraints improve accuracy.
+
+Output format improves consistency.
+
+Role + Context + Task + Constraints + Output = Professional-grade prompts.
+
+For most real-world work, Role Prompting + Zero-Shot is enough to get high-quality results.
+
+One-Line Summary
+The quality of AI output is directly proportional to the clarity of the role, context, task, constraints, and output format you provide. 🚀
+
+
+✨ Optimize Prompt
