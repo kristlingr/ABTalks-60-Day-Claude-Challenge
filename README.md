@@ -16,3 +16,8 @@ Twinkle Grover is a Data Scientist at EXL Service with a strong background in he
 
 - Prompt engineering notes documented in [day-02/day2.md](day-02/day2.md)
 - Day 02 is now in progress with prompt engineering exercises and examples.
+
+## Day 03
+
+- Day 03 is documented and in progress.
+- Related work can be added under [day-03/](day-03/).
