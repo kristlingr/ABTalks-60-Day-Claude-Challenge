@@ -1,0 +1,105 @@
+
+
+ Chain of Thought (CoT) Prompting 
+
+ What is CoT?
+
+CoT prompting is a technique where the model generates step-by-step intermediate explanations before arriving at an answer. This helps improve accuracy and makes the output clearer and more reliable. It can be combined with few-shot prompting to get better results on more complex tasks that require reasoning before responding.
+
+ CoT is an *emergent ability* — it only arises with sufficiently large language models.
+
+---
+
+How it Works
+
+The model interprets the input, breaks it into logical steps, and produces the final output after reasoning. This process can be refined or repeated to improve accuracy.
+
+Example Math- 
+Instead of directly answering "What is 39 × 21?", CoT breaks it down:
+- Multiply 30 by 21 = 630
+- Multiply 9 by 21 = 189
+- Add 630 + 189 = **819**
+
+Example — Zero-Shot trigger (Prompt Engineering Guide):
+Without CoT: "I went to the market and bought 10 apples..." → model answers **11** (wrong).
+With "Let's think step by step" appended, the model walks through each transaction correctly and arrives at **10**.
+
+---
+
+Why it Matters (Importance)
+
+**Structured Reasoning** — breaks complex problems into smaller, manageable steps, encouraging logical flow and reducing confusion in multi-step tasks.
+
+**Improved Transparency** — makes the reasoning process visible to users, helping them understand how the final answer is derived and increasing trust in model outputs.
+
+**Higher Accuracy** — minimizes errors by avoiding skipped steps, ensuring better handling of complex reasoning tasks with more consistent results.
+
+**Versatility** — effective for math, logical reasoning, and decision-making; useful in NLP tasks like question answering and summarization.
+
+---
+
+CoT Variants
+
+1. Few-Shot CoT
+Provide worked examples that include full reasoning chains, not just answers. Even a single example with a reasoning chain can be enough for the model to follow the pattern on a new problem.
+
+2. Zero-Shot CoT
+Proposed by Kojima et al. (2022) — essentially just adding "Let's think step by step" to the original prompt. Particularly useful where you don't have too many examples to use.
+
+3. Auto-CoT
+Proposed by Zhang et al. (2022) to eliminate manual effort of crafting demonstrations. It uses LLMs with "Let's think step by step" to automatically generate reasoning chains. Since auto-generated chains can contain mistakes, diversity of demonstrations is critical.
+
+Auto-CoT runs in two stages:
+- Stage 1 — Question Clustering:** partition questions from a dataset into a few clusters
+- Stage 2 — Demonstration Sampling:** select a representative question from each cluster and generate its reasoning chain using Zero-Shot CoT with simple heuristics (e.g., ~60 tokens per question, ~5 reasoning steps)
+
+4. Chain-of-Draft (CoD)** *(newer)*
+A token-efficient evolution — produces minimal draft-style reasoning instead of verbose steps. Matches CoT accuracy at lower cost and latency. Best for production/real-time applications.
+
+---
+
+ CoT vs Other Prompting Methods
+
+| Technique         | How it works                           | Reasoning quality             |
+| ----------------- | -------------------------------------- | ----------------------------- |
+| **Zero-Shot**     | No examples; direct answer             | Weakest for complex tasks     |
+| **Few-Shot**      | A few examples, no reasoning shown     | Better, but unstructured      |
+| **Few-Shot CoT**  | Examples include full reasoning chains | Best for multi-step tasks     |
+| **Zero-Shot CoT** | Append *"Let's think step by step"*    | Strong, no examples needed    |
+| **Auto-CoT**      | Auto-generates diverse demonstrations  | Scalable, reduces manual work |
+
+
+
+
+Trigger Phrases That Work
+
+- "Let's think step by step."*
+- "Let's work this out in a step-by-step way to be sure we have the right answer."*
+
+
+Applications
+
+Math Problem Solving— breaks down multi-step arithmetic or algebraic reasoning step by step.
+
+Commonsense Reasoning — handles tasks where models must consider various factors and make decisions that seem intuitive to humans but are complex for AI (e.g., ordering comparisons like "Who is the shortest?").
+
+Logical Puzzles & Games — particularly useful where understanding the process is as important as the answer itself.
+
+Story Generation — guides the AI through logical plot progression, ensuring coherence and consistency throughout.
+
+---
+
+ Advantages
+
+✅ Fewer mistakes — intermediate steps reduce the chance of skipping logic
+✅ Transparent outputs — users can audit the reasoning path
+✅ Better performance on math, logic, commonsense, and NLP tasks
+✅ Flexible — works few-shot, zero-shot, or automated
+
+ Limitations
+
+❌ Computationally expensive — more tokens generated per query
+❌ Requires high-quality training data that includes both answers *and* reasoning steps
+❌ In complex tasks, the model may struggle to maintain coherent reasoning across many steps
+❌ Only works well at sufficient model scale (emergent capability)
+
