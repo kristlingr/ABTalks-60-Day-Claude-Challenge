@@ -21,3 +21,8 @@ Twinkle Grover is a Data Scientist at EXL Service with a strong background in he
 
 - Day 03 is documented and in progress.
 - Related work can be added under [day-03/](day-03/).
+
+## Day 04
+
+- Day 04 is documented and organized in [day-04/](day-04/).
+- Challenge content focuses on career strategy and roadmap generation using Chain-of-Thought reasoning.
