@@ -24,10 +24,15 @@ Twinkle Grover is a Data Scientist at EXL Service with a strong background in he
 
 ## Day 04
 
-- Day 04 is documented and organized in [day-04/](day-04/).
+- Day 04 is documented and organized in [day-04/](day-04/)
 - Challenge content focuses on career strategy and roadmap generation using Chain-of-Thought reasoning.
 
 ## Day 05
 
-- Day 05 is documented and organized in [day-05/](day-05/).
+- Day 05 is documented and organized in [day-05/](day-05/)
 - Challenge content involves exploring AI roadmaps and comparative analysis between DSML and AI Engineer career paths.
+
+## Day 06
+
+- Day 06 is documented and organized in [day-06/](day-06/)
+- Related work and learning notes can be added under [day-06/notes/](day-06/notes/) and outputs in [day-06/outputs/](day-06/outputs/).
