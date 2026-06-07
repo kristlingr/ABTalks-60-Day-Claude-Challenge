@@ -36,3 +36,13 @@ Twinkle Grover is a Data Scientist at EXL Service with a strong background in he
 
 - Day 06 is documented and organized in [day-06/](day-06/)
 - Related work and learning notes can be added under [day-06/notes/](day-06/notes/) and outputs in [day-06/outputs/](day-06/outputs/).
+
+## Day 07
+
+- Day 07 is documented and organized in [day-07/](day-07/)
+- Related work and learning notes can be added under [day-07/notes/](day-07/notes/) and outputs in [day-07/outputs/](day-07/outputs/).
+
+## Day 08
+
+- Day 08 is documented and organized in [day-08/](day-08/)
+- Related work and learning notes can be added under [day-08/notes/](day-08/notes/) and outputs in [day-08/outputs/](day-08/outputs/).
