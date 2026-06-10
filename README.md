@@ -50,4 +50,9 @@ Twinkle Grover is a Data Scientist at EXL Service with a strong background in he
 ## Day 09
 
 - Day 09 is documented and organized in [day-09/](day-09/)
-- Related work and learning notes can be added under [day-09/notes/](day-09/notes/) and outputs in [day-09/outputs/](day-09/outputs/).
+- Challenge content focuses on building a Nutrition Analytics Platform using single-prompt engineering and Claude Artifacts.
+
+## Day 10
+
+- Day 10 is documented and organized in [day-10/](day-10/)
+- Related work and learning notes can be added under [day-10/notes/](day-10/notes/) and outputs in [day-10/outputs/](day-10/outputs/).
