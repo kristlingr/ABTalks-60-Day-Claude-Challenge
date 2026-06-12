@@ -1,6 +1,6 @@
 # Day 12
 
-Key Learnings
+# Key Learnings:
 Business understanding is as important as technical expertise.
 The best models solve business problems, not just prediction tasks.
 Feature engineering often creates more value than changing algorithms.
