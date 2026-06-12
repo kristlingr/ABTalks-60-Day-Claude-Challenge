@@ -1,3 +1,3 @@
-# Day 12 Template
+# Day 12
 
 Content here.
