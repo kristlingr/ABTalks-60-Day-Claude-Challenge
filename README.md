@@ -1,5 +1,13 @@
 # ABTalks 60-Day Claude Challenge
 
+- [Day 01](day-01/day1.md)
+- [Day 02](day-02/day2.md)
+- [Day 03](day-03/day3.md)
+- [Day 04](day-04/day4.md)
+- [Day 05](day-05/day5.md)
+- [Day 06](day-06/day6.md)
+- [Day 07](day-07/day7.md)
+- [Day 08](day-08/day8.md)
 - [Day 09](day-09/day9.md)
 - [Day 10](day-10/day10.md)
 - [Day 11](day-11/day11.md)
