@@ -1,13 +1,17 @@
-# Day 15: Claude Challenge
+# Day 15: Predictive Health Modeling & Wearable Integration
 
 ## Notes
-- [Insert notes about today's challenge here]
+- **Focus:** Bridging the gap between raw wearable data and actionable health predictions.
+- **Learning:** Explored how to integrate real-time biometric data (from Oura/Fitbit) with predictive modeling to move from "descriptive" health tracking to "prescriptive" wellness.
+- **Takeaway:** The future of healthcare analytics lies in the ability to process high-velocity wearable data to identify health trends before they become clinical issues.
 
 ## Prompts
-- [Insert the prompts used today]
+- **Objective:** Design a system architecture that ingests wearable API data, applies a random forest classifier for sleep quality prediction, and provides personalized recovery recommendations.
+- **Used Prompt:** [Pending Upload to prompts/ folder]
 
 ## Outputs
-- [Describe or link to the outputs generated]
+- **Architecture Diagram:** Concept for a Nutrition + Biometric sync engine (linked to NutriScope Vital).
+- **Predictive Model Blueprint:** Drafted a Python-based logic for correlating daily activity levels with nocturnal heart rate variability (HRV).
 
 ## Screenshots
-- [Include any relevant screenshots or media]
+- [Placeholder for Model Output Screenshots]
