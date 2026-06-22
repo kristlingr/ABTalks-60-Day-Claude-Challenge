@@ -1,0 +1,138 @@
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);color:var(--color-text-primary)}
+.wrap{padding:1rem 0}
+.header{margin-bottom:1.5rem}
+.header h1{font-size:18px;font-weight:500;margin-bottom:4px}
+.header p{font-size:13px;color:var(--color-text-secondary)}
+.section{margin-bottom:1.5rem}
+.section-title{font-size:13px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.75rem;display:flex;align-items:center;gap:6px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:1rem}
+.card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.85rem 1rem;border:0.5px solid var(--color-border-tertiary)}
+.card .label{font-size:12px;color:var(--color-text-secondary);margin-bottom:4px}
+.card .value{font-size:15px;font-weight:500}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500}
+.badge.high{background:var(--color-background-danger);color:var(--color-text-danger)}
+.badge.med{background:var(--color-background-warning);color:var(--color-text-warning)}
+.badge.low{background:var(--color-background-success);color:var(--color-text-success)}
+.badge.conflict{background:var(--color-background-warning);color:var(--color-text-warning)}
+.badge.open{background:var(--color-background-info);color:var(--color-text-info)}
+.badge.pending{background:var(--color-background-secondary);color:var(--color-text-secondary);border:0.5px solid var(--color-border-secondary)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-weight:500;font-size:12px;color:var(--color-text-secondary);padding:8px 10px;border-bottom:0.5px solid var(--color-border-tertiary)}
+td{padding:9px 10px;border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:top;line-height:1.5}
+tr:last-child td{border-bottom:none}
+.list-item{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.75rem 1rem;margin-bottom:8px;font-size:13px;line-height:1.6}
+.list-item .meta{font-size:11px;color:var(--color-text-secondary);margin-top:4px}
+.collapsible summary{cursor:pointer;font-size:13px;font-weight:500;padding:.65rem 0;list-style:none;display:flex;justify-content:space-between;align-items:center;color:var(--color-text-primary)}
+.collapsible summary::after{content:"›";transform:rotate(90deg);display:inline-block;transition:transform .2s;font-size:16px;color:var(--color-text-secondary)}
+.collapsible[open] summary::after{transform:rotate(270deg)}
+.collapsible{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:0 1rem;margin-bottom:8px;background:var(--color-background-primary)}
+.collapsible-body{padding:.5rem 0 .75rem}
+.conflict-item{background:var(--color-background-warning);border:0.5px solid var(--color-border-warning);border-radius:var(--border-radius-md);padding:.75rem 1rem;margin-bottom:8px;font-size:13px;line-height:1.6}
+.sep{height:0.5px;background:var(--color-border-tertiary);margin:1.5rem 0}
+</style>
+<div class="wrap">
+  <div class="header">
+    <h1>Quarterly Growth Strategy Meeting</h1>
+    <p>Meeting transcript · Q2 performance review · Topics: revenue, conversion, engineering capacity, retention, hiring, conference</p>
+  </div>
+
+  <div class="section">
+    <div class="section-title">📊 Summary</div>
+    <div class="list-item">Q2 revenue grew 12%, falling short of the 18% annual target. Five enterprise deals slipped to next quarter due to procurement delays and security review requests. Engineering is near capacity with the August analytics dashboard release. A website redesign is proposed to improve conversion rates, but cost estimates are pending. Customer retention is strong at 94%, though support ticket volume has increased — primarily due to reporting performance issues already flagged as a known engineering problem. Hiring decisions and the customer conference budget are both deferred pending further data.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">💡 Key Takeaways</div>
+    <div class="cards">
+      <div class="card"><div class="label">Q2 Revenue Growth</div><div class="value">12% <span style="font-size:12px;color:var(--color-text-secondary)">(target: 18%)</span></div></div>
+      <div class="card"><div class="label">Enterprise Deals Closed</div><div class="value">9 / 14 expected</div></div>
+      <div class="card"><div class="label">Website Traffic Growth</div><div class="value">+34% QoQ</div></div>
+      <div class="card"><div class="label">Customer Retention</div><div class="value">94%</div></div>
+    </div>
+    <div class="list-item">Procurement delays and security review requests caused 5 enterprise deals to slip — biggest driver of revenue gap.<div class="meta">Head of Sales</div></div>
+    <div class="list-item">Reporting performance is affecting both customer support ticket volume and sales prospects — CEO flagged as a priority issue.<div class="meta">CEO + Customer Success + Head of Sales</div></div>
+    <div class="list-item">Website redesign and simplified demo-request flow planned to improve conversion rates, but timeline clashes with engineering capacity.<div class="meta">VP Marketing + CTO</div></div>
+    <div class="list-item">No public commitment on August analytics dashboard release date until engineering milestone review is complete.<div class="meta">CEO decision</div></div>
+  </div>
+
+  <div class="sep"></div>
+
+  <div class="section">
+    <div class="section-title">✅ Action Items</div>
+    <table>
+      <thead><tr><th>Task</th><th>Owner</th><th>Deadline</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>Get cost estimate for website work (after architecture review)</td><td>CTO</td><td>Not specified</td><td><span class="badge high">🔴 High Priority</span></td></tr>
+        <tr><td>Obtain CEO approval before any additional website spend</td><td>CEO</td><td>After cost estimate received</td><td><span class="badge pending">⏳ Pending</span></td></tr>
+        <tr><td>Complete engineering milestone review for analytics dashboard</td><td>Engineering / CTO</td><td>Before August release</td><td><span class="badge pending">⏳ Pending</span></td></tr>
+        <tr><td>Investigate and resolve reporting performance + dashboard loading issues</td><td>Engineering team</td><td>Not specified</td><td><span class="badge high">🔴 High Priority</span></td></tr>
+        <tr><td>Collect final vendor proposals for customer conference</td><td>CFO / VP Marketing</td><td>Before next month's meeting</td><td><span class="badge pending">⏳ Pending</span></td></tr>
+        <tr><td>Revisit customer conference budget</td><td>CEO + CFO</td><td>Next month</td><td><span class="badge pending">⏳ Pending</span></td></tr>
+        <tr><td>Finalize Q3 forecasts before making hiring decisions</td><td>All department heads</td><td>Not specified</td><td><span class="badge med">🟠 Medium Priority</span></td></tr>
+        <tr><td>Follow up on open items at next week's leadership meeting</td><td>All leadership</td><td>Next week</td><td><span class="badge pending">⏳ Pending</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sep"></div>
+
+  <div class="section">
+    <div class="section-title">❓ Open Questions</div>
+    <div class="list-item"><span class="badge open">❓ Open Question</span>&nbsp; Can the 5 slipped enterprise deals be recovered in Q3, or will the annual target be missed?<div class="meta">Raised by CFO</div></div>
+    <div class="list-item"><span class="badge open">❓ Open Question</span>&nbsp; What is the cost of additional contractors for website work? Architecture review not yet done.<div class="meta">Raised by CFO; estimate pending from CTO</div></div>
+    <div class="list-item"><span class="badge open">❓ Open Question</span>&nbsp; Will the analytics dashboard launch on time in August? CTO cannot currently guarantee the date.<div class="meta">Raised by Head of Sales re: conference announcement</div></div>
+    <div class="list-item"><span class="badge open">❓ Open Question</span>&nbsp; Should the analytics dashboard be announced at the customer conference? Decision deferred until milestone review.<div class="meta">CEO decision pending</div></div>
+    <div class="list-item"><span class="badge open">❓ Open Question</span>&nbsp; What headcount is actually needed? Department heads submitted conflicting requests.<div class="meta">Deferred until Q3 forecasts finalized</div></div>
+  </div>
+
+  <div class="sep"></div>
+
+  <div class="section">
+    <div class="section-title">⚠️ Risks & Blockers</div>
+    <div class="list-item"><strong>Annual revenue target at risk.</strong> If the 5 slipped enterprise deals move again in Q3, the annual commitment will likely be missed.<div class="meta">CFO</div></div>
+    <div class="list-item"><strong>Engineering at or near capacity.</strong> Adding major website work may require contractor hiring — cost unknown until architecture review completes.<div class="meta">CTO</div></div>
+    <div class="list-item"><strong>Reporting performance is a dual-sided risk.</strong> Driving up support ticket volume AND affecting sales prospects. Known issue; fix in progress but not resolved.<div class="meta">Customer Success Lead + Head of Sales</div></div>
+    <div class="list-item"><strong>August dashboard release date not guaranteed.</strong> Public commitments or conference announcements should not be made until milestone review is complete.<div class="meta">CTO</div></div>
+  </div>
+
+  <div class="sep"></div>
+
+  <div class="section">
+    <div class="section-title">⚠️ Conflicts</div>
+    <div class="conflict-item"><span class="badge conflict">⚠️ Conflict</span>&nbsp; <strong>Website redesign vs. engineering capacity.</strong> VP Marketing wants to proceed with the website redesign and demo-request simplification; CTO flagged that engineering is already near capacity focused on the August analytics dashboard. These timelines directly compete.<div class="meta">VP Marketing vs. CTO + Product Director</div></div>
+    <div class="conflict-item"><span class="badge conflict">⚠️ Conflict</span>&nbsp; <strong>Reporting performance priority vs. planned feature releases.</strong> Product Director acknowledged that fixing reporting performance may have greater business impact than some planned features — implying current roadmap prioritization may need to change.<div class="meta">Product Director</div></div>
+    <div class="conflict-item"><span class="badge conflict">⚠️ Conflict</span>&nbsp; <strong>Headcount requests conflict across departments.</strong> Department heads submitted different numbers. Not resolved — deferred to Q3 forecast finalization.<div class="meta">CFO</div></div>
+  </div>
+
+  <div class="sep"></div>
+
+  <div class="section">
+    <div class="section-title">📝 Additional Notes</div>
+    <details class="collapsible">
+      <summary>Enterprise deal slippage detail</summary>
+      <div class="collapsible-body">
+        <div class="list-item">14 large contracts expected to close; 9 finalized. 5 slipped. Reasons: procurement delays (primary), and 2 clients requested additional security reviews before signing.</div>
+      </div>
+    </details>
+    <details class="collapsible">
+      <summary>Support ticket volume context</summary>
+      <div class="collapsible-body">
+        <div class="list-item">Increase in support tickets attributed mainly to reporting performance and dashboard loading times. Engineering team has already begun investigating — CTO confirmed this is a known issue.</div>
+      </div>
+    </details>
+    <details class="collapsible">
+      <summary>Customer conference budget status</summary>
+      <div class="collapsible-body">
+        <div class="list-item">VP Marketing requested approval for annual customer conference budget. CFO is awaiting final vendor proposals before approving. CEO agreed to revisit next month. No current approval given.</div>
+      </div>
+    </details>
+    <details class="collapsible">
+      <summary>Analytics dashboard + conference announcement</summary>
+      <div class="collapsible-body">
+        <div class="list-item">Head of Sales proposed announcing the new analytics dashboard at the conference. Product Director said only if confident about August date. CTO cannot guarantee date. CEO directed: no public commitments until engineering milestone review is complete.</div>
+      </div>
+    </details>
+  </div>
+</div>
