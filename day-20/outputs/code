@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Face Puzzle Game</title>
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --success: #10b981;
+      --success-glow: rgba(16, 185, 129, 0.2);
+      --bg-main: #f3f4f6;
+      --card-bg: #ffffff;
+      --text: #1f2937;
+      --text-muted: #4b5563;
+      --border: #e5e7eb;
+      --drag-highlight: #4f46e5;
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 1rem;
+    }
+
+    header {
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-top: 0.25rem;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    /* Video & Preview Setup */
+    .viewfinder-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: #000;
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #webcam {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scaleX(-1); /* Mirror view for intuitive usage */
+    }
+
+    .fallback-container {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 1.5rem;
+      color: var(--text-muted);
+    }
+
+    .fallback-container.active {
+      display: flex;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.1s ease;
+      width: 100%;
+    }
+
+    .btn:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+
+    .btn-secondary:hover {
+      background-color: rgba(79, 70, 229, 0.05);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 0.75rem;
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    /* Difficulty Screen styling */
+    .preview-crop {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: var(--radius);
+      border: 3px solid var(--border);
+      margin-bottom: 1.5rem;
+    }
+
+    .grid-options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+
+    .option-btn {
+      background: #fff;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 0.5rem;
+      text-align: center;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .option-btn.selected {
+      border-color: var(--primary);
+      background-color: rgba(79, 70, 229, 0.05);
+      color: var(--primary);
+    }
+
+    /* Game Screen styling */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+      width: 100%;
+      background: var(--bg-main);
+      border-radius: 8px;
+      padding: 0.75rem;
+      text-align: center;
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+    }
+
+    .stats-label {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      margin-bottom: 0.25rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .stats-value {
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    /* Puzzle Container */
+    #puzzle-board {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      touch-action: none; /* Prevent scrolling during drag */
+    }
+
+    .puzzle-piece {
+      position: absolute;
+      box-sizing: border-box;
+      background-repeat: no-repeat;
+      cursor: grab;
+      touch-action: none;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+      will-change: transform, left, top;
+    }
+
+    .puzzle-piece.dragging {
+      z-index: 1000;
+      cursor: grabbing;
+      opacity: 0.9;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3), inset 0 0 0 3px var(--drag-highlight);
+    }
+
+    .puzzle-piece.correct {
+      box-shadow: inset 0 0 0 3px var(--success), 0 0 8px var(--success-glow);
+    }
+
+    /* Overlay Modal style */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 23, 42, 0.7);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      padding: 1rem;
+    }
+
+    .overlay.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      max-width: 400px;
+      width: 100%;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--success);
+      margin-bottom: 1rem;
+    }
+
+    /* Leaderboard Styles */
+    .leaderboard-container {
+      margin-top: 1rem;
+      width: 100%;
+    }
+
+    .leaderboard-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 0.25rem;
+      margin-bottom: 0.5rem;
+      text-align: left;
+    }
+
+    .leaderboard-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+    }
+
+    .leaderboard-table th {
+      text-align: left;
+      color: var(--text-muted);
+      padding: 0.25rem 0;
+    }
+
+    .leaderboard-table td {
+      padding: 0.4rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .leaderboard-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .text-right {
+      text-align: right;
+    }
+
+    /* Hidden file element */
+    #image-loader {
+      display: none;
+    }
+
+    @media (max-width: 400px) {
+      .container {
+        padding: 1rem;
+      }
+      h1 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Face Puzzle</h1>
+    <p class="subtitle">Capture your expression and solve the scrambled grid</p>
+  </header>
+
+  <main class="container">
+    
+    <!-- Screen 1: Camera Access & Snapshot -->
+    <section id="screen-camera" class="screen active">
+      <div class="viewfinder-container">
+        <video id="webcam" autoplay playsinline muted></video>
+        
+        <div id="fallback-message" class="fallback-container">
+          <p style="margin-bottom: 1rem;">Camera access is unavailable or was denied.</p>
+          <label for="image-loader" class="btn">Choose an Image File</label>
+          <input type="file" id="image-loader" accept="image/*">
+        </div>
+      </div>
+      
+      <div class="button-group">
+        <button id="snap-btn" class="btn">Take Photo</button>
+        <button id="upload-alternative-btn" class="btn btn-secondary">Upload Photo</button>
+      </div>
+    </section>
+
+    <!-- Screen 2: Difficulty Selection -->
+    <section id="screen-difficulty" class="screen">
+      <img id="crop-preview" class="preview-crop" alt="Captured layout crop">
+      <p style="margin-bottom: 1rem; color: var(--text-muted); text-align: center;">Choose your grid size:</p>
+      
+      <div class="grid-options">
+        <div class="option-btn selected" data-grid="3">3 × 3<br><span style="font-size: 0.75rem; font-weight: normal; color: var(--text-muted);">9 pieces</span></div>
+        <div class="option-btn" data-grid="4">4 × 4<br><span style="font-size: 0.75rem; font-weight: normal; color: var(--text-muted);">16 pieces</span></div>
+        <div class="option-btn" data-grid="5">5 × 5<br><span style="font-size: 0.75rem; font-weight: normal; color: var(--text-muted);">25 pieces</span></div>
+      </div>
+
+      <button id="start-game-btn" class="btn">Generate & Start</button>
+      <div class="button-group">
+        <button id="back-to-cam-btn" class="btn btn-secondary">New Photo</button>
+      </div>
+    </section>
+
+    <!-- Screen 3: Game Board -->
+    <section id="screen-game" class="screen">
+      <div class="stats-bar">
+        <div>
+          <div class="stats-label">Time</div>
+          <div id="timer-display" class="stats-value">00:00.0</div>
+        </div>
+        <div>
+          <div class="stats-label">Moves</div>
+          <div id="moves-count" class="stats-value">0</div>
+        </div>
+        <div>
+          <div class="stats-label">Progress</div>
+          <div id="correct-count" class="stats-value">0/9</div>
+        </div>
+      </div>
+
+      <div id="puzzle-board"></div>
+
+      <div class="button-group">
+        <button id="reset-puzzle-btn" class="btn btn-secondary">Reset State</button>
+        <button id="new-photo-btn" class="btn btn-secondary">New Photo</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Hidden Canvas for cropping image processing -->
+  <canvas id="crop-canvas" style="display: none;"></canvas>
+
+  <!-- Win Results Modal -->
+  <div id="win-modal" class="overlay">
+    <div class="modal-content">
+      <div class="modal-title">Puzzle Complete!</div>
+      <p style="margin-bottom: 0.5rem; font-size: 0.95rem;">You matched your face correctly.</p>
+      <div class="stats-bar" style="margin: 1rem 0;">
+        <div>
+          <div class="stats-label">Difficulty</div>
+          <div id="results-difficulty" class="stats-value">-</div>
+        </div>
+        <div>
+          <div class="stats-label">Time</div>
+          <div id="results-time" class="stats-value">-</div>
+        </div>
+        <div>
+          <div class="stats-label">Moves</div>
+          <div id="results-moves" class="stats-value">-</div>
+        </div>
+      </div>
+
+      <!-- Leaderboard -->
+      <div class="leaderboard-container">
+        <div class="leaderboard-title">Top 5 Best Times</div>
+        <table class="leaderboard-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Grid</th>
+              <th class="text-right">Time</th>
+              <th class="text-right">Moves</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboard-rows">
+            <!-- Dynamic rows -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="button-group" style="margin-top: 1.5rem;">
+        <button id="modal-play-again" class="btn">Play Again</button>
+        <button id="modal-new-photo" class="btn btn-secondary">New Photo</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // System State Variables
+    let activeStream = null;
+    let loadedImageSrc = null;
+    let selectedGridSize = 3; 
+    let activePiece = null;
+    let pieceSize = 0;
+
+    let movesCount = 0;
+    let gameWon = false;
+    let timerInterval = null;
+    let startTime = null;
+    let elapsedTime = 0;
+
+    let boardState = []; // Holds references to puzzle piece positions
+
+    // Screen navigation helpers
+    function showScreen(screenId) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(screenId).classList.add('active');
+    }
+
+    // Camera Access initialization
+    async function startCamera() {
+      const video = document.getElementById('webcam');
+      const fallbackMsg = document.getElementById('fallback-message');
+      const snapBtn = document.getElementById('snap-btn');
+
+      fallbackMsg.classList.remove('active');
+      video.style.display = 'block';
+      snapBtn.disabled = false;
+
+      try {
+        if (activeStream) {
+          stopCamera();
+        }
+        activeStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 640 } },
+          audio: false
+        });
+        video.srcObject = activeStream;
+      } catch (err) {
+        console.warn("Unable to acquire camera interface:", err);
+        video.style.display = 'none';
+        fallbackMsg.classList.add('active');
+        snapBtn.disabled = true;
+      }
+    }
+
+    function stopCamera() {
+      if (activeStream) {
+        activeStream.getTracks().forEach(track => track.stop());
+        activeStream = null;
+      }
+    }
+
+    // Process snapshot or uploaded image, fitting to a 1:1 canvas ratio
+    function handleSourceImage(source, isVideo) {
+      const canvas = document.getElementById('crop-canvas');
+      const ctx = canvas.getContext('2d');
+      const size = 600; 
+
+      canvas.width = size;
+      canvas.height = size;
+
+      let srcWidth = isVideo ? source.videoWidth : source.naturalWidth || source.width;
+      let srcHeight = isVideo ? source.videoHeight : source.naturalHeight || source.height;
+
+      // Extract square bounding box coordinates from center
+      const minDimension = Math.min(srcWidth, srcHeight);
+      const sx = (srcWidth - minDimension) / 2;
+      const sy = (srcHeight - minDimension) / 2;
+
+      // Draw matched crop onto canvas
+      ctx.save();
+      if (isVideo) {
+        // Horizontal inversion for visual mirroring
+        ctx.translate(size, 0);
+        ctx.scale(-1, 1);
+      }
+      ctx.drawImage(source, sx, sy, minDimension, minDimension, 0, 0, size, size);
+      ctx.restore();
+
+      loadedImageSrc = canvas.toDataURL('image/jpeg');
+      document.getElementById('crop-preview').src = loadedImageSrc;
+      
+      stopCamera();
+      showScreen('screen-difficulty');
+    }
+
+    // Event Wireups: Media Capture
+    document.getElementById('snap-btn').addEventListener('click', () => {
+      const video = document.getElementById('webcam');
+      if (activeStream && video.readyState === video.HAVE_ENOUGH_DATA) {
+        handleSourceImage(video, true);
+      }
+    });
+
+    const fileLoader = document.getElementById('image-loader');
+    fileLoader.addEventListener('change', (e) => {
+      if (e.target.files && e.target.files[0]) {
+        const file = e.target.files[0];
+        const img = new Image();
+        img.onload = () => {
+          handleSourceImage(img, false);
+        };
+        img.src = URL.createObjectURL(file);
+      }
+    });
+
+    document.getElementById('upload-alternative-btn').addEventListener('click', () => {
+      fileLoader.click();
+    });
+
+    // Event Wireups: Difficulty Setup
+    const optionButtons = document.querySelectorAll('.option-btn');
+    optionButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        optionButtons.forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedGridSize = parseInt(btn.dataset.grid);
+      });
+    });
+
+    document.getElementById('back-to-cam-btn').addEventListener('click', () => {
+      showScreen('screen-camera');
+      startCamera();
+    });
+
+    document.getElementById('start-game-btn').addEventListener('click', () => {
+      showScreen('screen-game');
+      buildAndLaunchPuzzle();
+    });
+
+    // Game logic engine
+    function buildAndLaunchPuzzle() {
+      const board = document.getElementById('puzzle-board');
+      board.innerHTML = '';
+      
+      movesCount = 0;
+      gameWon = false;
+      document.getElementById('moves-count').innerText = movesCount;
+      
+      resetTimer();
+      startTimer();
+
+      const boardDimension = board.clientWidth || 400; // fallback standard size if unrendered
+      pieceSize = boardDimension / selectedGridSize;
+
+      // Fisher-Yates shuffle that avoids solved placement outcomes
+      let indices = Array.from({ length: selectedGridSize * selectedGridSize }, (_, i) => i);
+      let matchCount = 0;
+      
+      do {
+        for (let i = indices.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [indices[i], indices[j]] = [indices[j], indices[i]];
+        }
+        
+        matchCount = 0;
+        for (let idx = 0; idx < indices.length; idx++) {
+          if (indices[idx] === idx) matchCount++;
+        }
+      } while (matchCount === indices.length && indices.length > 1);
+
+      boardState = [];
+
+      for (let s = 0; s < indices.length; s++) {
+        const targetPieceId = indices[s];
+        const pieceEl = document.createElement('div');
+        pieceEl.classList.add('puzzle-piece');
+        
+        pieceEl.style.width = `${pieceSize}px`;
+        pieceEl.style.height = `${pieceSize}px`;
+        pieceEl.style.backgroundImage = `url(${loadedImageSrc})`;
+        pieceEl.style.backgroundSize = `${boardDimension}px ${boardDimension}px`;
+
+        // Calculate background crop segment based on structural home ID
+        const targetCol = targetPieceId % selectedGridSize;
+        const targetRow = Math.floor(targetPieceId / selectedGridSize);
+        pieceEl.style.backgroundPosition = `${-targetCol * pieceSize}px ${-targetRow * pieceSize}px`;
+
+        // Coordinate positions in layout space
+        const currentCol = s % selectedGridSize;
+        const currentRow = Math.floor(s / selectedGridSize);
+        pieceEl.style.left = `${currentCol * pieceSize}px`;
+        pieceEl.style.top = `${currentRow * pieceSize}px`;
+
+        pieceEl.dataset.id = targetPieceId;
+        pieceEl.dataset.slot = s;
+
+        // Pointer event framework for drag operations
+        pieceEl.addEventListener('pointerdown', handleDragStart);
+
+        board.appendChild(pieceEl);
+        boardState[s] = {
+          id: targetPieceId,
+          element: pieceEl
+        };
+      }
+
+      refreshUIMatchState();
+    }
+
+    // Interaction handling - Touch & Pointer Actions
+    let dragStartOffset = { x: 0, y: 0 };
+    let dragOriginalCoords = { x: 0, y: 0 };
+
+    function handleDragStart(e) {
+      if (gameWon) return;
+      e.preventDefault();
+
+      activePiece = e.currentTarget;
+      activePiece.classList.add('dragging');
+      
+      dragOriginalCoords.x = parseFloat(activePiece.style.left);
+      dragOriginalCoords.y = parseFloat(activePiece.style.top);
+
+      dragStartOffset.x = e.clientX - dragOriginalCoords.x;
+      dragStartOffset.y = e.clientY - dragOriginalCoords.y;
+
+      document.addEventListener('pointermove', handleDragMove);
+      document.addEventListener('pointerup', handleDragEnd);
+    }
+
+    function handleDragMove(e) {
+      if (!activePiece) return;
+      
+      const newX = e.clientX - dragStartOffset.x;
+      const newY = e.clientY - dragStartOffset.y;
+      
+      activePiece.style.left = `${newX}px`;
+      activePiece.style.top = `${newY}px`;
+    }
+
+    function handleDragEnd(e) {
+      if (!activePiece) return;
+
+      document.removeEventListener('pointermove', handleDragMove);
+      document.removeEventListener('pointerup', handleDragEnd);
+
+      const board = document.getElementById('puzzle-board');
+      const boardBounds = board.getBoundingClientRect();
+
+      // Normalize workspace point values relative to coordinates container
+      const relativeX = e.clientX - boardBounds.left;
+      const relativeY = e.clientY - boardBounds.top;
+
+      const colTarget = Math.floor(relativeX / pieceSize);
+      const rowTarget = Math.floor(relativeY / pieceSize);
+
+      let targetSlot = -1;
+      if (colTarget >= 0 && colTarget < selectedGridSize && rowTarget >= 0 && rowTarget < selectedGridSize) {
+        targetSlot = rowTarget * selectedGridSize + colTarget;
+      }
+
+      const activeSlot = parseInt(activePiece.dataset.slot);
+
+      if (targetSlot !== -1 && targetSlot !== activeSlot) {
+        executePieceSwap(activeSlot, targetSlot);
+        movesCount++;
+        document.getElementById('moves-count').innerText = movesCount;
+      } else {
+        restorePiecePosition(activePiece, activeSlot);
+      }
+
+      activePiece.classList.remove('dragging');
+      activePiece = null;
+
+      refreshUIMatchState();
+      verifyWinState();
+    }
+
+    function executePieceSwap(slotA, slotB) {
+      const pieceA = boardState[slotA];
+      const pieceB = boardState[slotB];
+
+      boardState[slotA] = pieceB;
+      boardState[slotB] = pieceA;
+
+      pieceA.element.dataset.slot = slotB;
+      pieceB.element.dataset.slot = slotA;
+
+      animateToSlot(pieceA.element, slotB);
+      animateToSlot(pieceB.element, slotA);
+    }
+
+    function restorePiecePosition(element, slot) {
+      animateToSlot(element, slot);
+    }
+
+    function animateToSlot(element, slot) {
+      const col = slot % selectedGridSize;
+      const row = Math.floor(slot / selectedGridSize);
+      
+      element.style.transition = 'left 0.2s cubic-bezier(0.16, 1, 0.3, 1), top 0.2s cubic-bezier(0.16, 1, 0.3, 1)';
+      element.style.left = `${col * pieceSize}px`;
+      element.style.top = `${row * pieceSize}px`;
+
+      setTimeout(() => {
+        element.style.transition = '';
+      }, 200);
+    }
+
+    // Refresh display UI elements indicating validation feedback
+    function refreshUIMatchState() {
+      let correctMatches = 0;
+      
+      for (let slotIdx = 0; slotIdx < boardState.length; slotIdx++) {
+        const piece = boardState[slotIdx];
+        if (piece.id === slotIdx) {
+          piece.element.classList.add('correct');
+          correctMatches++;
+        } else {
+          piece.element.classList.remove('correct');
+        }
+      }
+
+      document.getElementById('correct-count').innerText = `${correctMatches}/${selectedGridSize * selectedGridSize}`;
+    }
+
+    // Timer Implementation
+    function startTimer() {
+      startTime = Date.now();
+      timerInterval = setInterval(() => {
+        elapsedTime = Date.now() - startTime;
+        updateTimerDisplay();
+      }, 100);
+    }
+
+    function stopTimer() {
+      clearInterval(timerInterval);
+    }
+
+    function resetTimer() {
+      stopTimer();
+      elapsedTime = 0;
+      updateTimerDisplay();
+    }
+
+    function updateTimerDisplay() {
+      document.getElementById('timer-display').innerText = formatTime(elapsedTime);
+    }
+
+    function formatTime(ms) {
+      const totalTenths = Math.floor(ms / 100);
+      const tenths = totalTenths % 10;
+      const totalSeconds = Math.floor(totalTenths / 10);
+      const seconds = totalSeconds % 60;
+      const minutes = Math.floor(totalSeconds / 60);
+
+      const mStr = String(minutes).padStart(2, '0');
+      const sStr = String(seconds).padStart(2, '0');
+      return `${mStr}:${sStr}.${tenths}`;
+    }
+
+    // Game Completion validation logic
+    function verifyWinState() {
+      let perfectMatch = true;
+      for (let s = 0; s < boardState.length; s++) {
+        if (boardState[s].id !== s) {
+          perfectMatch = false;
+          break;
+        }
+      }
+
+      if (perfectMatch && !gameWon) {
+        gameWon = true;
+        stopTimer();
+        saveCompletedRecord();
+        launchWinScreen();
+      }
+    }
+
+    // High Score tracking with LocalStorage storage limits
+    function saveCompletedRecord() {
+      const currentScore = {
+        id: Date.now(),
+        grid: `${selectedGridSize}x${selectedGridSize}`,
+        timeString: formatTime(elapsedTime),
+        rawTime: elapsedTime,
+        moves: movesCount,
+        date: new Date().toLocaleDateString()
+      };
+
+      let scoresList = [];
+      try {
+        scoresList = JSON.parse(localStorage.getItem('face_puzzle_records') || '[]');
+      } catch (e) {
+        scoresList = [];
+      }
+
+      scoresList.push(currentScore);
+      // Ascending sort based on raw completion duration (lower is better)
+      scoresList.sort((a, b) => a.rawTime - b.rawTime);
+      scoresList = scoresList.slice(0, 5); // Keep top 5 leaderboard entries
+
+      localStorage.setItem('face_puzzle_records', JSON.stringify(scoresList));
+    }
+
+    function renderLeaderboardTable() {
+      const rowsContainer = document.getElementById('leaderboard-rows');
+      rowsContainer.innerHTML = '';
+      
+      let scoresList = [];
+      try {
+        scoresList = JSON.parse(localStorage.getItem('face_puzzle_records') || '[]');
+      } catch (e) {
+        scoresList = [];
+      }
+
+      if (scoresList.length === 0) {
+        rowsContainer.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">No records registered yet.</td></tr>`;
+        return;
+      }
+
+      scoresList.forEach((score, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>#${index + 1}</td>
+          <td>${score.grid}</td>
+          <td class="text-right">${score.timeString}</td>
+          <td class="text-right">${score.moves}</td>
+        `;
+        rowsContainer.appendChild(row);
+      });
+    }
+
+    function launchWinScreen() {
+      document.getElementById('results-difficulty').innerText = `${selectedGridSize}x${selectedGridSize}`;
+      document.getElementById('results-time').innerText = formatTime(elapsedTime);
+      document.getElementById('results-moves').innerText = movesCount;
+
+      renderLeaderboardTable();
+      document.getElementById('win-modal').classList.add('active');
+    }
+
+    // Modal & Control Setup Event Listeners
+    document.getElementById('modal-play-again').addEventListener('click', () => {
+      document.getElementById('win-modal').classList.remove('active');
+      buildAndLaunchPuzzle();
+    });
+
+    document.getElementById('modal-new-photo').addEventListener('click', () => {
+      document.getElementById('win-modal').classList.remove('active');
+      showScreen('screen-camera');
+      startCamera();
+    });
+
+    document.getElementById('reset-puzzle-btn').addEventListener('click', () => {
+      buildAndLaunchPuzzle();
+    });
+
+    document.getElementById('new-photo-btn').addEventListener('click', () => {
+      showScreen('screen-camera');
+      startCamera();
+    });
+
+    // Handle viewport resize events gracefully
+    window.addEventListener('resize', () => {
+      const board = document.getElementById('puzzle-board');
+      if (boardState.length > 0 && board.clientWidth > 0) {
+        const boardDimension = board.clientWidth;
+        pieceSize = boardDimension / selectedGridSize;
+
+        for (let s = 0; s < boardState.length; s++) {
+          const piece = boardState[s];
+          const col = s % selectedGridSize;
+          const row = Math.floor(s / selectedGridSize);
+
+          piece.element.style.width = `${pieceSize}px`;
+          piece.element.style.height = `${pieceSize}px`;
+          piece.element.style.backgroundSize = `${boardDimension}px ${boardDimension}px`;
+
+          const targetPieceId = piece.id;
+          const targetCol = targetPieceId % selectedGridSize;
+          const targetRow = Math.floor(targetPieceId / selectedGridSize);
+          piece.element.style.backgroundPosition = `${-targetCol * pieceSize}px ${-targetRow * pieceSize}px`;
+
+          // Position matching layouts
+          const currentPieceSlot = parseInt(piece.element.dataset.slot);
+          const currentCol = currentPieceSlot % selectedGridSize;
+          const currentRow = Math.floor(currentPieceSlot / selectedGridSize);
+          piece.element.style.left = `${currentCol * pieceSize}px`;
+          piece.element.style.top = `${currentRow * pieceSize}px`;
+        }
+      }
+    });
+
+    // Run initializer startup call
+    window.addEventListener('DOMContentLoaded', () => {
+      startCamera();
+    });
+  </script>
+</body>
+</html>
