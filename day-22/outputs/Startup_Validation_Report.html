@@ -2,144 +2,187 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
-<title>Startup Validation Report</title>
+<meta name="viewport" content="width=794, initial-scale=1.0"/>
+<title>Startup Validation Report — NightShift Kitchen</title>
 <style>
 @page { size: A4; margin: 18mm 16mm 20mm 16mm; }
-* { box-sizing: border-box; }
-body {
-    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
-    font-size: 10.5pt;
-    line-height: 1.5;
-    color: #1a1a2e;
-    max-width: 100%;
-    margin: 0;
-    padding: 0;
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
 }
+
+body {
+    font-family: "Segoe UI", Calibri, Arial, sans-serif;
+    font-size: 11pt;
+    line-height: 1.55;
+    color: #1a1a2e;
+    margin: 0 auto;
+    padding: 24px 32px 48px;
+    max-width: 210mm;
+    min-width: 680px;
+    word-break: normal;
+    overflow-wrap: break-word;
+    hyphens: manual;
+}
+
 h1 {
-    font-size: 22pt;
+    font-size: 24pt;
     color: #0f3460;
     border-bottom: 3px solid #0f3460;
-    padding-bottom: 8px;
-    margin: 0 0 16px 0;
-    page-break-after: avoid;
+    padding-bottom: 10px;
+    margin: 0 0 20px;
 }
 h2 {
-    font-size: 14pt;
+    font-size: 15pt;
     color: #16213e;
-    border-bottom: 1px solid #e94560;
-    padding-bottom: 4px;
-    margin: 28px 0 12px 0;
+    border-bottom: 2px solid #e94560;
+    padding-bottom: 6px;
+    margin: 32px 0 14px;
     page-break-after: avoid;
 }
 h3 {
-    font-size: 11pt;
+    font-size: 12pt;
     color: #0f3460;
-    margin: 18px 0 8px 0;
+    margin: 20px 0 10px;
     page-break-after: avoid;
 }
-h4 { font-size: 10pt; color: #333; margin: 14px 0 6px 0; }
-p { margin: 0 0 10px 0; }
+h4 { font-size: 11pt; margin: 16px 0 8px; }
+
+p { margin: 0 0 12px; }
+strong { font-weight: 700; }
+em { font-style: italic; }
+
+a { color: #0f3460; text-decoration: none; }
+
+hr {
+    border: none;
+    border-top: 1px solid #c8d0da;
+    margin: 28px 0;
+}
+
+ul, ol {
+    margin: 8px 0 14px 24px;
+    padding: 0;
+}
+li { margin-bottom: 6px; }
+
+/* ── Tables ── */
 table {
     width: 100%;
     border-collapse: collapse;
-    margin: 12px 0 18px 0;
-    font-size: 9.5pt;
+    margin: 14px 0 20px;
+    font-size: 10pt;
     table-layout: fixed;
     page-break-inside: avoid;
 }
-th {
-    background-color: #0f3460;
-    color: #ffffff;
-    font-weight: bold;
+
+th, td {
+    border: 1px solid #c8d0da;
     padding: 8px 10px;
     text-align: left;
-    border: 1px solid #0f3460;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-}
-td {
-    padding: 7px 10px;
-    border: 1px solid #d0d7de;
     vertical-align: top;
-    word-wrap: break-word;
+    word-break: normal;
     overflow-wrap: break-word;
+    white-space: normal;
+    line-height: 1.45;
 }
-/* Two-column tables: label column narrower */
-table tr td:first-child,
-table tr th:first-child {
-    width: 28%;
+
+th {
+    background: #0f3460;
+    color: #fff;
+    font-weight: 700;
+    border-color: #0f3460;
 }
-table tr td:last-child,
-table tr th:last-child {
-    width: 72%;
+
+tbody tr:nth-child(even) td { background: #f4f7fb; }
+
+/* 2-column key/value */
+table.cols-2 th:nth-child(1), table.cols-2 td:nth-child(1) { width: 30%; }
+table.cols-2 th:nth-child(2), table.cols-2 td:nth-child(2) { width: 70%; }
+
+/* 3-column */
+table.cols-3 th, table.cols-3 td { width: 33.33%; font-size: 9.5pt; }
+
+/* 4-column */
+table.cols-4 th, table.cols-4 td { width: 25%; font-size: 9pt; }
+
+/* 5-column */
+table.cols-5 th, table.cols-5 td { width: 20%; font-size: 8.5pt; }
+
+/* 6-column */
+table.cols-6 th, table.cols-6 td { width: 16.66%; font-size: 8pt; }
+
+/* 7-column (competitor table) */
+table.cols-7 th, table.cols-7 td { width: 14.28%; font-size: 7.5pt; padding: 5px 6px; }
+
+/* Scorecard */
+table.scorecard th { text-align: center; }
+table.scorecard td:nth-child(1) { width: 38%; }
+table.scorecard td:nth-child(2) { width: 32%; }
+table.scorecard td:nth-child(3) { width: 30%; }
+table.scorecard .total td {
+    background: #dce6f2;
+    font-weight: 700;
+    text-align: center;
 }
-/* Three+ column tables: equal-ish distribution */
-table.cols-3 th, table.cols-3 td { width: 33.33%; }
-table.cols-4 th, table.cols-4 td { width: 25%; }
-table.cols-5 th, table.cols-5 td { width: 20%; }
-tr:nth-child(even) td { background-color: #f6f8fa; }
+
+/* Flow / journey table */
+table.flow-table th { text-align: center; font-size: 9pt; }
+table.flow-table td { text-align: center; font-size: 9pt; }
+
 blockquote {
     border-left: 4px solid #e94560;
-    margin: 12px 0;
-    padding: 8px 14px;
+    margin: 14px 0;
+    padding: 10px 16px;
     background: #fdf2f4;
-    font-style: italic;
     color: #333;
 }
-pre {
-    font-family: Consolas, "Courier New", monospace;
-    font-size: 7.5pt;
-    background: #f4f4f8;
-    border: 1px solid #ddd;
-    padding: 10px 12px;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    line-height: 1.35;
-    margin: 10px 0 14px 0;
-    page-break-inside: avoid;
-}
-code {
-    font-family: Consolas, "Courier New", monospace;
-    font-size: 9pt;
-    background: #f0f0f5;
-    padding: 1px 4px;
-}
-hr {
-    border: none;
-    border-top: 1px solid #ccc;
-    margin: 24px 0;
-}
-ul, ol { margin: 8px 0 12px 22px; }
-li { margin-bottom: 4px; }
-a { color: #0f3460; text-decoration: none; }
-.section-break { page-break-before: always; }
-.cover-block {
+
+/* Recommendation box */
+.recommendation-box {
+    border: 3px solid #0f3460;
+    border-radius: 6px;
+    background: #eef3fa;
+    padding: 20px 24px;
+    margin: 18px 0 24px;
     text-align: center;
-    margin-bottom: 24px;
 }
-.cover-block h1 {
-    border-bottom: none;
-    font-size: 26pt;
+.recommendation-box .verdict {
+    font-size: 18pt;
+    font-weight: 700;
+    color: #0f3460;
+    margin: 10px 0;
+}
+
+.cover-title {
+    text-align: center;
     margin-bottom: 8px;
 }
+.cover-title h1 {
+    border-bottom: none;
+    font-size: 28pt;
+    margin-bottom: 4px;
+}
+
+.section-break { page-break-before: always; }
+
 .footer-note {
-    margin-top: 40px;
-    padding-top: 12px;
-    border-top: 1px solid #ccc;
-    font-size: 8.5pt;
-    color: #888;
+    margin-top: 48px;
+    padding-top: 14px;
+    border-top: 1px solid #c8d0da;
+    font-size: 9pt;
+    color: #777;
     text-align: center;
 }
 </style>
 </head>
 <body>
-<div class="cover-block">
-<h1>STARTUP VALIDATION REPORT</h1>
-</div>
-
+<div class="cover-title"><h1>STARTUP VALIDATION REPORT</h1></div>
 <hr />
-<table>
+<table class="cols-2 meta-table">
 <thead>
 <tr>
 <th>Field</th>
@@ -196,7 +239,7 @@ a { color: #0f3460; text-decoration: none; }
 <h2 class="section-break">1. EXECUTIVE SUMMARY</h2>
 <h3>Venture Overview</h3>
 <p><strong>NightShift Kitchen</strong> is a cloud kitchen concept designed to deliver <strong>hygienic, affordable, ready-to-eat meals</strong> to <strong>IT night support workers</strong> in India — starting as a <strong>side business</strong> in Pune, with a path to full-scale operations once brand recognition is established.</p>
-<table>
+<table class="cols-2">
 <thead>
 <tr>
 <th>Dimension</th>
@@ -235,20 +278,20 @@ a { color: #0f3460; text-decoration: none; }
 </tbody>
 </table>
 <h3>Key Findings</h3>
-<pre><code>┌─────────────────────────────────────────────────────────────────┐
-│  VALIDATION SCORECARD                                           │
-├──────────────────────────┬──────────┬───────────────────────────┤
-│  Problem exists          │  ████████│  9/10                     │
-│  Market size             │  ███████ │  8/10                     │
-│  Founder fit             │  ███████ │  7/10                     │
-│  Early validation        │  █████   │  5/10                     │
-│  Competitive moat        │  ████    │  4/10                     │
-│  Unit economics (est.)   │  █████   │  5/10                     │
-│  Scalability             │  ██████  │  6/10                     │
-├──────────────────────────┴──────────┴───────────────────────────┤
-│  WEIGHTED TOTAL: 72/100 — CONDITIONAL GO                      │
-└─────────────────────────────────────────────────────────────────┘
-</code></pre>
+<table class="scorecard">
+<thead><tr><th>Dimension</th><th>Score Bar</th><th>Rating</th></tr></thead>
+<tbody>
+<tr><td>Problem exists</td><td>████████</td><td>9/10</td></tr>
+<tr><td>Market size</td><td>███████</td><td>8/10</td></tr>
+<tr><td>Founder fit</td><td>███████</td><td>7/10</td></tr>
+<tr><td>Early validation</td><td>█████</td><td>5/10</td></tr>
+<tr><td>Competitive moat</td><td>████</td><td>4/10</td></tr>
+<tr><td>Unit economics (est.)</td><td>█████</td><td>5/10</td></tr>
+<tr><td>Scalability</td><td>██████</td><td>6/10</td></tr>
+<tr class="total"><td colspan="3"><strong>WEIGHTED TOTAL: 72/100 — CONDITIONAL GO</strong></td></tr>
+</tbody>
+</table>
+
 <h3>Bottom Line</h3>
 <p>The idea addresses a <strong>real, underserved pain point</strong> that the founder has personally experienced. India’s cloud kitchen market is growing at <strong>12–17% CAGR</strong>, and late-night delivery is a proven revenue driver (20–30% of orders for some operators). However, <strong>generic "food for anyone anytime" positioning is too broad</strong> — success depends on narrowing to <strong>"trusted hygienic meals for IT night shift workers"</strong> and proving unit economics before quitting a day job or raising capital.</p>
 <hr />
@@ -313,7 +356,7 @@ a { color: #0f3460; text-decoration: none; }
 </tbody>
 </table>
 <h3>2.3 Problem Severity Score</h3>
-<table>
+<table class="cols-3">
 <thead>
 <tr>
 <th>Criterion</th>
@@ -355,14 +398,18 @@ a { color: #0f3460; text-decoration: none; }
 </tbody>
 </table>
 <h3>2.4 Problem Validation Verdict</h3>
-<table>
+<table class="cols-2">
 <thead>
 <tr>
-<th>Verdict</th>
-<th><strong>✅ VALIDATED</strong></th>
+<th>Item</th>
+<th>Detail</th>
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>Verdict</td>
+<td><strong>✅ VALIDATED</strong></td>
+</tr>
 <tr>
 <td>Confidence</td>
 <td><strong>85%</strong></td>
@@ -376,7 +423,7 @@ a { color: #0f3460; text-decoration: none; }
 <hr />
 <h2>3. FOUNDER–MARKET FIT SCORE</h2>
 <h3>3.1 Assessment Framework</h3>
-<table>
+<table class="cols-5">
 <thead>
 <tr>
 <th>Dimension</th>
@@ -439,22 +486,18 @@ a { color: #0f3460; text-decoration: none; }
 </tbody>
 </table>
 <h3>3.2 Founder–Market Fit Radar</h3>
-<pre><code>                    Lived Problem (10)
-                          ▲
-                         /|\
-                        / | \
-           Mission (9) /  |  \ Customer Access (8)
-                      /   |   \
-                     /    |    \
-        Domain (4) ◄──────┼──────► Market Knowledge (7)
-                     \    |    /
-                      \   |   /
-                       \  |  /
-                        \ | /
-                         \|/
-                          ▼
-                  Execution Capacity (5)
-</code></pre>
+<table class="cols-2">
+<thead><tr><th>Dimension</th><th>Score (1–10)</th></tr></thead>
+<tbody>
+<tr><td>Lived Problem</td><td>10</td></tr>
+<tr><td>Customer Access</td><td>8</td></tr>
+<tr><td>Market Knowledge</td><td>7</td></tr>
+<tr><td>Mission Alignment</td><td>9</td></tr>
+<tr><td>Domain Expertise (F&B)</td><td>4</td></tr>
+<tr><td>Execution Capacity</td><td>5</td></tr>
+</tbody>
+</table>
+
 <h3>3.3 Gaps to Close</h3>
 <table class="cols-3">
 <thead>
@@ -488,7 +531,7 @@ a { color: #0f3460; text-decoration: none; }
 </tbody>
 </table>
 <h3>3.4 Founder–Market Fit Verdict</h3>
-<table>
+<table class="cols-2">
 <thead>
 <tr>
 <th>Score</th>
@@ -569,7 +612,7 @@ a { color: #0f3460; text-decoration: none; }
 </tbody>
 </table>
 <p><strong>TAM Calculation (Bottom-Up Cross-Check)</strong></p>
-<table>
+<table class="cols-2">
 <thead>
 <tr>
 <th>Input</th>
@@ -651,7 +694,7 @@ a { color: #0f3460; text-decoration: none; }
 </table>
 <h3>4.4 SOM — Serviceable Obtainable Market</h3>
 <p><strong>Year 1 — Pune Pilot (Side Business)</strong></p>
-<table>
+<table class="cols-3">
 <thead>
 <tr>
 <th>Input</th>
@@ -713,19 +756,20 @@ a { color: #0f3460; text-decoration: none; }
 </tbody>
 </table>
 <h3>4.5 Market Growth Visualization</h3>
-<pre><code>India Cloud Kitchen Market Growth (₹ Crore)
+<table class="cols-2">
+<thead><tr><th>Year</th><th>India Cloud Kitchen Market (₹ Crore)</th></tr></thead>
+<tbody>
+<tr><td>2020</td><td>~1,000</td></tr>
+<tr><td>2022</td><td>~2,000</td></tr>
+<tr><td>2024</td><td>~2,800</td></tr>
+<tr><td><strong>2025 (TAM baseline)</strong></td><td><strong>₹3,200</strong></td></tr>
+<tr><td>2026</td><td>~4,000</td></tr>
+<tr><td>2028</td><td>~6,500</td></tr>
+<tr><td>2030</td><td>~8,000+</td></tr>
+</tbody>
+</table>
 
-₹6,500 ┤                                          ╭──
-₹5,000 ┤                                    ╭─────╯
-₹4,000 ┤                              ╭─────╯
-₹3,200 ┤█████████████████████████████╯  ← 2025 (TAM baseline)
-₹2,000 ┤███████████████████
-₹1,000 ┤██████████
-     0 ┼──────┬──────┬──────┬──────┬──────┬──────
-       2020  2022  2024  2026  2028  2030
-
-Your SOM (Y1): ▓ ~₹1 Cr  |  Your SOM (Y3): ▓▓▓ ~₹12 Cr
-</code></pre>
+<p><strong>Your SOM:</strong> Year 1 ~₹1 Cr | Year 3 ~₹12 Cr</p>
 <h3>4.6 Key Assumptions &amp; Sensitivities</h3>
 <table class="cols-3">
 <thead>
@@ -761,24 +805,17 @@ Your SOM (Y1): ▓ ~₹1 Cr  |  Your SOM (Y3): ▓▓▓ ~₹12 Cr
 <hr />
 <h2>5. COMPETITOR ANALYSIS</h2>
 <h3>5.1 Competitive Landscape Map</h3>
-<pre><code>                    HIGH NIGHT COVERAGE
-                          ▲
-                          │
-         Swiggy / Zomato  │  Rebel Foods (EatSure)
-         (aggregators)    │  Wow! Momo, Box8
-                          │
-    LOW ◄─────────────────┼─────────────────► HIGH
-    NICHE                 │                 NICHE
-    FOCUS                 │                 FOCUS
-                          │
-         Local dhabas     │  ★ YOUR OPPORTUNITY ★
-         Maggi / canteen  │  NightShift Kitchen
-                          │  (IT night + hygiene)
-                          ▼
-                    LOW NIGHT COVERAGE
-</code></pre>
+<table class="cols-2">
+<thead><tr><th>Market Position</th><th>Players / Opportunity</th></tr></thead>
+<tbody>
+<tr><td><strong>High night coverage, Low niche focus</strong></td><td>Swiggy / Zomato (aggregators), Rebel Foods (EatSure), Wow! Momo, Box8</td></tr>
+<tr><td><strong>Low night coverage, Low niche focus</strong></td><td>Local dhabas, Maggi, office canteen</td></tr>
+<tr><td><strong>Low night coverage, High niche focus</strong></td><td><strong>★ YOUR OPPORTUNITY: NightShift Kitchen (IT night + hygiene) ★</strong></td></tr>
+</tbody>
+</table>
+
 <h3>5.2 Competitor Comparison Table</h3>
-<table>
+<table class="cols-7">
 <thead>
 <tr>
 <th>Competitor</th>
@@ -912,7 +949,7 @@ Your SOM (Y1): ▓ ~₹1 Cr  |  Your SOM (Y3): ▓▓▓ ~₹12 Cr
 </tbody>
 </table>
 <h3>5.4 Competitive Intensity Score</h3>
-<table>
+<table class="cols-2">
 <thead>
 <tr>
 <th>Factor</th>
@@ -945,7 +982,7 @@ Your SOM (Y1): ▓ ~₹1 Cr  |  Your SOM (Y3): ▓▓▓ ~₹12 Cr
 <hr />
 <h2>6. MARKET GAP ANALYSIS</h2>
 <h3>6.1 Identified Gaps</h3>
-<table>
+<table class="cols-4">
 <thead>
 <tr>
 <th>Gap</th>
@@ -994,13 +1031,16 @@ Your SOM (Y1): ▓ ~₹1 Cr  |  Your SOM (Y3): ▓▓▓ ~₹12 Cr
 </tbody>
 </table>
 <h3>6.2 White Space Positioning</h3>
-<pre><code>CURRENT MARKET                    YOUR WHITE SPACE
-─────────────────                 ─────────────────────────────
-&quot;Order anything&quot;          →       &quot;Trusted night meals for IT crews&quot;
-&quot;Restaurant marketplace&quot;  →       &quot;One kitchen, one promise&quot;
-&quot;Fastest delivery wins&quot;   →       &quot;Hygienic + affordable + reliable&quot;
-&quot;All consumers&quot;           →       &quot;IT night support in Pune&quot;
-</code></pre>
+<table class="cols-2">
+<thead><tr><th>Current Market</th><th>Your White Space</th></tr></thead>
+<tbody>
+<tr><td>"Order anything"</td><td>"Trusted night meals for IT crews"</td></tr>
+<tr><td>"Restaurant marketplace"</td><td>"One kitchen, one promise"</td></tr>
+<tr><td>"Fastest delivery wins"</td><td>"Hygienic + affordable + reliable"</td></tr>
+<tr><td>"All consumers"</td><td>"IT night support in Pune"</td></tr>
+</tbody>
+</table>
+
 <h3>6.3 Recommended Positioning Statement</h3>
 <blockquote>
 <p><strong>"NightShift Kitchen — Pune's trusted cloud kitchen for IT night crews. Hygienic meals, delivered hot between 10 PM and 5 AM."</strong></p>
@@ -1008,7 +1048,7 @@ Your SOM (Y1): ▓ ~₹1 Cr  |  Your SOM (Y3): ▓▓▓ ~₹12 Cr
 <hr />
 <h2>7. IDEAL CUSTOMER PROFILE (ICP)</h2>
 <h3>7.1 ICP Summary Card</h3>
-<table>
+<table class="cols-2">
 <thead>
 <tr>
 <th>Attribute</th>
@@ -1067,7 +1107,7 @@ Your SOM (Y1): ▓ ~₹1 Cr  |  Your SOM (Y3): ▓▓▓ ~₹12 Cr
 </tbody>
 </table>
 <h3>7.2 ICP Scoring Model (for prioritization)</h3>
-<table>
+<table class="cols-2">
 <thead>
 <tr>
 <th>Firmographic / Behavioral Signal</th>
@@ -1110,7 +1150,7 @@ Your SOM (Y1): ▓ ~₹1 Cr  |  Your SOM (Y3): ▓▓▓ ~₹12 Cr
 </tbody>
 </table>
 <h3>7.3 Tier 1 Target Accounts (Pune)</h3>
-<table>
+<table class="cols-4">
 <thead>
 <tr>
 <th>Zone</th>
@@ -1149,7 +1189,7 @@ Your SOM (Y1): ▓ ~₹1 Cr  |  Your SOM (Y3): ▓▓▓ ~₹12 Cr
 <hr />
 <h2>8. BUYER PERSONA</h2>
 <h3>Persona: "Rahul — The Night Shift Warrior"</h3>
-<table>
+<table class="cols-2 meta-table">
 <thead>
 <tr>
 <th>Field</th>
@@ -1244,7 +1284,7 @@ Your SOM (Y1): ▓ ~₹1 Cr  |  Your SOM (Y3): ▓▓▓ ~₹12 Cr
 </tbody>
 </table>
 <h3>Persona Goals &amp; Frustrations</h3>
-<table>
+<table class="cols-2">
 <thead>
 <tr>
 <th>Goals</th>
@@ -1277,7 +1317,7 @@ Your SOM (Y1): ▓ ~₹1 Cr  |  Your SOM (Y3): ▓▓▓ ~₹12 Cr
 <hr />
 <h2>9. CUSTOMER PAIN POINTS</h2>
 <h3>9.1 Pain Point Hierarchy</h3>
-<table class="cols-3">
+<table class="cols-6">
 <thead>
 <tr>
 <th style="text-align: center;">Rank</th>
@@ -1348,18 +1388,13 @@ Your SOM (Y1): ▓ ~₹1 Cr  |  Your SOM (Y3): ▓▓▓ ~₹12 Cr
 </tbody>
 </table>
 <h3>9.2 Pain vs. Gain Matrix</h3>
-<pre><code>        HIGH GAIN TO CUSTOMER
-              ▲
-              │  ★ Hygienic meals    ★ Affordable bundles
-              │  ★ Shift-time delivery
-              │
-              │     ○ Fancy branding
-              │     ○ Wide cuisine variety
-              │
-              └──────────────────────────────►
-         LOW EFFORT              HIGH EFFORT
-              TO BUILD              TO BUILD
-</code></pre>
+<table class="cols-2">
+<thead><tr><th>Build First (High Gain, Low Effort)</th><th>Lower Priority (High Effort)</th></tr></thead>
+<tbody>
+<tr><td>★ Hygienic meals<br>★ Affordable bundles<br>★ Shift-time delivery (10 PM–5 AM)</td><td>○ Fancy branding<br>○ Wide cuisine variety</td></tr>
+</tbody>
+</table>
+
 <p><strong>Build first:</strong> Hygiene + affordability + reliable 10 PM–5 AM delivery.</p>
 <hr />
 <h2>10. BUYING TRIGGERS &amp; OBJECTIONS</h2>
@@ -1411,7 +1446,7 @@ Your SOM (Y1): ▓ ~₹1 Cr  |  Your SOM (Y3): ▓▓▓ ~₹12 Cr
 </tbody>
 </table>
 <h3>10.2 Objections &amp; Responses</h3>
-<table>
+<table class="cols-3">
 <thead>
 <tr>
 <th>Objection</th>
@@ -1458,7 +1493,7 @@ Your SOM (Y1): ▓ ~₹1 Cr  |  Your SOM (Y3): ▓▓▓ ~₹12 Cr
 </tbody>
 </table>
 <h3>10.3 Willingness to Pay (Estimated — Requires Validation)</h3>
-<table>
+<table class="cols-3">
 <thead>
 <tr>
 <th>Price Point</th>
@@ -1555,20 +1590,23 @@ Your SOM (Y1): ▓ ~₹1 Cr  |  Your SOM (Y3): ▓▓▓ ~₹12 Cr
 </tbody>
 </table>
 <h3>11.2 Journey Flow Diagram</h3>
-<pre><code>AWARENESS          TRIAL              HABIT              ADVOCACY
-    │                │                  │                    │
-    ▼                ▼                  ▼                    ▼
-┌────────┐     ┌──────────┐      ┌───────────┐       ┌───────────┐
-│ Shift  │────►│ First    │─────►│ 3x/week   │──────►│ Refers    │
-│ hunger │     │ order    │      │ orders    │       │ team of 5 │
-│ pain   │     │ ₹99 deal │      │ subscribe │       │           │
-└────────┘     └──────────┘      └───────────┘       └───────────┘
-    │                │                  │                    │
-    └────────────────┴──────────────────┴────────────────────┘
-                    CHURN RISK: Boring menu / price / bad delivery
-</code></pre>
+<table class="cols-4 flow-table">
+<thead>
+<tr><th>1. Awareness</th><th>2. Trial</th><th>3. Habit</th><th>4. Advocacy</th></tr>
+</thead>
+<tbody>
+<tr>
+<td>Shift hunger pain<br>Word-of-mouth, flyers</td>
+<td>First order<br>₹99 launch deal</td>
+<td>3+ orders/week<br>Subscription</td>
+<td>Refers team of 5<br>Referral rewards</td>
+</tr>
+</tbody>
+</table>
+
+<p><em>Churn risk: boring menu, price sensitivity, or bad delivery experience.</em></p>
 <h3>11.3 Key Metrics per Stage</h3>
-<table>
+<table class="cols-3">
 <thead>
 <tr>
 <th>Stage</th>
@@ -1612,7 +1650,7 @@ Your SOM (Y1): ▓ ~₹1 Cr  |  Your SOM (Y3): ▓▓▓ ~₹12 Cr
 <hr />
 <h2>12. RISK ASSESSMENT</h2>
 <h3>12.1 Risk Register</h3>
-<table>
+<table class="cols-6">
 <thead>
 <tr>
 <th style="text-align: center;">ID</th>
@@ -1707,25 +1745,17 @@ Your SOM (Y1): ▓ ~₹1 Cr  |  Your SOM (Y3): ▓▓▓ ~₹12 Cr
 </tbody>
 </table>
 <h3>12.2 Risk Heat Map</h3>
-<pre><code>IMPACT
-  ▲
-  │  R3          R1 R2 R4 R6
-H │  (hygiene)   (competition, margins, density)
-I │
-G │
-H │              R5 R7
-  │  R9          (bandwidth, CAC)
-M │
-E │
-D │  R10
-  │  (regulatory)
-L │
-O ┼──────────────────────────────────►
-W    LOW      MEDIUM      HIGH
-              LIKELIHOOD
-</code></pre>
+<table class="cols-4">
+<thead><tr><th></th><th>Low Likelihood</th><th>Medium Likelihood</th><th>High Likelihood</th></tr></thead>
+<tbody>
+<tr><td><strong>High Impact</strong></td><td>R9</td><td>R5, R7</td><td>R1, R2, R3, R4, R6</td></tr>
+<tr><td><strong>Medium Impact</strong></td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td><strong>Low Impact</strong></td><td>R10</td><td>—</td><td>—</td></tr>
+</tbody>
+</table>
+
 <h3>12.3 Unit Economics Sensitivity (Estimated)</h3>
-<table>
+<table class="cols-3">
 <thead>
 <tr>
 <th>Line Item</th>
@@ -1779,7 +1809,7 @@ W    LOW      MEDIUM      HIGH
 <hr />
 <h2>13. PIVOT OPPORTUNITIES</h2>
 <h3>13.1 Pivot Options (If Initial Model Struggles)</h3>
-<table class="cols-3">
+<table class="cols-5">
 <thead>
 <tr>
 <th>Pivot</th>
@@ -1842,15 +1872,16 @@ W    LOW      MEDIUM      HIGH
 </tbody>
 </table>
 <h3>13.2 Recommended Pivot Sequence</h3>
-<pre><code>Phase 1 (Now)     →  B2C night meals for IT support (Pune)
-Phase 2 (Month 6) →  Subscription boxes (P2) if repeat rate &lt; 30%
-Phase 3 (Year 1)  →  B2B corporate contracts (P1) if 500+ B2C customers
-Phase 4 (Year 2)  →  Expand to Bangalore/Hyderabad (P3/P6)
-</code></pre>
+<ol>
+<li><strong>Phase 1 (Now):</strong> B2C night meals for IT support (Pune)</li>
+<li><strong>Phase 2 (Month 6):</strong> Subscription boxes (P2) if repeat rate &lt; 30%</li>
+<li><strong>Phase 3 (Year 1):</strong> B2B corporate contracts (P1) if 500+ B2C customers</li>
+<li><strong>Phase 4 (Year 2):</strong> Expand to Bangalore/Hyderabad (P3/P6)</li>
+</ol>
 <hr />
 <h2>14. GO / NO-GO RECOMMENDATION</h2>
 <h3>14.1 Decision Framework</h3>
-<table class="cols-3">
+<table class="cols-4">
 <thead>
 <tr>
 <th>Criterion</th>
@@ -1917,22 +1948,24 @@ Phase 4 (Year 2)  →  Expand to Bangalore/Hyderabad (P3/P6)
 </tbody>
 </table>
 <h3>14.2 Final Recommendation</h3>
-<pre><code>╔══════════════════════════════════════════════════════════════╗
-║                                                              ║
-║   RECOMMENDATION:  ✅  CONDITIONAL GO                        ║
-║                                                              ║
-║   Confidence Level: 72%                                      ║
-║                                                              ║
-╚══════════════════════════════════════════════════════════════╝
-</code></pre>
-<table>
+<div class="recommendation-box">
+<p><strong>RECOMMENDATION</strong></p>
+<p class="verdict">✅ CONDITIONAL GO</p>
+<p>Confidence Level: <strong>72%</strong></p>
+</div>
+
+<table class="cols-2">
 <thead>
 <tr>
-<th>Verdict</th>
-<th><strong>CONDITIONAL GO</strong></th>
+<th>Item</th>
+<th>Detail</th>
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>Verdict</td>
+<td><strong>CONDITIONAL GO</strong></td>
+</tr>
 <tr>
 <td>Meaning</td>
 <td>Proceed with a <strong>lean 30-day pilot</strong> in Pune (Hinjewadi). Do <strong>not</strong> invest in full kitchen lease or quit day job until you validate <strong>50 pre-orders</strong> and <strong>₹140 AOV acceptance</strong>.</td>
@@ -1992,7 +2025,7 @@ Phase 4 (Year 2)  →  Expand to Bangalore/Hyderabad (P3/P6)
 <hr />
 <h2>15. 30-DAY ACTION PLAN</h2>
 <h3>Week 1: Validate &amp; Define (Days 1–7)</h3>
-<table>
+<table class="cols-4">
 <thead>
 <tr>
 <th style="text-align: center;">Day</th>
@@ -2041,7 +2074,7 @@ Phase 4 (Year 2)  →  Expand to Bangalore/Hyderabad (P3/P6)
 </tbody>
 </table>
 <h3>Week 2: Pre-Launch &amp; Pre-Sell (Days 8–14)</h3>
-<table>
+<table class="cols-4">
 <thead>
 <tr>
 <th style="text-align: center;">Day</th>
@@ -2084,7 +2117,7 @@ Phase 4 (Year 2)  →  Expand to Bangalore/Hyderabad (P3/P6)
 </tbody>
 </table>
 <h3>Week 3: Soft Launch (Days 15–21)</h3>
-<table>
+<table class="cols-4">
 <thead>
 <tr>
 <th style="text-align: center;">Day</th>
@@ -2127,7 +2160,7 @@ Phase 4 (Year 2)  →  Expand to Bangalore/Hyderabad (P3/P6)
 </tbody>
 </table>
 <h3>Week 4: Measure &amp; Decide (Days 22–30)</h3>
-<table>
+<table class="cols-4">
 <thead>
 <tr>
 <th style="text-align: center;">Day</th>
@@ -2176,7 +2209,7 @@ Phase 4 (Year 2)  →  Expand to Bangalore/Hyderabad (P3/P6)
 </tbody>
 </table>
 <h3>30-Day KPI Dashboard</h3>
-<table>
+<table class="cols-3">
 <thead>
 <tr>
 <th>KPI</th>
@@ -2233,7 +2266,7 @@ Phase 4 (Year 2)  →  Expand to Bangalore/Hyderabad (P3/P6)
 </tbody>
 </table>
 <h3>Budget Estimate (30-Day Pilot)</h3>
-<table>
+<table class="cols-2">
 <thead>
 <tr>
 <th>Item</th>
@@ -2338,6 +2371,6 @@ Phase 4 (Year 2)  →  Expand to Bangalore/Hyderabad (P3/P6)
 <hr />
 <p><strong>END OF REPORT</strong></p>
 <p><em>Prepared for PDF export. Print or convert via browser (Ctrl+P → Save as PDF) or any Markdown-to-PDF tool.</em></p>
-<div class="footer-note">Startup Validation Report — Confidential</div>
+<div class="footer-note">Startup Validation Report — Confidential — NightShift Kitchen</div>
 </body>
 </html>
