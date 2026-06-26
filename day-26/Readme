@@ -1,0 +1,8 @@
+How This Simulator Works
+This educational tool models the standard administrative pathway of a U.S. healthcare prior authorization request across three operational domains: the Patient, the Provider Clinic, and the Insurance Payer.
+Advance the Case File: Progress the patient's active case folder through five sequential stages by dragging it to the highlighted drop zone or clicking "Process Step."
+Resolve Clinical Challenges: At each stage, complete an interactive decision form—such as verifying active eligibility, matching chart notes to clinical criteria guidelines, assembling compliant document packets, or responding to payer audits.
+Track Real-Time Performance:
+Administrative Days Elapsed tracks the operational delays caused by your choices (optimal paths save time, while incomplete documentation or administrative errors add simulated delay penalties).
+Process Efficiency Score rates your compliance with standard utilization management guidelines, deducting points for audit failures, unnecessary uploads, or bypassed protocols.
+Achieve Determination: Successfully navigate pends, clinical denials, or appeal pathways in the final stage to secure the approval and review your performance summary.
