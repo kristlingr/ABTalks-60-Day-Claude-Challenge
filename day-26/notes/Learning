@@ -1,0 +1,40 @@
+About PA Auth
+
+1.
+Step 1: Patient Eligibility & Intake
+Real-World Alignment: High. Many administrative delays are caused by submitting prior authorizations (PAs) for active plans that do not actually require authorization for the specific CPT/HCPCS code, or for plans that have been terminated.
+Educational Value: Explaining the role of the electronic Benefit Verification (eBV) system correctly teaches users that eligibility and code checks must precede the labor-intensive clinical compilation phase.
+Step 2: Medical Necessity Evaluation (Guideline Matching)
+Real-World Alignment: Exceptional. Utilization Review (UR) clinicians do not simply answer multiple-choice questions; they actively abstract objective indicators from EHR clinical narratives to satisfy structured guidelines like Milliman Care Guidelines (MCG) or InterQual.
+Scenario Integrity:
+Total Hip Arthroplasty: Accurately identifies the need to prove the failure of conservative management (physical therapy, NSAIDs) and objective radiological proof of joint-space narrowing.
+Lumbar MRI: Correctly teaches the "red flag" exception rules. Uncomplicated lower back pain typically requires 6 weeks of conservative therapy before advanced imaging is authorized. However, progressive neurological deficits—such as foot drop—allow clinicians to override this timeframe immediately.
+Specialty Biologics (Plaque Psoriasis & Crohn’s): Accurately highlights Body Surface Area (BSA) thresholds (typically 
+≥
+10
+%
+≥10%
+) and biochemical/endoscopic markers (fecal calprotectin, mucosal ulcerations) as standard diagnostic prerequisites.
+Step 3: Document Assembly & Quality Assurance (QA)
+Real-World Alignment: High. Clinicians often make the mistake of "data dumping" (exporting the patient's entire chart) or under-documenting.
+Educational Value: The simulator's penalty mechanic teaches the concept of "Minimum Necessary" standards under HIPAA. Attaching unrelated diagnostics (like a spine MRI for a hip arthroplasty) increases the payer audit review timeline and increases administrative burden.
+Step 4: Portal Submission & Triage
+Real-World Alignment: High. While HIPAA standard ASC X12 278 transactions or electronic prior authorization (ePA) portals are the industry standard for fast-tracking triage, a significant portion of the market still relies on manual paper facsimiles (faxes), which introduce manual data entry errors and physical document loss.
+Educational Value: Contrast-testing ePA portal efficiency against legacy fax processes highlights how transmission channels impact simulated "days elapsed."
+Step 5: Adjudication Outcome (Pend, Denial, Appeal, Site of Care)
+Real-World Alignment: High.
+Pend Resolution: Accurately teaches that a "Pend" is a time-sensitive administrative hold (frequently a 72-hour turnaround) to submit legible signatures or missing progress notes, preventing a hard denial.
+Clinical Denial (MRI): Demonstrates the value of a Peer-to-Peer (P2P) consultation. When an administrative triage reviewer misses a key clinical indicator (like foot drop), a direct discussion between the ordering doctor and the payer's Medical Director is the fastest correction mechanism.
+Step Therapy Appeal: Correctly models the step therapy ("fail-first") override process. If a patient has a documented medical contraindication to a preferred formulary drug (e.g., adalimumab), an appeal with objective clinical documentation can override the rule.
+Site of Care Optimization (Infliximab): Models a modern payer cost-containment strategy. Payers aggressively redirect stable patients away from high-cost hospital outpatient departments to lower-cost standalone infusion centers or home health settings.
+2. Workflow Summary Review (Post-Scenario Scorecard)
+Upon completing a scenario, the user is presented with a scorecard containing:
+Administrative Days Elapsed: Measures the cost of choices.
+Process Efficiency Score: Tracks quality control.
+Historical Case Record Insights: Summarizes the decision points and labels them as either a Recommended Path or an Administrative Delay.
+Instructional Impact: This retrospective review reinforces why certain pathways were optimal. Rather than just giving a score, displaying a step-by-step history forces the user to reflect on which decisions extended the patient's wait time (e.g., seeing how missing documents added 4 days, or choosing a paper fax added 3 days).
+3. Professional Recommendations for Further Realism
+Should you choose to build further on this code in the future, consider these minor, high-level structural enhancements:
+Introduce Gold-Carding Concepts: For advanced training, explain that some highly compliant providers can bypass certain steps of the PA workflow entirely through "Gold-Carding" status (earned by maintaining high approval rates and clinical accuracy over time).
+Incorporate Peer-to-Peer Deadlines: In the Lumbar MRI scenario, mention that P2P consultations typically have strict regulatory deadlines (often within 15 days of the initial denial date) to add time-sensitivity.
+X12 278 Standard Nomenclature: For tech-focused audiences, reference the EDI 278 transaction standard within Step 4 to highlight the technical backend of automated electronic submissions
