@@ -1,0 +1,1681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prior Authorization Training Portal</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom Scrollbar for Chat & Workspace Panels */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    
+    /* Animation helper for glowing active targets */
+    @keyframes pulse-border {
+      0% { border-color: #2563eb; }
+      100% { border-color: #bfdbfe; }
+    }
+    .pulse-target {
+      animation: pulse-border 1.5s infinite alternate;
+    }
+
+    /* Confetti Particle Styling */
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      opacity: 0.8;
+      top: -10px;
+      animation: fall linear forwards;
+    }
+    @keyframes fall {
+      to {
+        transform: translateY(105vh) rotate(360deg);
+      }
+    }
+
+    /* Modal Overlay Transition Override */
+    .modal-overlay.open {
+      opacity: 1 !important;
+      pointer-events: auto !important;
+    }
+    .modal-overlay.open .modal {
+      transform: translateY(0) !important;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans min-h-screen flex flex-col">
+
+  <!-- Confetti Target Area -->
+  <div id="confetti-container" class="fixed top-0 left-0 w-screen h-screen pointer-events-none z-50 overflow-hidden"></div>
+
+  <!-- Persistent Master Navigation Header -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-4">
+      <div>
+        <h1 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+          <span>🩺</span> Prior Authorization Training Portal
+        </h1>
+        <p class="text-xs text-slate-500">Master patient advocacy, administrative criteria, and clinical guidelines.</p>
+      </div>
+      
+      <!-- Tab Controls -->
+      <nav class="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200">
+        <button id="tab-hub" onclick="switchMode('hub')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 bg-white text-slate-800 shadow-sm">
+          🏠 Home Hub
+        </button>
+        <button id="tab-story" onclick="switchMode('story')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 text-slate-600 hover:text-slate-900">
+          📖 1. Story Journey
+        </button>
+        <button id="tab-board" onclick="switchMode('board')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 text-slate-600 hover:text-slate-900">
+          🗂️ 2. Workflow Board
+        </button>
+      </nav>
+      
+      <div class="hidden lg:flex items-center gap-2">
+        <span class="text-[10px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700 px-3 py-1 rounded-full border border-blue-200">
+          Educational Sandbox
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       TAB 1: PORTAL HUB VIEW
+       ========================================================================== -->
+  <section id="view-hub" class="max-w-5xl mx-auto px-4 py-12 flex-grow flex flex-col justify-center items-center">
+    <div class="text-center max-w-2xl mb-12">
+      <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight sm:text-4xl">
+        Deconstruct the Prior Authorization Journey
+      </h2>
+      <p class="mt-4 text-base text-slate-600">
+        Prior Authorization (PA) is a critical administrative step in U.S. healthcare. Select a module below to examine the process through two distinct lenses.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
+      <!-- Story Mode Box -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between">
+        <div>
+          <div class="text-3xl mb-4">📖</div>
+          <h3 class="text-lg font-bold text-slate-900">Module 1: Patient Story Journey</h3>
+          <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+            Follow Rahul, a patient diagnosed with Rheumatoid Arthritis, and Priya, an access specialist, through an 8-scene interactive dialogue. Learn how step-therapy criteria and operational delays impact patients.
+          </p>
+          <ul class="mt-4 space-y-2 text-xs text-slate-600">
+            <li class="flex items-center gap-2">🔹 Beginner-friendly explanations</li>
+            <li class="flex items-center gap-2">🔹 Branching scenario-based dialogue</li>
+            <li class="flex items-center gap-2">🔹 Focus on clinical advocacy & patient impact</li>
+          </ul>
+        </div>
+        <button onclick="switchMode('story')" class="mt-6 w-full py-2.5 bg-indigo-600 text-white font-semibold text-xs rounded-xl hover:bg-indigo-700 transition-colors">
+          Start Story Journey
+        </button>
+      </div>
+
+      <!-- Board Mode Box -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between">
+        <div>
+          <div class="text-3xl mb-4">🗂️</div>
+          <h3 class="text-lg font-bold text-slate-900">Module 2: Interactive Workflow Board</h3>
+          <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+            Take direct control of clinic operations. Drag case cards across Patient, Provider, and Payer lanes. Link live clinical chart text to medical criteria, assemble clean claim packets, and resolve denials.
+          </p>
+          <ul class="mt-4 space-y-2 text-xs text-slate-600">
+            <li class="flex items-center gap-2">🔹 Interactive clinical criteria matching</li>
+            <li class="flex items-center gap-2">🔹 Multi-document file packet compiler</li>
+            <li class="flex items-center gap-2">🔹 Administrative metrics (Days Elapsed & Score)</li>
+          </ul>
+        </div>
+        <button onclick="switchMode('board')" class="mt-6 w-full py-2.5 bg-blue-600 text-white font-semibold text-xs rounded-xl hover:bg-blue-700 transition-colors">
+          Open Workflow Board
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       TAB 2: PATIENT STORY VIEW
+       ========================================================================== -->
+  <section id="view-story" class="hidden flex-grow flex-col">
+    <!-- Story Mini Header -->
+    <div class="bg-slate-950 text-white py-3 border-b border-slate-855">
+      <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Chronological Progress</span>
+          <span id="story-progress-text" class="text-xs font-semibold text-indigo-400">Scene 1 of 8</span>
+        </div>
+        <div class="w-48 bg-slate-800 rounded-full h-2 overflow-hidden">
+          <div id="story-progress-bar" class="bg-indigo-50 h-2 rounded-full transition-all duration-300" style="width: 12.5%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Story Workspace -->
+    <div class="flex-grow max-w-7xl w-full mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
+      <!-- Story Registry Sidebar -->
+      <aside class="lg:col-span-1 space-y-4">
+        <!-- Patient Profile -->
+        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+          <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Patient Profile</h3>
+          <div class="space-y-2 text-xs">
+            <div><span class="text-slate-400 block text-[10px]">Name</span><strong class="text-slate-800">Rahul Sharma</strong></div>
+            <div><span class="text-slate-400 block text-[10px]">Indication</span><strong class="text-slate-800">Rheumatoid Arthritis (M06.9)</strong></div>
+            <div><span class="text-slate-400 block text-[10px]">Therapy</span><strong class="text-slate-800">Humira (Adalimumab)</strong></div>
+          </div>
+        </div>
+
+        <!-- Plan Requirements -->
+        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+          <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Plan Requirements</h3>
+          <div class="space-y-2 text-xs">
+            <div><span class="text-slate-400 block text-[10px]">Insurers</span><strong class="text-slate-800">StarCare Health</strong></div>
+            <div><span class="text-slate-400 block text-[10px]">Required Step</span><strong class="text-slate-800">Sulfasalazine Trial</strong></div>
+          </div>
+        </div>
+
+        <!-- Live Plan Status -->
+        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+          <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Live Plan Status</h3>
+          <div class="space-y-3 text-xs">
+            <div>
+              <span class="block text-slate-400 text-[10px]">Assigned Payer</span>
+              <span class="font-bold text-slate-800">StarCare Health (Commercial)</span>
+            </div>
+            <div>
+              <span class="block text-slate-400 text-[10px]">PA Status</span>
+              <span id="story-pa-status" class="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-600">Not Initiated</span>
+            </div>
+            <div>
+              <span class="block text-slate-400 text-[10px]">Ref Number</span>
+              <code id="story-pa-ref" class="text-[10px] bg-slate-50 px-1.5 py-0.5 rounded border border-slate-200 text-slate-600">N/A</code>
+            </div>
+            <div class="pt-2 border-t border-slate-100">
+              <span class="block text-slate-400 text-[10px]">Required Trials</span>
+              <ul class="space-y-1 mt-1 text-[11px]">
+                <li class="flex items-center gap-1.5 text-slate-500" id="story-trial-first">
+                  <span id="story-icon-1">⚪</span> First-line therapy (Sulfasalazine)
+                </li>
+                <li class="flex items-center gap-1.5 text-slate-500" id="story-trial-doc">
+                  <span id="story-icon-2">⚪</span> Clinical Sign-off / Records
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Story Dialogues Container -->
+      <div class="lg:col-span-3 flex flex-col h-[550px] bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div id="chat-feed" class="flex-grow overflow-y-auto p-4 sm:p-6 bg-slate-50/50 flex flex-col space-y-4"></div>
+        <div class="bg-white border-t border-slate-200 p-4">
+          <p id="choice-prompt-text" class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3 text-center">
+            Determine the Response Strategy
+          </p>
+          <div id="choices-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl mx-auto"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       TAB 3: CLINICAL WORKFLOW BOARD VIEW
+       ========================================================================== */ -->
+  <section id="view-board" class="hidden flex-grow flex-col">
+    <!-- Dashboard Stats Panel -->
+    <div class="bg-slate-900 py-3 border-b border-slate-800 text-white">
+      <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+        
+        <!-- Dropdown Selector -->
+        <div class="flex items-center gap-2">
+          <label for="scenario-select" class="text-xs text-slate-400 font-bold uppercase tracking-wider">Active Case:</label>
+          <select id="scenario-select" onchange="initiateScenario(this.value)" class="bg-slate-800 text-xs text-white border border-slate-700 rounded-lg px-2 py-1 outline-none">
+            <!-- Populated dynamically -->
+          </select>
+        </div>
+
+        <div class="flex items-center gap-6 text-xs font-semibold">
+          <div class="flex items-center gap-1.5"><span class="text-slate-400">Stage:</span> <span id="board-stage-title" class="text-blue-400">Intake</span></div>
+          <div class="flex items-center gap-1.5"><span class="text-slate-400">Days Elapsed:</span> <span id="board-days-count" class="text-blue-400">0</span></div>
+          <div class="flex items-center gap-1.5"><span class="text-slate-400">Score:</span> <span id="board-efficiency" class="text-blue-400">100%</span></div>
+        </div>
+        
+        <button onclick="restartCurrentScenario()" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold px-2.5 py-1 rounded border border-slate-700 transition-colors">
+          Reset Case
+        </button>
+      </div>
+    </div>
+
+    <!-- Stepper Indicator -->
+    <div class="bg-white border-b border-slate-200 py-3">
+      <div class="max-w-7xl mx-auto px-4 flex justify-between gap-2 overflow-x-auto" id="board-timeline-stepper">
+        <div class="flex items-center gap-1.5 text-xs text-blue-600 font-bold shrink-0" data-step="1">
+          <span class="w-5 h-5 rounded-full bg-blue-100 flex items-center justify-center text-[10px]">1</span> Eligibility Verify
+        </div>
+        <div class="flex items-center gap-1.5 text-xs text-slate-400 shrink-0" data-step="2">
+          <span class="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center text-[10px]">2</span> Medical Necessity
+        </div>
+        <div class="flex items-center gap-1.5 text-xs text-slate-400 shrink-0" data-step="3">
+          <span class="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center text-[10px]">3</span> Document Assembly
+        </div>
+        <div class="flex items-center gap-1.5 text-xs text-slate-400 shrink-0" data-step="4">
+          <span class="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center text-[10px]">4</span> Portal Submission
+        </div>
+        <div class="flex items-center gap-1.5 text-xs text-slate-400 shrink-0" data-step="5">
+          <span class="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center text-[10px]">5</span> Adjudication Outcome
+        </div>
+      </div>
+    </div>
+
+    <!-- Board Core Interface -->
+    <div class="flex-grow max-w-7xl w-full mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
+      <!-- Clinical Sidebar Record -->
+      <aside class="lg:col-span-1 space-y-4">
+        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+          <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Demographic</h3>
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <div><span class="text-slate-400 block text-[10px]">Name</span><strong id="b-chart-name" class="text-slate-800">-</strong></div>
+            <div><span class="text-slate-400 block text-[10px]">Age</span><strong id="b-chart-age" class="text-slate-800">-</strong></div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+          <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Diagnosis</h3>
+          <div id="b-chart-diagnosis" class="text-xs bg-slate-50 border-l-2 border-slate-300 p-2 text-slate-700 font-medium">-</div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+          <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Prescribed Service</h3>
+          <div id="b-chart-service" class="text-xs font-bold text-blue-900">-</div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+          <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">History Logs</h3>
+          <div id="b-chart-history" class="text-xs bg-slate-50 border-l-2 border-slate-300 p-2 text-slate-700 leading-relaxed max-h-36 overflow-y-auto">-</div>
+        </div>
+      </aside>
+
+      <!-- Lane Grid board -->
+      <div class="lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Lane 1: Patient -->
+        <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm flex flex-col h-[480px]">
+          <div class="bg-slate-900 text-white px-3 py-2 text-xs font-bold flex justify-between items-center">
+            <span>1. Patient Domain</span><span>👤</span>
+          </div>
+          <div class="p-4 bg-slate-50/50 flex-grow flex flex-col gap-4">
+            <div id="zone-1" data-zone-step="1" ondragover="allowDrop(event)" ondragleave="dragLeave(event)" ondrop="handleDrop(event)" class="drop-zone border-2 border-dashed border-slate-300 bg-white rounded-xl p-4 flex-grow flex flex-col justify-center items-center text-center transition-all duration-200">
+              <strong class="text-xs text-slate-800">1. Verification Zone</strong>
+              <p class="text-[10px] text-slate-400 mt-1">Verify active policy and prior auth criteria requirements.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lane 2: Provider -->
+        <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm flex flex-col h-[480px]">
+          <div class="bg-blue-900 text-white px-3 py-2 text-xs font-bold flex justify-between items-center">
+            <span>2. Provider Domain</span><span>🩺</span>
+          </div>
+          <div class="p-4 bg-slate-50/50 flex-grow flex flex-col gap-4">
+            <div id="zone-2" data-zone-step="2" ondragover="allowDrop(event)" ondragleave="dragLeave(event)" ondrop="handleDrop(event)" class="drop-zone border-2 border-dashed border-slate-200 bg-white rounded-xl p-4 flex-grow flex flex-col justify-center items-center text-center transition-all duration-200">
+              <strong class="text-xs text-slate-800">2. Necessity Check</strong>
+              <p class="text-[10px] text-slate-400 mt-1">Match medical chart segments to guidelines.</p>
+            </div>
+            <div id="zone-3" data-zone-step="3" ondragover="allowDrop(event)" ondragleave="dragLeave(event)" ondrop="handleDrop(event)" class="drop-zone border-2 border-dashed border-slate-200 bg-white rounded-xl p-4 flex-grow flex flex-col justify-center items-center text-center transition-all duration-200">
+              <strong class="text-xs text-slate-800">3. Document Prep</strong>
+              <p class="text-[10px] text-slate-400 mt-1">Assemble clean clinical attachment packet.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lane 3: Payer -->
+        <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm flex flex-col h-[480px]">
+          <div class="bg-slate-800 text-white px-3 py-2 text-xs font-bold flex justify-between items-center">
+            <span>3. Payer Domain</span><span>🏦</span>
+          </div>
+          <div class="p-4 bg-slate-50/50 flex-grow flex flex-col gap-4">
+            <div id="zone-4" data-zone-step="4" ondragover="allowDrop(event)" ondragleave="dragLeave(event)" ondrop="handleDrop(event)" class="drop-zone border-2 border-dashed border-slate-200 bg-white rounded-xl p-4 flex-grow flex flex-col justify-center items-center text-center transition-all duration-200">
+              <strong class="text-xs text-slate-800">4. Web Portal</strong>
+              <p class="text-[10px] text-slate-400 mt-1">Submit digital packet into review queues.</p>
+            </div>
+            <div id="zone-5" data-zone-step="5" ondragover="allowDrop(event)" ondragleave="dragLeave(event)" ondrop="handleDrop(event)" class="drop-zone border-2 border-dashed border-slate-200 bg-white rounded-xl p-4 flex-grow flex flex-col justify-center items-center text-center transition-all duration-200">
+              <strong class="text-xs text-slate-800">5. Medical Review</strong>
+              <p class="text-[10px] text-slate-400 mt-1">Resolve pends, denials, or expedited appeals.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Persistent Standard Policy Footer Info -->
+  <footer class="bg-white border-t border-slate-200 mt-auto py-6">
+    <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-400">
+      Prior Authorization Sandbox Portal &copy; All Scenarios and Payers are configured as illustrative representations of medical access operations.
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       MODALS WRAPPERS & DIALOG SYSTEM
+       ========================================================================== -->
+  <!-- Modals 1: Active Board Steps -->
+  <div class="modal-overlay fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity duration-200" id="board-modal">
+    <div class="modal bg-white rounded-2xl shadow-xl w-11/12 max-w-2xl overflow-hidden flex flex-col max-h-[90vh] transform translate-y-4 transition-transform duration-200">
+      <div class="bg-slate-900 text-white p-4 flex justify-between items-center">
+        <h3 id="board-modal-badge" class="text-xs font-bold uppercase tracking-wider text-blue-400">Workspace Verification</h3>
+      </div>
+      <div class="p-6 overflow-y-auto flex-grow">
+        <h4 id="board-modal-title" class="text-lg font-bold text-slate-900 mb-1">Step Target</h4>
+        <p id="board-modal-desc" class="text-xs text-slate-500 mb-6">Description notes</p>
+        
+        <div id="board-modal-workspace" class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+          <!-- Populated programmatically based on active stage -->
+        </div>
+
+        <div id="board-modal-feedback" class="mt-4 p-4 rounded-xl text-xs hidden"></div>
+      </div>
+      <div class="bg-slate-50 p-4 border-t border-slate-200 flex justify-end">
+        <button id="board-modal-action-btn" disabled onclick="submitBoardDecision()" class="bg-blue-600 disabled:bg-slate-300 disabled:cursor-not-allowed hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2 rounded-xl transition-colors">
+          Confirm Choice
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modals 2: Completion Dashboard -->
+  <div class="modal-overlay fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity duration-200" id="board-summary-modal">
+    <div class="modal bg-white rounded-2xl shadow-xl w-11/12 max-w-lg p-6 text-center transform translate-y-4 transition-transform duration-200">
+      <div class="text-4xl mb-3">🎉</div>
+      <h2 class="text-xl font-bold text-slate-900">Prior Authorization Approved!</h2>
+      <p class="text-xs text-slate-500 mt-1">All clinical guidelines and attachment packets have successfully validated.</p>
+      
+      <div class="flex justify-center gap-6 my-6">
+        <div class="bg-blue-50 p-4 rounded-xl min-w-[120px] border border-blue-100">
+          <span class="text-[10px] text-slate-400 block font-bold uppercase tracking-wider">DAYS ELAPSED</span>
+          <strong id="sum-days" class="text-xl text-blue-900 font-black">12 Days</strong>
+        </div>
+        <div class="bg-blue-50 p-4 rounded-xl min-w-[120px] border border-blue-100">
+          <span class="text-[10px] text-slate-400 block font-bold uppercase tracking-wider">EFFICIENCY</span>
+          <strong id="sum-score" class="text-xl text-blue-900 font-black">90%</strong>
+        </div>
+      </div>
+
+      <div class="text-left bg-slate-50 border border-slate-200 rounded-xl p-4 max-h-48 overflow-y-auto text-xs space-y-2" id="board-sum-logs">
+        <!-- Logs loaded here -->
+      </div>
+
+      <div class="mt-6 flex justify-center gap-3">
+        <button onclick="closeBoardSummaryAndNext()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-5 py-2.5 rounded-xl transition-colors">
+          Simulate Next Case
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       6. JAVASCRIPT LOGIC ENGINE
+       ========================================================================== -->
+  <script>
+    /* ==========================================================================
+       A. Scenarios & Data Configurations
+       ========================================================================== */
+    const STORY_SCENES = [
+      {
+        sceneId: 1,
+        title: "Doctor Visit",
+        nodeId: "node-1",
+        paStatus: "In Process",
+        paRef: "Pending",
+        trialFirst: "verifying",
+        trialDoc: "verifying",
+        narrativeIntro: [
+          { char: "narrator", text: "Rahul visits Dr. Patel at City Medical Center, experiencing persistent, painful inflammation in his wrists and fingers." },
+          { char: "doctor", text: "Dr. Patel: 'Your inflammation markers confirm a diagnosis of severe Rheumatoid Arthritis. To prevent permanent joint erosion and long-term cartilage damage, we must initiate advanced biologic treatment. I am writing a prescription for Humira.'" },
+          { char: "rahul", text: "Thank you, Dr. Patel. My joints have been incredibly stiff. Should I head over to the pharmacy to pick up the prescription immediately?" }
+        ],
+        choices: [
+          {
+            text: "Ask about insurance pre-approval rules.",
+            userLine: "Wait, does my insurance plan allow me to fill specialty biologics like Humira immediately?",
+            reaction: [
+              { char: "narrator", text: "Priya, a Healthcare Operations Specialist at City Medical Center, steps in to review the chart requirements." },
+              { char: "priya", text: "Hello Rahul! Specialty medications almost always require Prior Authorization (PA) before StarCare Health—your insurer—will agree to cover the cost. Let's look at how we submit this request." }
+            ]
+          },
+          {
+            text: "Submit the request directly to StarCare Health.",
+            userLine: "We should send this order to my insurance company, StarCare Health, to see if they approve it.",
+            reaction: [
+              { char: "narrator", text: "Priya, a Healthcare Operations Specialist, organizes the administrative pathway." },
+              { char: "priya", text: "Excellent proactive step, Rahul. For expensive biologic agents, our medical clinic coordinates directly with StarCare Health to establish clinical coverage before you go to the pharmacy." }
+            ]
+          }
+        ]
+      },
+      {
+        sceneId: 2,
+        title: "Insurance Roadblock",
+        nodeId: "node-2",
+        paStatus: "Submitted",
+        paRef: "REF-99812",
+        trialFirst: "pending",
+        trialDoc: "pending",
+        narrativeIntro: [
+          { char: "narrator", text: "Dr. Patel's administrative team compiles the clinic files and submits the Prior Authorization request directly to StarCare Health (an illustrative example of a commercial payer)." },
+          { char: "priya", text: "To clarify, the standard workflow for these therapies starts as Provider → PA Request → Payer. No retail pharmacy is intermediate in this phase. Once the PA is formally approved by StarCare, it resides permanently on your file for the approved plan duration." },
+          { char: "rahul", text: "So you transmit clinical logs directly to them? Why is this process necessary if my doctor already wrote the prescription?" }
+        ],
+        choices: [
+          {
+            text: "Ask Priya for the clinical cost reasoning.",
+            userLine: "Why do insurance plans establish these checkpoints if a licensed physician already decided what I need?",
+            reaction: [
+              { char: "priya", text: "Biologics like Humira cost thousands of dollars per month. Insurers use prior authorization checks to verify clinical indication, ensure safe prescribing habits, and control escalating healthcare costs." }
+            ]
+          },
+          {
+            text: "Express concern about systemic access delays.",
+            userLine: "My joint pain is active today. Doesn't this back-and-forth discussion cause delays in getting my medicine?",
+            reaction: [
+              { char: "priya", text: "It can, Rahul. Navigating these requirements demands rapid coordination because delays directly impact physical comfort and clinical safety. Let's look at the underlying data." }
+            ]
+          }
+        ]
+      },
+      {
+        sceneId: 3,
+        title: "What is PA?",
+        nodeId: "node-3",
+        paStatus: "Reviewing",
+        paRef: "REF-99812",
+        trialFirst: "checking",
+        trialDoc: "checking",
+        narrativeIntro: [
+          { char: "narrator", text: "Priya provides clinical context on what prior authorization entails for patients." },
+          { char: "priya", text: "Prior authorization is not merely a bureaucratic task. For aggressive, inflammatory conditions like Rheumatoid Arthritis, delays in initiating biologic therapy are clinically meaningful and can permanently impact structural disease progression." },
+          { char: "priya", text: "To give you an idea of scale, the American Medical Association (AMA) 2023 Prior Authorization Survey reported that PA policies lead to treatment delays for the absolute majority of patients (94% of physicians surveyed reported significant delays in care)." }
+        ],
+        choices: [
+          {
+            text: "Inquire about 'Step Therapy' regulations.",
+            userLine: "Priya, what is 'Step Therapy' and does StarCare Health require me to try other drugs first?",
+            reaction: [
+              { char: "priya", text: "Step therapy requires patients to try and 'fail' conventional, lower-cost therapies before the insurance company approves advanced, higher-cost biologic options. Let's see how they verify this." }
+            ]
+          },
+          {
+            text: "Ask how the review checklist works.",
+            userLine: "What specific details does the insurance company verify before granting an approval?",
+            reaction: [
+              { char: "priya", text: "The payer evaluates several clear medical parameters. Let's review the exact checklist that StarCare Health operates behind the scenes." }
+            ]
+          }
+        ]
+      },
+      {
+        sceneId: 4,
+        title: "Insurance Review",
+        nodeId: "node-4",
+        paStatus: "Evaluating",
+        paRef: "REF-99812",
+        trialFirst: "checking",
+        trialDoc: "checking",
+        narrativeIntro: [
+          { char: "narrator", text: "Priya breaks down the four core criteria checklists checked during StarCare's review process." },
+          { char: "priya", text: "When StarCare's clinical review team receives our packet, they check: 1) Active Member Eligibility, 2) Complete clinical documentation, 3) ICD-10 Diagnosis match (confirming Rheumatoid Arthritis matches FDA-approved indications), and 4) Documented Step Therapy trial history." },
+          { char: "priya", text: "Eligibility ensures you have active coverage. Clinical documentation verifies the diagnosis is backed by lab results. The ICD-10 check confirms medical alignment, and step therapy history ensures we followed the required drug sequence." }
+        ],
+        choices: [
+          {
+            text: "Assume the initial submission was complete.",
+            userLine: "Dr. Patel's office manages many patients. I assume they sent over a complete file with all required historical trials.",
+            reaction: [
+              { char: "priya", text: "We try our best, but sometimes historical trial details from other medical facilities aren't fully integrated into current EHR records." }
+            ]
+          },
+          {
+            text: "Ask what happens if a gap is found.",
+            userLine: "What happens if our submitted packet lacks a minor documentation checkpoint or historical note?",
+            reaction: [
+              { char: "priya", text: "If any checklist item is incomplete, StarCare Health will issue an administrative hold or an outright denial. Let's see the result of our submission." }
+            ]
+          }
+        ]
+      },
+      {
+        sceneId: 5,
+        title: "Denial",
+        nodeId: "node-5",
+        paStatus: "Denied",
+        paRef: "REF-99812",
+        trialFirst: "failed",
+        trialDoc: "missing",
+        narrativeIntro: [
+          { char: "narrator", text: "StarCare Health issues an administrative prior authorization Denial, citing missing documentation of first-line conventional therapy trials." },
+          { char: "rahul", text: "Oh no! I just received an alert from my insurance portal. My request for Humira was officially denied! Am I locked out of getting this medication permanently?" },
+          { char: "priya", text: "A denial is not permanent, Rahul. In this case, StarCare noted that while Dr. Patel's notes mention you tried conventional sulfasalazine, the formal pharmacy logs showing you completed that first-line step therapy were missing." },
+          { char: "priya", text: "This administrative friction is highly resource-intensive. Prior authorization denials and appeals cost physician offices an average of 2+ staff hours per resolution to manage." }
+        ],
+        choices: [
+          {
+            text: "Ask how to prove the previous drug trials.",
+            userLine: "How do we locate and submit the formal proof showing I tried and failed sulfasalazine last year?",
+            reaction: [
+              { char: "priya", text: "We must pull your past prescription refill logs and compile a structured clinical timeline to satisfy their Step Therapy checklist. Let's start the appeal." }
+            ]
+          },
+          {
+            text: "Initiate the clinical appeal immediately.",
+            userLine: "My joints are increasingly stiff; let's compile whatever clinical documentation is necessary to file an appeal.",
+            reaction: [
+              { char: "priya", text: "Speed is essential to minimize treatment delays. Let's build a robust clinical packet to contest StarCare's decision." }
+            ]
+          }
+        ]
+      },
+      {
+        sceneId: 6,
+        title: "Appeal",
+        nodeId: "node-6",
+        paStatus: "Appealing",
+        paRef: "REF-99812",
+        trialFirst: "validated",
+        trialDoc: "assembling",
+        narrativeIntro: [
+          { char: "narrator", text: "Dr. Patel's clinical team compiles the necessary documentation to initiate a formal administrative appeal." },
+          { char: "priya", text: "To secure approval on appeal, we must bundle: 1) Your historical pharmacy records proving 6 months of sulfasalazine trial, 2) Diagnostic laboratory panels showing severe ongoing inflammation, and 3) A signed Letter of Medical Necessity outlining why alternative treatments are contraindicated." },
+          { char: "priya", text: "This complete packet is transmitted directly back to StarCare Health's appeals department for clinical review." }
+        ],
+        choices: [
+          {
+            text: "Review the Letter of Medical Necessity.",
+            userLine: "Let's review Dr. Patel's Letter of Medical Necessity to ensure it emphasizes the risk of permanent joint erosion.",
+            reaction: [
+              { char: "priya", text: "The letter is highly detailed, highlighting that delaying therapy puts you at immediate risk of irreversible joint cartilage destruction. Let's submit and wait for the determination." }
+            ]
+          },
+          {
+            text: "Transmit the formal appeal packet.",
+            userLine: "The clinical records and pharmacy logs are verified. Let's transmit the appeal packet electronically to speed up review.",
+            reaction: [
+              { char: "priya", text: "Packet transmitted! The electronic portal logs our submission instantly. Now, the payer's clinical review team evaluates the new evidence." }
+            ]
+          }
+        ]
+      },
+      {
+        sceneId: 7,
+        title: "Approval",
+        nodeId: "node-7",
+        paStatus: "Approved",
+        paRef: "AUTH-88219A",
+        trialFirst: "completed",
+        trialDoc: "completed",
+        narrativeIntro: [
+          { char: "narrator", text: "StarCare Health reviews the clinical appeal and issues an official Prior Authorization Approval." },
+          { char: "priya", text: "Incredible news, Rahul! The appeal was successful. StarCare Health has overturned the initial denial and approved the Humira prior authorization." },
+          { char: "priya", text: "They have issued a unique Prior Authorization Reference Number: AUTH-88219A. This approval is saved on file, meaning no repeat PA is required for Humira for the next 12 months." },
+          { char: "rahul", text: "What an absolute relief! I can finally schedule my first dose. This has been a complex process." }
+        ],
+        choices: [
+          {
+            text: "Reflect on patient responsibilities.",
+            userLine: "This taught me how important it is as a patient to track my own drug history and keep records of past treatments.",
+            reaction: [
+              { char: "priya", text: "Absolutely, Rahul. Active patient documentation helps the clinical team resolve these checks much faster. Let's summarize the overall takeaways." }
+            ]
+          },
+          {
+            text: "Analyze health system workflows at scale.",
+            userLine: "If this takes so much work for one patient, how do large hospital networks manage thousands of these cases?",
+            reaction: [
+              { char: "priya", text: "Large health systems use dedicated administrative teams and tracking metrics to coordinate this workload efficiently. Let's look at the broader takeaways." }
+            ]
+          }
+        ]
+      },
+      {
+        sceneId: 8,
+        title: "Takeaways",
+        nodeId: "node-8",
+        paStatus: "Approved",
+        paRef: "AUTH-88219A",
+        trialFirst: "completed",
+        trialDoc: "completed",
+        narrativeIntro: [
+          { char: "narrator", text: "The simulation concludes with dual perspectives on prior authorization." },
+          { char: "rahul", text: "From a patient perspective, prior authorization represents a significant hurdle. Staying informed, tracking medication trial history, and collaborating closely with clinic staff is vital to avoid prolonged treatment delays." },
+          { char: "priya", text: "From an operational perspective, healthcare systems must actively track metrics like overall Denial Rates, Appeal Success Rates, and Administrative Resolution Time to optimize patient access and reduce administrative burn." }
+        ],
+        choices: [
+          {
+            text: "Review the workflow journey.",
+            userLine: "Let's review the complete journey from diagnosis to approval.",
+            reaction: [
+              { char: "narrator", text: "Workflow Summary: Scene 1: Visit & Rx issued | Scene 2: Provider transmits PA | Scene 3: PA evaluated for disease progression risk | Scene 4: Internal review check | Scene 5: Initial denial due to missing trials | Scene 6: Appeal packet compiled | Scene 7: Successful approval and authorization reference issued | Scene 8: Lessons analyzed." }
+            ]
+          },
+          {
+            text: "Restart the simulation.",
+            userLine: "I would like to restart the simulation to review the clinical and system checkpoints once more.",
+            reaction: [
+              { char: "narrator", text: "Restarting simulation. Loading Scene 1..." },
+              { char: "system-action", text: "RESTART_GAME" }
+            ]
+          }
+        ]
+      }
+    ];
+
+    const SCENARIOS = [
+      {
+        id: "elective-surgery",
+        title: "Total Hip Arthroplasty (CPT 27130)",
+        patientName: "Robert Miller",
+        age: 64,
+        diagnosis: "Severe osteoarthritis of the right hip joint (ICD-10 M16.11)",
+        requestedService: "Right Total Hip Arthroplasty",
+        clinicalDetails: "Patient reports severe pain limiting weight-bearing activity. Completed 6 months of physical therapy and tried daily NSAIDs without functional improvement. Joint space narrowing visible on weight-bearing X-ray.",
+        guidelines: [
+          { id: "g1", text: "Radiological confirmation of joint space narrowing", matched: false },
+          { id: "g2", text: "Failure of conservative therapy (PT/NSAIDs) >= 3 months", matched: false }
+        ],
+        chartPhrases: [
+          { id: "phrase-pain", text: "severe pain limiting weight-bearing activity", correct: false, feedback: "This describes subjective symptoms, not objective guideline criteria." },
+          { id: "phrase-therapy", text: "Completed 6 months of physical therapy and tried daily NSAIDs without functional improvement", correct: true, matchId: "g2", feedback: "Correct! This satisfies the standard requirement for non-surgical conservative therapy failure." },
+          { id: "phrase-imaging", text: "Joint space narrowing visible on weight-bearing X-ray", correct: true, matchId: "g1", feedback: "Correct! This satisfies the requirement for objective radiological confirmation of joint narrowing." }
+        ],
+        documents: [
+          { id: "doc-pt", name: "Physical Therapy treatment logs (6 Months)", required: true },
+          { id: "doc-xray", name: "Right Hip X-Ray Radiology Report (Current)", required: true },
+          { id: "doc-chart", name: "Physician History & Physical Clinical Notes", required: true },
+          { id: "doc-spine", name: "Unrelated Lumbar Spine MRI", required: false, penalty: true, reason: "Attaching unrelated imaging increases payer clinical audit review time." },
+          { id: "doc-dl", name: "Patient Driver's License Copy", required: false, penalty: false }
+        ],
+        payerChallenge: {
+          type: "Pend",
+          challengeText: "The payer has placed the case in a 'Pended' status, citing that the physical therapy signatures are missing or illegible on the uploaded logs.",
+          question: "How do you resolve this administrative Pend to secure approval?",
+          options: [
+            { text: "Obtain the certified digital sign-off from the physical therapy clinic and submit the clarified logs within the 72-hour grace period.", correct: true, costDays: 2, points: 20, feedback: "Correct! Resolving a pend immediately prevents a hard denial and saves processing time." },
+            { text: "File an administrative complaint and re-submit a brand new prior authorization request.", correct: false, costDays: 7, points: -15, feedback: "Incorrect. Filing a new request duplicates administrative work and resets the review timeline completely." }
+          ]
+        }
+      },
+      {
+        id: "mri-lumbar",
+        title: "Lumbar Spine MRI (CPT 72148)",
+        patientName: "Sarah Chen",
+        age: 42,
+        diagnosis: "Lower back pain with radiculopathy (ICD-10 M54.16)",
+        requestedService: "MRI Lumbar Spine without contrast",
+        clinicalDetails: "Patient has lower back pain radiating to left calf. Symptoms have persisted for 2 weeks. No red flags (no fever, no bowel/bladder dysfunction, no history of cancer). Progressive foot drop is noted on examination.",
+        guidelines: [
+          { id: "g1", text: "Presence of progressive focal neurological deficits (e.g., foot drop)", matched: false }
+        ],
+        chartPhrases: [
+          { id: "phrase-pain", text: "lower back pain radiating to left calf", correct: false, feedback: "This describes basic radicular pain, which usually requires 6 weeks of conservative treatment first." },
+          { id: "phrase-duration", text: "persisted for 2 weeks", correct: false, feedback: "A duration of 2 weeks is insufficient for standard imaging without red flags." },
+          { id: "phrase-neurology", text: "Progressive foot drop is noted on examination", correct: true, matchId: "g1", feedback: "Correct! Progressive neurological motor deficits constitute a clinical indicator that overrides conservative therapy wait times." }
+        ],
+        documents: [
+          { id: "doc-neuro", name: "Neurological Clinical Examination Chart Notes", required: true },
+          { id: "doc-spine-order", name: "Physician Signed MRI Order Form", required: true },
+          { id: "doc-blood", name: "Complete Blood Count (CBC) Lab Panel", required: false, penalty: false },
+          { id: "doc-consent", name: "Signed Informed Consent Document", required: false, penalty: false }
+        ],
+        payerChallenge: {
+          type: "Denial",
+          challengeText: "The payer issues an initial Clinical Denial, citing that the patient has only undergone 2 weeks of conservative therapy (standard criteria requires 6 weeks for uncomplicated back pain). The clinical triage reviewer missed the documented progressive foot drop.",
+          question: "How do you navigate this Clinical Denial?",
+          options: [
+            { text: "Request an expedited Peer-to-Peer (P2P) consultation between the ordering physician and the payer's Medical Director to review the progressive foot drop.", correct: true, costDays: 2, points: 25, feedback: "Correct! Peer-to-peer discussions are highly effective for highlighting severe neurological indicators missed during administrative triage." },
+            { text: "Accept the denial and instruct the patient to pay out-of-pocket for the diagnostic scan.", correct: false, costDays: 1, points: -20, feedback: "Incorrect. Accepting the denial without utilizing clinical advocacy options places an undue financial burden on the patient." }
+          ]
+        }
+      },
+      {
+        id: "specialty-med",
+        title: "Biologic Specialty Medication (CPT J3590)",
+        patientName: "Elena Rostova",
+        age: 38,
+        diagnosis: "Moderate-to-severe Plaque Psoriasis (ICD-10 L40.0)",
+        requestedService: "Cosentyx (Secukinumab) Injection",
+        clinicalDetails: "Patient has plaque psoriasis covering 12% of body surface area. Documented clinical history of failure on topical corticosteroids and oral methotrexate. Payer formulary dictates step therapy with adalimumab.",
+        guidelines: [
+          { id: "g1", text: "Documented failure, intolerance, or contraindication of preferred formulary drug (Adalimumab)", matched: false },
+          { id: "g2", text: "Severe disease involvement (>= 10% Body Surface Area or sensitive areas)", matched: false }
+        ],
+        chartPhrases: [
+          { id: "phrase-bsa", text: "covering 12% of body surface area", correct: true, matchId: "g2", feedback: "Correct! This satisfies the severity criteria threshold (typically > 10% Body Surface Area)." },
+          { id: "phrase-failure", text: "clinical history of failure on topical corticosteroids and oral methotrexate", correct: true, matchId: "g1", feedback: "Correct! This proves the patient has tried standard first-line therapies." }
+        ],
+        documents: [
+          { id: "doc-derm-notes", name: "Dermatologist Clinical Assessment & Progress Notes", required: true },
+          { id: "doc-prior-rx", name: "Pharmacy Prescription Refill Records (Methotrexate)", required: true },
+          { id: "doc-lab-liver", name: "Liver Function Diagnostic Panel (for methotrexate tracking)", required: false, penalty: false },
+          { id: "doc-unrelated-ekg", name: "Electrocardiogram (EKG) Report", required: false, penalty: true, reason: "EKG reports are irrelevant to plaque psoriasis biologic approvals." }
+        ],
+        payerChallenge: {
+          type: "Appeal",
+          challengeText: "The payer issues a clinical denial stating step therapy requirements have not been met, as there is no trial of Adalimumab (Humira) documented. However, Adalimumab is contraindicated for this patient due to a family history and personal predisposition to demyelinating disease.",
+          question: "How do you proceed with appealing this decision?",
+          options: [
+            { text: "Submit an expedited Clinical Appeal with documentation outlining the absolute clinical contraindication to the step-one formulary drug.", correct: true, costDays: 4, points: 25, feedback: "Correct! Standard step therapy policies must allow for clinical bypass when preferred drugs are documented as medically contraindicated." },
+            { text: "Switch the prescription to a generic alternative to bypass the step therapy guideline.", correct: false, costDays: 6, points: -10, feedback: "Incorrect. Changing medications arbitrarily may not match clinical needs and starts the authorization process over." }
+          ]
+        }
+      },
+      {
+        id: "crohns-infusion",
+        title: "Infliximab Infusion Therapy (CPT J1745)",
+        patientName: "Marcus Vance",
+        age: 29,
+        diagnosis: "Moderate-to-severe Crohn's disease (ICD-10 K50.90)",
+        requestedService: "Infliximab (Remicade) Outpatient Infusion",
+        clinicalDetails: "Patient presents with persistent abdominal pain and chronic diarrhea. Lab results indicate elevated fecal calprotectin levels of 450 mcg/g. Colonoscopy records show mucosal ulcerations in the terminal ileum. Patient tried and failed oral sulfasalazine therapy.",
+        guidelines: [
+          { id: "g1", text: "Endoscopic or laboratory evidence of active inflammatory disease", matched: false },
+          { id: "g2", text: "Inadequate response or intolerance to conventional first-line aminosalicylates", matched: false }
+        ],
+        chartPhrases: [
+          { id: "phrase-pain", text: "persistent abdominal pain and chronic diarrhea", correct: false, feedback: "This describes common subjective symptoms, which are insufficient alone to authorize high-cost biologic infusions." },
+          { id: "phrase-labs", text: "elevated fecal calprotectin levels of 450 mcg/g", correct: true, matchId: "g1", feedback: "Correct! Fecal calprotectin is an objective biochemical marker indicating active bowel inflammation." },
+          { id: "phrase-ulcers", text: "mucosal ulcerations in the terminal ileum", correct: true, matchId: "g1", feedback: "Correct! Colonoscopy findings provide definitive endoscopic evidence of active Crohn's disease." },
+          { id: "phrase-failure", text: "tried and failed oral sulfasalazine therapy", correct: true, matchId: "g2", feedback: "Correct! Documented failure of conventional first-line oral therapies satisfies step-therapy requirements." }
+        ],
+        documents: [
+          { id: "doc-colon", name: "Colonoscopy Endoscopy & Pathology Report", required: true },
+          { id: "doc-labs", name: "Inflammatory Bowel Disease Lab Panel Results", required: true },
+          { id: "doc-chart-notes", name: "Gastroenterologist Clinical Consultation Notes", required: true },
+          { id: "doc-diet", name: "Patient Dietary Food Log", required: false, penalty: true, reason: "A dietary food log is not recognized as clinical evidence for biological drug authorizations." }
+        ],
+        payerChallenge: {
+          type: "Denial",
+          challengeText: "The payer issues an administrative Denial, stating that the infusion must be performed at a preferred, lower-cost standalone infusion center rather than the hospital outpatient department.",
+          question: "This represents a 'Site of Care' restriction. How do you resolve this denial?",
+          options: [
+            { text: "Transition the patient's referral to an accredited standalone infusion center or arrange home health infusion.", correct: true, costDays: 3, points: 20, feedback: "Correct! Navigating 'Site of Care' guidelines by shifting services to standalone outpatient facilities is the standard path to satisfy payer cost-containment rules." },
+            { text: "Appeal the decision demanding hospital placement without providing documentation showing the patient is clinically unstable for home or standalone care.", correct: false, costDays: 6, points: -15, feedback: "Incorrect. Payers rarely override Site of Care rules without documented clinical proof of instability (e.g., history of severe anaphylaxis requiring ICU monitoring)." }
+          ]
+        }
+      }
+    ];
+
+    /* ==========================================================================
+       B. Unified Application State
+       ========================================================================== */
+    let currentMode = "hub"; // 'hub', 'story', 'board'
+    
+    // Board Mode state properties
+    let boardState = {
+      activeScenarioIndex: 0,
+      currentStage: 1, // Progress tracking 1 to 5
+      daysElapsed: 0,
+      efficiencyScore: 100,
+      caseHistory: {},
+      selectedGuidelineId: null,
+      attachedDocs: [], 
+      temporarySelection: null
+    };
+
+    // Story Mode state properties
+    let storySceneIndex = 0;
+
+    /* ==========================================================================
+       C. Setup and Event Routing
+       ========================================================================== */
+    window.addEventListener("DOMContentLoaded", () => {
+      populateBoardScenarios();
+      switchMode("hub");
+      setupGlobalDragAndDrop();
+    });
+
+    function switchMode(mode) {
+      currentMode = mode;
+      
+      // Hide all panels
+      document.getElementById("view-hub").classList.add("hidden");
+      document.getElementById("view-story").classList.add("hidden");
+      document.getElementById("view-board").classList.add("hidden");
+
+      // Reset Tab styling
+      const tabs = ["hub", "story", "board"];
+      tabs.forEach(t => {
+        const tabBtn = document.getElementById(`tab-${t}`);
+        if (tabBtn) {
+          tabBtn.className = "px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 text-slate-600 hover:text-slate-900";
+        }
+      });
+
+      // Highlight target and render
+      const activeTab = document.getElementById(`tab-${mode}`);
+      if (activeTab) {
+        activeTab.className = "px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 bg-white text-slate-800 shadow-sm";
+      }
+
+      if (mode === "hub") {
+        document.getElementById("view-hub").classList.remove("hidden");
+      } else if (mode === "story") {
+        document.getElementById("view-story").classList.remove("hidden");
+        // FIX: Check visual child elements length instead of firstChild to avoid comment mismatch
+        const feed = document.getElementById("chat-feed");
+        if (feed.children.length === 0) {
+          restartStorySimulation();
+        }
+      } else if (mode === "board") {
+        document.getElementById("view-board").classList.remove("hidden");
+        // Load default scenario if not initialized
+        initiateScenario(boardState.activeScenarioIndex);
+      }
+    }
+
+    /* ==========================================================================
+       D. Module 1: Patient Story Engine (Pure DOM Generation)
+       ========================================================================== */
+    function restartStorySimulation() {
+      storySceneIndex = 0;
+      const feed = document.getElementById("chat-feed");
+      
+      // Clear chat children with parent removal checks (no innerHTML)
+      while (feed.firstChild) {
+        feed.removeChild(feed.firstChild);
+      }
+
+      loadStoryScene(0);
+    }
+
+    function loadStoryScene(index) {
+      if (index >= STORY_SCENES.length) return;
+      
+      storySceneIndex = index;
+      const scene = STORY_SCENES[index];
+
+      // Update story Progress stats
+      const pct = ((index + 1) / 8) * 100;
+      document.getElementById("story-progress-bar").style.width = `${pct}%`;
+      document.getElementById("story-progress-text").textContent = `Scene ${index + 1} of 8`;
+
+      // Update Live Plan Status Widget Panel in real-time
+      const badge = document.getElementById("story-pa-status");
+      badge.textContent = scene.paStatus;
+      badge.className = "inline-block px-2 py-0.5 rounded text-[10px] font-bold";
+      
+      if (scene.paStatus === "Approved") {
+        badge.classList.add("bg-green-100", "text-green-800");
+      } else if (scene.paStatus === "Denied") {
+        badge.classList.add("bg-red-100", "text-red-800");
+      } else {
+        badge.classList.add("bg-amber-100", "text-amber-800");
+      }
+
+      document.getElementById("story-pa-ref").textContent = scene.paRef;
+
+      const tf = document.getElementById("story-trial-first");
+      const ti1 = document.getElementById("story-icon-1");
+      const td = document.getElementById("story-trial-doc");
+      const ti2 = document.getElementById("story-icon-2");
+
+      if (scene.trialFirst === "verifying" || scene.trialFirst === "pending" || scene.trialFirst === "checking") {
+        tf.className = "flex items-center gap-1.5 text-amber-600 font-medium";
+        ti1.textContent = "⏳";
+      } else if (scene.trialFirst === "failed") {
+        tf.className = "flex items-center gap-1.5 text-red-600 font-semibold";
+        ti1.textContent = "❌";
+      } else if (scene.trialFirst === "completed" || scene.trialFirst === "validated") {
+        tf.className = "flex items-center gap-1.5 text-green-700 font-semibold";
+        ti1.textContent = "✅";
+      }
+
+      if (scene.trialDoc === "verifying" || scene.trialDoc === "pending" || scene.trialDoc === "checking" || scene.trialDoc === "assembling") {
+        td.className = "flex items-center gap-1.5 text-amber-600 font-medium";
+        ti2.textContent = "⏳";
+      } else if (scene.trialDoc === "missing") {
+        td.className = "flex items-center gap-1.5 text-red-600 font-semibold";
+        ti2.textContent = "❌";
+      } else if (scene.trialDoc === "completed") {
+        td.className = "flex items-center gap-1.5 text-green-700 font-semibold";
+        ti2.textContent = "✅";
+      }
+
+      // Build dialog bubbles
+      scene.narrativeIntro.forEach(item => {
+        appendStoryChatBubble(item.char, item.text);
+      });
+
+      // Build choice buttons
+      const choicesBox = document.getElementById("choices-container");
+      choicesBox.innerHTML = "";
+
+      scene.choices.forEach(choice => {
+        const btn = document.createElement("button");
+        btn.className = "w-full text-left bg-slate-50 hover:bg-slate-100 text-slate-850 font-semibold border border-slate-200 hover:border-slate-300 rounded-xl p-3.5 text-xs transition-all duration-200 hover:shadow-sm flex items-center justify-between group";
+        
+        const textSpan = document.createElement("span");
+        textSpan.className = "pr-2";
+        textSpan.textContent = choice.text;
+        
+        const arrowSpan = document.createElement("span");
+        arrowSpan.className = "text-indigo-500 font-bold transition-transform group-hover:translate-x-1";
+        arrowSpan.textContent = "→";
+
+        btn.appendChild(textSpan);
+        btn.appendChild(arrowSpan);
+        btn.addEventListener("click", () => handleStoryChoice(choice));
+        choicesBox.appendChild(btn);
+      });
+    }
+
+    function handleStoryChoice(choice) {
+      document.getElementById("choices-container").innerHTML = "";
+
+      // Append selected user line
+      appendStoryChatBubble("rahul", choice.userLine);
+
+      // Render reaction dialogues with progressive timings
+      choice.reaction.forEach((react, idx) => {
+        setTimeout(() => {
+          if (react.text === "RESTART_GAME") {
+            restartStorySimulation();
+            return;
+          }
+          appendStoryChatBubble(react.char, react.text);
+        }, (idx + 1) * 600);
+      });
+
+      // Progress scenes
+      const nextDelay = (choice.reaction.length + 1) * 750;
+      setTimeout(() => {
+        const nextIdx = storySceneIndex + 1;
+        if (nextIdx < STORY_SCENES.length) {
+          loadStoryScene(nextIdx);
+        }
+      }, nextDelay);
+    }
+
+    function appendStoryChatBubble(character, text) {
+      const feed = document.getElementById("chat-feed");
+      const wrapper = document.createElement("div");
+      wrapper.className = "flex items-start mb-4 space-x-3 w-full transition-all duration-300 opacity-0 transform translate-y-2";
+
+      if (character === "rahul") {
+        wrapper.classList.add("justify-start");
+        const avatar = document.createElement("div");
+        avatar.className = "flex-shrink-0 w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-md shadow-sm border border-blue-200";
+        avatar.textContent = "👦";
+
+        const box = document.createElement("div");
+        box.className = "max-w-md";
+        const label = document.createElement("div");
+        label.className = "text-[9px] font-bold text-slate-400 mb-0.5 ml-1";
+        label.textContent = "Rahul (Patient)";
+        const bubble = document.createElement("div");
+        bubble.className = "bg-white border border-slate-200 text-slate-800 p-3 rounded-2xl rounded-tl-none shadow-sm text-xs leading-relaxed";
+        bubble.textContent = text;
+
+        box.appendChild(label);
+        box.appendChild(bubble);
+        wrapper.appendChild(avatar);
+        wrapper.appendChild(box);
+
+      } else if (character === "priya") {
+        wrapper.className = "flex items-start mb-4 space-x-3 w-full justify-end flex-row-reverse space-x-reverse";
+        const avatar = document.createElement("div");
+        avatar.className = "flex-shrink-0 w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-md shadow-sm border border-indigo-200";
+        avatar.textContent = "👧";
+
+        const box = document.createElement("div");
+        box.className = "max-w-md flex flex-col items-end";
+        const label = document.createElement("div");
+        label.className = "text-[9px] font-bold text-slate-400 mb-0.5 mr-1";
+        label.textContent = "Priya (Specialist)";
+        const bubble = document.createElement("div");
+        bubble.className = "bg-indigo-600 text-white p-3 rounded-2xl rounded-tr-none shadow-sm text-xs leading-relaxed";
+        bubble.textContent = text;
+
+        box.appendChild(label);
+        box.appendChild(bubble);
+        wrapper.appendChild(box);
+        wrapper.appendChild(avatar);
+
+      } else if (character === "narrator") {
+        wrapper.className = "flex justify-center w-full my-4 px-4";
+        const note = document.createElement("div");
+        note.className = "text-center text-[11px] italic text-slate-500 max-w-md leading-relaxed border-t border-b border-slate-100 py-2.5 w-full";
+        note.textContent = text;
+        wrapper.appendChild(note);
+
+      } else if (character === "doctor") {
+        wrapper.className = "flex justify-center w-full my-3 px-4";
+        const note = document.createElement("div");
+        note.className = "text-center text-xs italic text-blue-900 font-medium max-w-md bg-blue-50/50 rounded-lg p-3 border border-blue-100 leading-relaxed shadow-sm w-full";
+        note.textContent = text;
+        wrapper.appendChild(note);
+      }
+
+      feed.appendChild(wrapper);
+      setTimeout(() => {
+        wrapper.classList.remove("opacity-0", "translate-y-2");
+      }, 50);
+      feed.scrollTop = feed.scrollHeight;
+    }
+
+    /* ==========================================================================
+       E. Module 2: Workflow Board Logic
+       ========================================================================== */
+    function populateBoardScenarios() {
+      const select = document.getElementById("scenario-select");
+      select.innerHTML = "";
+      SCENARIOS.forEach((scen, idx) => {
+        const opt = document.createElement("option");
+        opt.value = idx;
+        opt.textContent = scen.title;
+        select.appendChild(opt);
+      });
+    }
+
+    function initiateScenario(index) {
+      const scenarioIdx = parseInt(index);
+      const scenario = SCENARIOS[scenarioIdx];
+      
+      // Reset State
+      boardState.activeScenarioIndex = scenarioIdx;
+      boardState.currentStage = 1;
+      boardState.daysElapsed = 0;
+      boardState.efficiencyScore = 100;
+      boardState.caseHistory = {};
+      boardState.selectedGuidelineId = null;
+      boardState.attachedDocs = [];
+      boardState.temporarySelection = null;
+
+      // Reset guidelines matching status
+      scenario.guidelines.forEach(g => g.matched = false);
+
+      // Populate Demographic Data in Sidebar
+      document.getElementById("b-chart-name").textContent = scenario.patientName;
+      document.getElementById("b-chart-age").textContent = scenario.age + " Years";
+      document.getElementById("b-chart-diagnosis").textContent = scenario.diagnosis;
+      document.getElementById("b-chart-service").textContent = scenario.requestedService;
+      document.getElementById("b-chart-history").textContent = scenario.clinicalDetails;
+
+      updateBoardMetricsUI();
+      renderBoardTimeline();
+      clearCaseCards();
+      createCaseCard(scenario.patientName, scenario.requestedService);
+      updateZoneHighlights();
+    }
+
+    function restartCurrentScenario() {
+      initiateScenario(boardState.activeScenarioIndex);
+    }
+
+    function updateBoardMetricsUI() {
+      document.getElementById("board-days-count").textContent = boardState.daysElapsed + " Days";
+      document.getElementById("board-efficiency").textContent = boardState.efficiencyScore + "%";
+      
+      let stageText = "Intake Phase";
+      if (boardState.currentStage === 2) stageText = "Medical Necessity";
+      if (boardState.currentStage === 3) stageText = "Document Preparation";
+      if (boardState.currentStage === 4) stageText = "Payer Portal Submission";
+      if (boardState.currentStage === 5) stageText = "Review Outcome";
+      if (boardState.currentStage > 5) stageText = "Case Closed";
+
+      document.getElementById("board-stage-title").textContent = stageText;
+    }
+
+    function renderBoardTimeline() {
+      const steps = document.querySelectorAll("#board-timeline-stepper > div");
+      steps.forEach(step => {
+        const stepNum = parseInt(step.getAttribute("data-step"));
+        step.className = "flex items-center gap-1.5 text-xs shrink-0";
+        const nodeSpan = step.querySelector("span");
+        
+        if (stepNum === boardState.currentStage) {
+          step.classList.add("text-blue-600", "font-bold");
+          nodeSpan.className = "w-5 h-5 rounded-full flex items-center justify-center text-[10px] bg-blue-100 text-blue-600 font-bold border border-blue-300";
+        } else if (stepNum < boardState.currentStage) {
+          step.classList.add("text-green-600", "font-medium");
+          nodeSpan.className = "w-5 h-5 rounded-full flex items-center justify-center text-[10px] bg-green-100 text-green-600 font-bold";
+        } else {
+          step.classList.add("text-slate-400");
+          nodeSpan.className = "w-5 h-5 rounded-full flex items-center justify-center text-[10px] bg-slate-100 text-slate-400";
+        }
+      });
+    }
+
+    function clearCaseCards() {
+      const oldCards = document.querySelectorAll("#case-card");
+      oldCards.forEach(c => c.remove());
+    }
+
+    function createCaseCard(patientName, service) {
+      const card = document.createElement("div");
+      card.id = "case-card";
+      card.className = "case-card bg-white border border-blue-400 p-3.5 rounded-xl shadow-sm cursor-grab active:cursor-grabbing hover:shadow-md transition-shadow duration-200 select-none w-full";
+      card.setAttribute("draggable", "true");
+      
+      card.innerHTML = `
+        <div class="flex items-center gap-1.5 text-[11px] font-bold text-blue-900 border-b border-blue-100 pb-1.5 mb-2">
+          <span>📁</span><span>Active Case File</span>
+        </div>
+        <div class="text-xs text-slate-800 leading-tight">
+          <strong class="block">${patientName}</strong>
+          <span class="text-[10px] text-slate-500 block mt-0.5">${service}</span>
+        </div>
+        <span class="inline-block bg-blue-50 text-blue-700 font-bold text-[9px] px-2 py-0.5 rounded border border-blue-200 mt-3" id="card-stage-badge">Stage: Verification</span>
+        <button class="card-action-btn mt-2 w-full bg-blue-50 hover:bg-blue-100 text-blue-600 border border-blue-200 border-dashed rounded py-1 text-[10px] font-bold" onclick="handleCardClickFallback()">Process Step</button>
+      `;
+
+      card.addEventListener("dragstart", handleDragStart);
+      card.addEventListener("dragend", handleDragEnd);
+
+      const targetZone = document.getElementById(`zone-${boardState.currentStage}`);
+      if (targetZone) {
+        targetZone.appendChild(card);
+      }
+    }
+
+    function updateZoneHighlights() {
+      const zones = document.querySelectorAll(".drop-zone");
+      zones.forEach(zone => {
+        zone.classList.remove("pulse-target", "bg-blue-50/70", "border-blue-300", "border-indigo-400", "bg-indigo-50/50");
+        const stepNum = parseInt(zone.getAttribute("data-zone-step"));
+        if (stepNum === boardState.currentStage) {
+          zone.classList.add("pulse-target", "bg-blue-50/70", "border-blue-300");
+        }
+      });
+    }
+
+    function handleDragStart(e) {
+      draggedElement = e.target;
+      e.target.classList.add("opacity-50");
+      e.dataTransfer.setData("text/plain", e.target.id);
+    }
+
+    function handleDragEnd(e) {
+      e.target.classList.remove("opacity-50");
+      const zones = document.querySelectorAll(".drop-zone");
+      zones.forEach(z => z.classList.remove("border-indigo-400", "bg-indigo-50/50"));
+    }
+
+    function allowDrop(e) {
+      e.preventDefault();
+      const zone = e.currentTarget;
+      const zoneStep = parseInt(zone.getAttribute("data-zone-step"));
+      if (zoneStep === boardState.currentStage) {
+        zone.classList.add("border-indigo-400", "bg-indigo-50/50");
+      }
+    }
+
+    function dragLeave(e) {
+      e.currentTarget.classList.remove("border-indigo-400", "bg-indigo-50/50");
+    }
+
+    function handleDrop(e) {
+      e.preventDefault();
+      const zone = e.currentTarget;
+      zone.classList.remove("border-indigo-400", "bg-indigo-50/50");
+      const zoneStep = parseInt(zone.getAttribute("data-zone-step"));
+
+      if (zoneStep === boardState.currentStage) {
+        processBoardStageChallenge(zoneStep);
+      }
+    }
+
+    function handleCardClickFallback() {
+      processBoardStageChallenge(boardState.currentStage);
+    }
+
+    function setupGlobalDragAndDrop() {
+      window.addEventListener("dragover", e => e.preventDefault(), false);
+      window.addEventListener("drop", e => e.preventDefault(), false);
+    }
+
+    /* ==========================================================================
+       F. Board Modal Integration & Matching Elements
+       ========================================================================== */
+    function processBoardStageChallenge(stage) {
+      const scenario = SCENARIOS[boardState.activeScenarioIndex];
+      const modal = document.getElementById("board-modal");
+      const badge = document.getElementById("board-modal-badge");
+      const title = document.getElementById("board-modal-title");
+      const desc = document.getElementById("board-modal-desc");
+      const workspace = document.getElementById("board-modal-workspace");
+      const confirmBtn = document.getElementById("board-modal-action-btn");
+      const feedback = document.getElementById("board-modal-feedback");
+
+      // Reset Modal Configs
+      feedback.style.display = "none";
+      feedback.className = "mt-4 p-4 rounded-xl text-xs hidden";
+      confirmBtn.disabled = true;
+      confirmBtn.textContent = "Confirm Choice";
+      confirmBtn.setAttribute("onclick", "submitBoardDecision()");
+      boardState.temporarySelection = null;
+      workspace.innerHTML = "";
+
+      if (stage === 1) {
+        badge.textContent = "Step 1: Patient Eligibility & Intake";
+        title.textContent = "Insurance Demographics Check";
+        desc.textContent = "Confirm if the policy is active and determine if the requested code requires prior authorization.";
+        
+        const options = [
+          { text: "Skip verification; proceed immediately with clinical record upload.", correct: false, feedback: "Incorrect. Filing without validation runs the risk of sending duplicate claims or requesting authorization for procedures that do not require clinical review." },
+          { text: "Verify current insurance eligibility and procedural prior-authorization checklist criteria inside the payer database.", correct: true, feedback: "Correct. Pre-verification ensures resources are only allocated to cases requiring a formal clinical review." },
+          { text: "Rely strictly on patient verbal confirmation of coverage eligibility.", correct: false, feedback: "Incorrect. Verbal confirmations are unreliable; specific procedural codes must be validated against insurer lists." }
+        ];
+        renderMultipleChoiceBoard(workspace, options);
+
+      } else if (stage === 2) {
+        badge.textContent = "Step 2: Medical Necessity Evaluation";
+        title.textContent = "Clinical Criteria Linking Checkpoint";
+        desc.textContent = "Select a Guideline criteria (right) and then click the corresponding matching evidence text in the chart (left).";
+        
+        renderGuidelineMatchingBoard(workspace, scenario);
+
+      } else if (stage === 3) {
+        badge.textContent = "Step 3: Document Assembly & QA Check";
+        title.textContent = "Compile the Complete Clinical Attachment Packet";
+        desc.textContent = "Identify and attach the necessary files to satisfy a 'Clean Claim' evaluation while excluding unnecessary duplicates.";
+        
+        renderDocumentAssemblyBoard(workspace, scenario);
+
+      } else if (stage === 4) {
+        badge.textContent = "Step 4: Portal Submission & Triage";
+        title.textContent = "Transmit Completed Packet to Payer Ingestion";
+        desc.textContent = "Choose the communication channel that reduces risk of document degradation or manual processing errors.";
+        
+        const options = [
+          { text: "Submit the prioritized clinical file using secure electronic Prior Authorization (ePA) portals.", correct: true, feedback: "Correct. Automated portals assign records directly into the reviewer's clinical work queue instantly." },
+          { text: "Transmit the compiled documents via legacy paper facsimile (fax machine).", correct: false, feedback: "Incorrect. Manual transmittals are prone to visual illegibility, loss of pages, and add days to ingestion timelines." }
+        ];
+        renderMultipleChoiceBoard(workspace, options);
+
+      } else if (stage === 5) {
+        badge.textContent = "Step 5: Review Outcome Challenge";
+        title.textContent = `Payer System Response: [${scenario.payerChallenge.type}]`;
+        desc.textContent = scenario.payerChallenge.challengeText;
+        
+        renderMultipleChoiceBoard(workspace, scenario.payerChallenge.options);
+      }
+
+      // Display Modal overlay
+      modal.classList.add("open");
+    }
+
+    function renderMultipleChoiceBoard(container, options) {
+      const list = document.createElement("div");
+      list.className = "flex flex-col gap-3";
+      
+      options.forEach((opt, idx) => {
+        const card = document.createElement("div");
+        card.className = "border border-slate-200 rounded-xl p-3.5 bg-white hover:border-blue-500 hover:bg-blue-50/40 cursor-pointer flex items-start gap-3 transition-colors duration-150";
+        card.innerHTML = `
+          <input type="radio" name="board-opts" id="bopt-${idx}" class="mt-1 accent-blue-600">
+          <label for="bopt-${idx}" class="text-xs text-slate-800 font-medium leading-relaxed select-none cursor-pointer">${opt.text}</label>
+        `;
+        
+        card.addEventListener("click", () => {
+          const cards = list.querySelectorAll("div");
+          cards.forEach(c => c.classList.remove("border-blue-500", "bg-blue-50/40"));
+          card.classList.add("border-blue-500", "bg-blue-50/40");
+          
+          const radio = card.querySelector("input");
+          if (radio) radio.checked = true;
+
+          boardState.temporarySelection = opt;
+          document.getElementById("board-modal-action-btn").disabled = false;
+        });
+
+        list.appendChild(card);
+      });
+
+      container.appendChild(list);
+    }
+
+    function renderGuidelineMatchingBoard(container, scenario) {
+      const grid = document.createElement("div");
+      grid.className = "workspace-grid";
+
+      const leftCol = document.createElement("div");
+      leftCol.className = "matching-chart-box";
+      leftCol.innerHTML = `<h5 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Patient Records:</h5>`;
+      
+      let chartHTML = scenario.clinicalDetails;
+      scenario.chartPhrases.forEach(p => {
+        const replaceText = p.text;
+        const replaceSpan = `<span class="matching-phrase" data-id="${p.id}" onclick="clickBoardChartPhrase(this)">${replaceText}</span>`;
+        chartHTML = chartHTML.replace(replaceText, replaceSpan);
+      });
+      
+      const textDiv = document.createElement("div");
+      textDiv.className = "text-xs text-slate-700 leading-relaxed bg-white border border-slate-200 rounded-xl p-3 max-h-52 overflow-y-auto";
+      textDiv.innerHTML = chartHTML;
+      leftCol.appendChild(textDiv);
+
+      const rightCol = document.createElement("div");
+      rightCol.className = "guideline-container flex flex-col gap-2 mt-4 md:mt-0";
+      rightCol.innerHTML = `<h5 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Guideline Checkpoints:</h5>`;
+
+      scenario.guidelines.forEach(g => {
+        const gCard = document.createElement("div");
+        gCard.className = `guideline-card text-xs p-3 border border-slate-200 rounded-xl bg-white cursor-pointer hover:border-blue-400 transition-colors ${g.matched ? 'matched bg-green-50 border-green-500 text-green-700' : ''}`;
+        gCard.id = `gcard-${g.id}`;
+        gCard.innerHTML = `<strong>${g.matched ? '✅ matched' : '⚪ criteria'}:</strong> ${g.text}`;
+        
+        gCard.addEventListener("click", () => {
+          if (g.matched) return;
+          const cards = rightCol.querySelectorAll(".guideline-card");
+          cards.forEach(c => c.classList.remove("border-blue-500", "bg-blue-50/50"));
+          gCard.classList.add("border-blue-500", "bg-blue-50/50");
+          boardState.selectedGuidelineId = g.id;
+        });
+
+        rightCol.appendChild(gCard);
+      });
+
+      grid.appendChild(leftCol);
+      grid.appendChild(rightCol);
+      container.appendChild(grid);
+    }
+
+    function clickBoardChartPhrase(spanElement) {
+      const phraseId = spanElement.getAttribute("data-id");
+      const scenario = SCENARIOS[boardState.activeScenarioIndex];
+      const selectedPhrase = scenario.chartPhrases.find(p => p.id === phraseId);
+      const feedback = document.getElementById("board-modal-feedback");
+
+      feedback.style.display = "block";
+      feedback.className = "mt-4 p-4 rounded-xl text-xs";
+
+      if (!boardState.selectedGuidelineId) {
+        feedback.classList.add("bg-red-50", "text-red-800", "border-l-4", "border-red-500");
+        feedback.textContent = "Error: Please select a Guideline criteria checkpoint from the right column first.";
+        return;
+      }
+
+      const activeCriteria = scenario.guidelines.find(g => g.id === boardState.selectedGuidelineId);
+
+      if (selectedPhrase.correct && selectedPhrase.matchId === boardState.selectedGuidelineId) {
+        feedback.classList.add("bg-green-50", "text-green-800", "border-l-4", "border-green-500");
+        feedback.textContent = selectedPhrase.feedback;
+        
+        activeCriteria.matched = true;
+        spanElement.className = "matching-phrase text-green-700 font-bold bg-green-50 px-1 border-b-2 border-green-500 rounded cursor-default";
+        spanElement.onclick = null;
+
+        const gCard = document.getElementById(`gcard-${boardState.selectedGuidelineId}`);
+        if (gCard) {
+          gCard.className = "guideline-card text-xs p-3 border border-green-500 rounded-xl bg-green-50 text-green-700 cursor-default font-semibold";
+          gCard.innerHTML = `<strong>✅ matched:</strong> ${activeCriteria.text}`;
+        }
+
+        boardState.selectedGuidelineId = null;
+
+        const allDone = scenario.guidelines.every(g => g.matched);
+        if (allDone) {
+          boardState.temporarySelection = { correct: true, source: "GuidelineMatching" };
+          document.getElementById("board-modal-action-btn").disabled = false;
+        }
+      } else {
+        feedback.classList.add("bg-red-50", "text-red-800", "border-l-4", "border-red-500");
+        feedback.textContent = selectedPhrase.feedback || "Mismatch: This patient chart phrase does not satisfy the active criteria checkpoint.";
+        
+        boardState.efficiencyScore = Math.max(10, boardState.efficiencyScore - 5);
+        boardState.daysElapsed += 1;
+        updateBoardMetricsUI();
+      }
+    }
+
+    function renderDocumentAssemblyBoard(container, scenario) {
+      const grid = document.createElement("div");
+      grid.className = "workspace-grid";
+
+      const leftCol = document.createElement("div");
+      leftCol.className = "doc-assembly-list space-y-2";
+      leftCol.innerHTML = `<h5 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Available Patient Documents:</h5>`;
+
+      const rightCol = document.createElement("div");
+      rightCol.className = "packet-container border-2 border-dashed border-blue-200 rounded-xl p-4 bg-blue-50/50 min-h-[160px] flex flex-col gap-2";
+      rightCol.id = "board-packet-target";
+      rightCol.innerHTML = `
+        <h5 class="text-[10px] font-bold text-blue-900 uppercase tracking-wider mb-2">Compiled Submission Packet:</h5>
+        <div id="board-packet-empty" class="text-slate-400 text-xs text-center my-10">Attach appropriate files from the left drawer</div>
+      `;
+
+      scenario.documents.forEach(doc => {
+        const card = document.createElement("div");
+        card.className = "assembly-doc-card text-xs p-3 border border-slate-200 rounded-xl bg-white flex justify-between items-center cursor-pointer transition-colors duration-150 hover:bg-slate-50";
+        card.id = `dcard-${doc.id}`;
+        card.innerHTML = `
+          <span>📁 ${doc.name}</span>
+          <button class="bg-blue-100 hover:bg-blue-200 text-blue-800 font-bold px-3 py-1.5 rounded-lg text-[10px] transition-colors">Attach</button>
+        `;
+
+        card.addEventListener("click", () => {
+          toggleBoardDocumentAttachment(doc, card, rightCol);
+        });
+
+        leftCol.appendChild(card);
+      });
+
+      grid.appendChild(leftCol);
+      grid.appendChild(rightCol);
+      container.appendChild(grid);
+    }
+
+    function toggleBoardDocumentAttachment(doc, card, packetBox) {
+      const idx = boardState.attachedDocs.indexOf(doc.id);
+      const btn = card.querySelector("button");
+
+      if (idx > -1) {
+        boardState.attachedDocs.splice(idx, 1);
+        card.classList.remove("border-blue-500", "bg-blue-50/20");
+        btn.textContent = "Attach";
+        btn.className = "bg-blue-100 text-blue-800 font-bold px-3 py-1.5 rounded-lg text-[10px]";
+        
+        const copy = document.getElementById(`packet-copy-${doc.id}`);
+        if (copy) copy.remove();
+      } else {
+        boardState.attachedDocs.push(doc.id);
+        card.classList.add("border-blue-500", "bg-blue-50/20");
+        btn.textContent = "Remove";
+        btn.className = "bg-blue-600 text-white font-bold px-3 py-1.5 rounded-lg text-[10px]";
+
+        const copy = document.createElement("div");
+        copy.className = "text-xs p-2.5 border border-blue-200 rounded-xl bg-white shadow-sm flex items-center gap-1.5";
+        copy.id = `packet-copy-${doc.id}`;
+        copy.innerHTML = `<span>📋 Attached: ${doc.name}</span>`;
+        packetBox.appendChild(copy);
+      }
+
+      const empty = document.getElementById("board-packet-empty");
+      if (empty) {
+        empty.style.display = boardState.attachedDocs.length > 0 ? "none" : "block";
+      }
+
+      boardState.temporarySelection = { source: "DocAssembly" };
+      document.getElementById("board-modal-action-btn").disabled = false;
+    }
+
+    function submitBoardDecision() {
+      const sel = boardState.temporarySelection;
+      if (!sel) return;
+
+      const feedback = document.getElementById("board-modal-feedback");
+      feedback.style.display = "block";
+      feedback.className = "mt-4 p-4 rounded-xl text-xs";
+      
+      const scenario = SCENARIOS[boardState.activeScenarioIndex];
+
+      if (sel.source === "GuidelineMatching") {
+        feedback.classList.add("bg-green-50", "text-green-800", "border-l-4", "border-green-500");
+        feedback.textContent = "Medical Necessity Guidelines fully verified. Objective chart indications mapped against criteria successfully.";
+        boardState.daysElapsed += 1;
+        updateBoardMetricsUI();
+
+      } else if (sel.source === "DocAssembly") {
+        const missing = scenario.documents.filter(d => d.required && !boardState.attachedDocs.includes(d.id));
+        const penalties = scenario.documents.filter(d => d.penalty && boardState.attachedDocs.includes(d.id));
+
+        if (missing.length === 0 && penalties.length === 0) {
+          feedback.classList.add("bg-green-50", "text-green-800", "border-l-4", "border-green-500");
+          feedback.textContent = "Perfect submission packet compiled! Clinical documents match criteria completely with zero administrative fluff.";
+          boardState.daysElapsed += 1;
+        } else if (missing.length === 0 && penalties.length > 0) {
+          feedback.classList.add("bg-yellow-50", "text-yellow-850", "border-l-4", "border-yellow-500");
+          const reason = penalties.map(p => p.reason).join(" ");
+          feedback.textContent = `Clean Claim Warning: Necessary clinical records are attached, but unnecessary documents were included. Note: ${reason}`;
+          boardState.efficiencyScore = Math.max(10, boardState.efficiencyScore - 10);
+          boardState.daysElapsed += 2;
+        } else {
+          feedback.classList.add("bg-red-50", "text-red-800", "border-l-4", "border-red-500");
+          const names = missing.map(m => m.name).join(", ");
+          feedback.textContent = `Claim Audit Failure: Complete records are missing: (${names}). A delay penalty has been applied to restructure the clinical files.`;
+          boardState.efficiencyScore = Math.max(10, boardState.efficiencyScore - 20);
+          boardState.daysElapsed += 4;
+        }
+        updateBoardMetricsUI();
+
+      } else {
+        if (sel.correct) {
+          feedback.classList.add("bg-green-50", "text-green-800", "border-l-4", "border-green-500");
+          feedback.textContent = sel.feedback;
+          boardState.daysElapsed += (sel.costDays || 1);
+          if (sel.points) {
+            boardState.efficiencyScore = Math.max(10, Math.min(100, boardState.efficiencyScore + sel.points));
+          }
+        } else {
+          feedback.classList.add("bg-red-50", "text-red-800", "border-l-4", "border-red-500");
+          feedback.textContent = sel.feedback;
+          boardState.daysElapsed += (sel.costDays || 3);
+          if (sel.points) {
+            boardState.efficiencyScore = Math.max(10, boardState.efficiencyScore + sel.points);
+          } else {
+            boardState.efficiencyScore = Math.max(10, boardState.efficiencyScore - 15);
+          }
+        }
+        updateBoardMetricsUI();
+      }
+
+      const confirmBtn = document.getElementById("board-modal-action-btn");
+      confirmBtn.textContent = "Continue Workflow";
+      confirmBtn.setAttribute("onclick", "advanceBoardWorkflow()");
+    }
+
+    function advanceBoardWorkflow() {
+      const modal = document.getElementById("board-modal");
+      modal.classList.add("opacity-0", "pointer-events-none");
+      modal.querySelector(".modal").classList.add("translate-y-4");
+      modal.classList.remove("open");
+
+      const confirmBtn = document.getElementById("board-modal-action-btn");
+      confirmBtn.textContent = "Confirm Choice";
+      confirmBtn.setAttribute("onclick", "submitBoardDecision()");
+
+      let stageLabel = `Stage ${boardState.currentStage}`;
+      if (boardState.currentStage === 1) stageLabel = "Active Eligibility Check";
+      if (boardState.currentStage === 2) stageLabel = "Medical Necessity Mapping";
+      if (boardState.currentStage === 3) stageLabel = "Clinical File Assembly";
+      if (boardState.currentStage === 4) stageLabel = "Web Portal Submission";
+      if (boardState.currentStage === 5) stageLabel = "Payer Review Outcome Resolving";
+
+      boardState.caseHistory[boardState.currentStage] = {
+        stage: stageLabel,
+        selection: boardState.temporarySelection ? (boardState.temporarySelection.text || "Diagnostic Guideline Matching/Assembly") : "Workflow Progression",
+        wasCorrect: boardState.temporarySelection ? (boardState.temporarySelection.correct !== false) : true
+      };
+
+      boardState.currentStage += 1;
+      renderBoardTimeline();
+
+      if (boardState.currentStage > 5) {
+        triggerBoardCompletion();
+      } else {
+        const card = document.getElementById("case-card");
+        const nextZone = document.getElementById(`zone-${boardState.currentStage}`);
+        if (card && nextZone) {
+          nextZone.appendChild(card);
+          const badge = document.getElementById("card-stage-badge");
+          if (boardState.currentStage === 2) badge.textContent = "Stage: Guideline Matching";
+          if (boardState.currentStage === 3) badge.textContent = "Stage: Packet Prep";
+          if (boardState.currentStage === 4) badge.textContent = "Stage: Submission";
+          if (boardState.currentStage === 5) badge.textContent = "Stage: Medical Review";
+        }
+        updateZoneHighlights();
+        updateBoardMetricsUI();
+      }
+    }
+
+    function triggerBoardCompletion() {
+      spawnBoardConfetti();
+
+      document.getElementById("sum-days").textContent = boardState.daysElapsed + " Days";
+      document.getElementById("sum-score").textContent = boardState.efficiencyScore + "%";
+
+      const logBox = document.getElementById("board-sum-logs");
+      logBox.innerHTML = "";
+      
+      Object.keys(boardState.caseHistory).forEach(stageNum => {
+        const item = boardState.caseHistory[stageNum];
+        const div = document.createElement("div");
+        div.className = "p-2 bg-white border border-slate-200 rounded-lg text-[10px] space-y-1";
+        div.innerHTML = `
+          <strong class="text-slate-800">${item.stage} - ${item.wasCorrect ? '✅ Recommended Path' : '⚠️ Administrative Delay'}</strong>
+          <p class="text-slate-500 leading-snug">${item.selection}</p>
+        `;
+        logBox.appendChild(div);
+      });
+
+      const modal = document.getElementById("board-summary-modal");
+      modal.classList.add("open");
+    }
+
+    function closeBoardSummaryAndNext() {
+      const modal = document.getElementById("board-summary-modal");
+      modal.classList.add("opacity-0", "pointer-events-none");
+      modal.querySelector(".modal").classList.add("translate-y-4");
+      modal.classList.remove("open");
+
+      let nextIdx = boardState.activeScenarioIndex + 1;
+      if (nextIdx >= SCENARIOS.length) {
+        nextIdx = 0;
+      }
+      document.getElementById("scenario-select").value = nextIdx;
+      initiateScenario(nextIdx);
+    }
+
+    function spawnBoardConfetti() {
+      const container = document.getElementById("confetti-container");
+      container.innerHTML = "";
+      const colors = ["#2563eb", "#3b82f6", "#10b981", "#0f172a", "#f59e0b"];
+
+      for (let i = 0; i < 60; i++) {
+        const p = document.createElement("div");
+        p.className = "confetti";
+        p.style.left = Math.random() * 100 + "vw";
+        p.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        p.style.width = Math.random() * 8 + 6 + "px";
+        p.style.height = p.style.width;
+        
+        const duration = Math.random() * 2 + 1.5;
+        p.style.animationDuration = duration + "s";
+        p.style.animationDelay = Math.random() * 0.3 + "s";
+        
+        container.appendChild(p);
+      }
+    }
+  </script>
+</body>
+</html>

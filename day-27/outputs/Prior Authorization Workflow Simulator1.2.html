@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prior Authorization Story Simulator</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom Scrollbar for Chat Feed */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans min-h-screen flex flex-col">
+
+  <!-- Application Header -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-20">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div>
+        <h1 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <span>🩺</span> Prior Authorization Story Simulator
+        </h1>
+        <p class="text-xs text-slate-500 mt-0.5">Understand the journey of patient access, clinical criteria, and system workflows.</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="text-xs font-semibold bg-blue-50 text-blue-700 px-3 py-1 rounded-full border border-blue-200">
+          StarCare Health (Illustrative Example Only)
+        </span>
+        <button onclick="restartSimulation()" class="text-xs font-semibold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg transition-colors">
+          Restart Journey
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Progress Tracker Bar -->
+  <div class="bg-slate-900 text-white py-3 border-b border-slate-800">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex justify-between items-center mb-2">
+        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Current Scene Progress</span>
+        <span id="progress-percentage" class="text-xs font-bold text-blue-400">Scene 1 of 8</span>
+      </div>
+      <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
+        <div id="progress-indicator-bar" class="bg-blue-500 h-2.5 rounded-full transition-all duration-300" style="width: 12.5%"></div>
+      </div>
+      <div class="grid grid-cols-8 gap-1 text-[10px] text-center mt-2 text-slate-400">
+        <div class="font-semibold" id="node-1">1. Visit</div>
+        <div id="node-2">2. Submission</div>
+        <div id="node-3">3. Definition</div>
+        <div id="node-4">4. Checkpoints</div>
+        <div id="node-5">5. Decision</div>
+        <div id="node-6">6. Appeal</div>
+        <div id="node-7">7. Approval</div>
+        <div id="node-8">8. Lessons</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Workspace Layout -->
+  <main class="flex-grow max-w-6xl w-full mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
+    
+    <!-- Sidebar - Clinical Profile & Diagnostics -->
+    <aside class="lg:col-span-1 space-y-4">
+      <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Case Registry Details</h3>
+        <div class="space-y-3 text-xs">
+          <div>
+            <span class="block text-slate-400">Patient Name</span>
+            <strong class="text-slate-800 text-sm">Rahul Sharma</strong>
+          </div>
+          <div>
+            <span class="block text-slate-400">Primary Diagnosis</span>
+            <strong class="text-slate-800 text-sm">Rheumatoid Arthritis (ICD-10 M06.9)</strong>
+          </div>
+          <div>
+            <span class="block text-slate-400">Prescribed Therapy</span>
+            <strong class="text-slate-800 text-sm">Humira (Adalimumab) 40mg/0.4mL</strong>
+          </div>
+          <div class="pt-2 border-t border-slate-100">
+            <span class="block text-slate-400">Ordering Provider</span>
+            <span class="font-semibold text-slate-800">Dr. Patel (City Medical Center)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Live Plan Status</h3>
+        <div class="space-y-3 text-xs">
+          <div>
+            <span class="block text-slate-400">Assigned Payer</span>
+            <span class="font-semibold text-slate-800">StarCare Health (Commercial)</span>
+          </div>
+          <div>
+            <span class="block text-slate-400">PA Status</span>
+            <span id="pa-status-badge" class="inline-block mt-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600">
+              Not Initiated
+            </span>
+          </div>
+          <div>
+            <span class="block text-slate-400">Ref Number</span>
+            <code id="pa-ref-label" class="text-[10px] bg-slate-50 px-1.5 py-0.5 rounded border border-slate-200 text-slate-600">N/A</code>
+          </div>
+          <div class="pt-2 border-t border-slate-100">
+            <span class="block text-slate-400">Required Trials</span>
+            <ul class="space-y-1 mt-1 text-[11px]">
+              <li class="flex items-center gap-1.5 text-slate-500" id="trial-first-line">
+                <span id="trial-icon-1">⚪</span> First-line therapy (Sulfasalazine)
+              </li>
+              <li class="flex items-center gap-1.5 text-slate-500" id="trial-documentation">
+                <span id="trial-icon-2">⚪</span> Clinical Sign-off / Records
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Chat & Dialogue Simulation Feed -->
+    <section class="lg:col-span-3 flex flex-col h-[600px] bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+      
+      <!-- Dialogue Feed Window -->
+      <div id="chat-feed" class="flex-grow overflow-y-auto p-4 sm:p-6 bg-slate-50/50 flex flex-col space-y-4">
+        <!-- New chat bubbles are dynamically appended here using createElement and appendChild -->
+      </div>
+
+      <!-- User Choice & Action Interface -->
+      <div class="bg-white border-t border-slate-200 p-4">
+        <div class="max-w-2xl mx-auto">
+          <p id="choice-prompt-text" class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 text-center">
+            How should Priya and Rahul respond?
+          </p>
+          <div id="choices-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <!-- Dynamic choice buttons loaded here -->
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Educational Concept Footer -->
+  <footer class="bg-white border-t border-slate-200 mt-12 py-8">
+    <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-slate-600">
+      <div>
+        <h4 class="font-bold text-slate-900 mb-2">Step Therapy Overview</h4>
+        <p class="text-xs leading-relaxed">Commonly called "fail-first" rules. Payers require patients to document trial and failure on lower-cost or conventional medications (like sulfasalazine) before advancing to specialized biologics.</p>
+      </div>
+      <div>
+        <h4 class="font-bold text-slate-900 mb-2">Clinical Documentation Necessity</h4>
+        <p class="text-xs leading-relaxed">Insurance review teams confirm diagnosis codes match evidence in clinic chart files. Missing clinic notes are the leading cause of administrative prior authorization delays and denials.</p>
+      </div>
+      <div>
+        <h4 class="font-bold text-slate-900 mb-2">System Metrics Tracked</h4>
+        <p class="text-xs leading-relaxed">Modern health systems track operational metrics such as total denial rate, successful appeal percentage, and average clinician resolution time to reduce patient access delays.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* ==========================================================================
+       1. Story State and Database Configuration
+       ========================================================================== */
+    const STORY_SCENES = [
+      {
+        sceneId: 1,
+        title: "Doctor Visit",
+        nodeId: "node-1",
+        paStatus: "In Process",
+        paRef: "Pending",
+        trialFirst: "verifying",
+        trialDoc: "verifying",
+        narrativeIntro: [
+          { char: "narrator", text: "Rahul visits Dr. Patel at City Medical Center, experiencing persistent, painful inflammation in his wrists and fingers." },
+          { char: "doctor", text: "Dr. Patel: 'Your inflammation markers confirm a diagnosis of severe Rheumatoid Arthritis. To prevent permanent joint erosion and long-term cartilage damage, we must initiate advanced biologic treatment. I am writing a prescription for Humira.'" },
+          { char: "rahul", text: "Thank you, Dr. Patel. My joints have been incredibly stiff. Should I head over to the pharmacy to pick up the prescription immediately?" }
+        ],
+        choices: [
+          {
+            text: "Ask about insurance pre-approval rules.",
+            userLine: "Wait, does my insurance plan allow me to fill specialty biologics like Humira immediately?",
+            reaction: [
+              { char: "narrator", text: "Priya, a Healthcare Operations Specialist at City Medical Center, steps in to review the chart requirements." },
+              { char: "priya", text: "Hello Rahul! Specialty medications almost always require Prior Authorization (PA) before StarCare Health—your insurer—will agree to cover the cost. Let's look at how we submit this request." }
+            ]
+          },
+          {
+            text: "Submit the request directly to StarCare Health.",
+            userLine: "We should send this order to my insurance company, StarCare Health, to see if they approve it.",
+            reaction: [
+              { char: "narrator", text: "Priya, a Healthcare Operations Specialist, organizes the administrative pathway." },
+              { char: "priya", text: "Excellent proactive step, Rahul. For expensive biologic agents, our medical clinic coordinates directly with StarCare Health to establish clinical coverage before you go to the pharmacy." }
+            ]
+          }
+        ]
+      },
+      {
+        sceneId: 2,
+        title: "Insurance Roadblock",
+        nodeId: "node-2",
+        paStatus: "Submitted",
+        paRef: "REF-99812",
+        trialFirst: "pending",
+        trialDoc: "pending",
+        narrativeIntro: [
+          { char: "narrator", text: "Dr. Patel's administrative team compiles the clinic files and submits the Prior Authorization request directly to StarCare Health (an illustrative example of a commercial payer)." },
+          { char: "priya", text: "To clarify, the standard workflow for these therapies starts as Provider → PA Request → Payer. No retail pharmacy is intermediate in this phase. Once the PA is formally approved by StarCare, it resides permanently on your file for the approved plan duration." },
+          { char: "rahul", text: "So you transmit clinical logs directly to them? Why is this process necessary if my doctor already wrote the prescription?" }
+        ],
+        choices: [
+          {
+            text: "Ask Priya for the clinical cost reasoning.",
+            userLine: "Why do insurance plans establish these checkpoints if a licensed physician already decided what I need?",
+            reaction: [
+              { char: "priya", text: "Biologics like Humira cost thousands of dollars per month. Insurers use prior authorization checks to verify clinical indication, ensure safe prescribing habits, and control escalating healthcare costs." }
+            ]
+          },
+          {
+            text: "Express concern about systemic access delays.",
+            userLine: "My joint pain is active today. Doesn't this back-and-forth discussion cause delays in getting my medicine?",
+            reaction: [
+              { char: "priya", text: "It can, Rahul. Navigating these requirements demands rapid coordination because delays directly impact physical comfort and clinical safety. Let's look at the underlying data." }
+            ]
+          }
+        ]
+      },
+      {
+        sceneId: 3,
+        title: "What is PA?",
+        nodeId: "node-3",
+        paStatus: "Reviewing",
+        paRef: "REF-99812",
+        trialFirst: "checking",
+        trialDoc: "checking",
+        narrativeIntro: [
+          { char: "narrator", text: "Priya provides clinical context on what prior authorization entails for patients." },
+          { char: "priya", text: "Prior authorization is not merely a bureaucratic task. For aggressive, inflammatory conditions like Rheumatoid Arthritis, delays in initiating biologic therapy are clinically meaningful and can permanently impact structural disease progression." },
+          { char: "priya", text: "To give you an idea of scale, the American Medical Association (AMA) 2023 Prior Authorization Survey reported that PA policies lead to treatment delays for the absolute majority of patients (94% of physicians surveyed reported significant delays in care)." }
+        ],
+        choices: [
+          {
+            text: "Inquire about 'Step Therapy' regulations.",
+            userLine: "Priya, what is 'Step Therapy' and does StarCare Health require me to try other drugs first?",
+            reaction: [
+              { char: "priya", text: "Step therapy requires patients to try and 'fail' conventional, lower-cost therapies before the insurance company approves advanced, higher-cost biologic options. Let's see how they verify this." }
+            ]
+          },
+          {
+            text: "Ask how the review checklist works.",
+            userLine: "What specific details does the insurance company verify before granting an approval?",
+            reaction: [
+              { char: "priya", text: "The payer evaluates several clear medical parameters. Let's review the exact checklist that StarCare Health operates behind the scenes." }
+            ]
+          }
+        ]
+      },
+      {
+        sceneId: 4,
+        title: "Insurance Review",
+        nodeId: "node-4",
+        paStatus: "Evaluating",
+        paRef: "REF-99812",
+        trialFirst: "checking",
+        trialDoc: "checking",
+        narrativeIntro: [
+          { char: "narrator", text: "Priya breaks down the four core criteria checklists checked during StarCare's review process." },
+          { char: "priya", text: "When StarCare's clinical review team receives our packet, they check: 1) Active Member Eligibility, 2) Complete clinical documentation, 3) ICD-10 Diagnosis match (confirming Rheumatoid Arthritis matches FDA-approved indications), and 4) Documented Step Therapy trial history." },
+          { char: "priya", text: "Eligibility ensures you have active coverage. Clinical documentation verifies the diagnosis is backed by lab results. The ICD-10 check confirms medical alignment, and step therapy history ensures we followed the required drug sequence." }
+        ],
+        choices: [
+          {
+            text: "Assume the initial submission was complete.",
+            userLine: "Dr. Patel's office manages many patients. I assume they sent over a complete file with all required historical trials.",
+            reaction: [
+              { char: "priya", text: "We try our best, but sometimes historical trial details from other medical facilities aren't fully integrated into current EHR records." }
+            ]
+          },
+          {
+            text: "Ask what happens if a gap is found.",
+            userLine: "What happens if our submitted packet lacks a minor documentation checkpoint or historical note?",
+            reaction: [
+              { char: "priya", text: "If any checklist item is incomplete, StarCare Health will issue an administrative hold or an outright denial. Let's see the result of our submission." }
+            ]
+          }
+        ]
+      },
+      {
+        sceneId: 5,
+        title: "Denial",
+        nodeId: "node-5",
+        paStatus: "Denied",
+        paRef: "REF-99812",
+        trialFirst: "failed",
+        trialDoc: "missing",
+        narrativeIntro: [
+          { char: "narrator", text: "StarCare Health issues an administrative prior authorization Denial, citing missing documentation of first-line conventional therapy trials." },
+          { char: "rahul", text: "Oh no! I just received an alert from my insurance portal. My request for Humira was officially denied! Am I locked out of getting this medication permanently?" },
+          { char: "priya", text: "A denial is not permanent, Rahul. In this case, StarCare noted that while Dr. Patel's notes mention you tried conventional sulfasalazine, the formal pharmacy logs showing you completed that first-line step therapy were missing." },
+          { char: "priya", text: "This administrative friction is highly resource-intensive. Prior authorization denials and appeals cost physician offices an average of 2+ staff hours per resolution to manage." }
+        ],
+        choices: [
+          {
+            text: "Ask how to prove the previous drug trials.",
+            userLine: "How do we locate and submit the formal proof showing I tried and failed sulfasalazine last year?",
+            reaction: [
+              { char: "priya", text: "We must pull your past prescription refill logs and compile a structured clinical timeline to satisfy their Step Therapy checklist. Let's start the appeal." }
+            ]
+          },
+          {
+            text: "Initiate the clinical appeal immediately.",
+            userLine: "My joints are increasingly stiff; let's compile whatever clinical documentation is necessary to file an appeal.",
+            reaction: [
+              { char: "priya", text: "Speed is essential to minimize treatment delays. Let's build a robust clinical packet to contest StarCare's decision." }
+            ]
+          }
+        ]
+      },
+      {
+        sceneId: 6,
+        title: "Appeal",
+        nodeId: "node-6",
+        paStatus: "Appealing",
+        paRef: "REF-99812",
+        trialFirst: "validated",
+        trialDoc: "assembling",
+        narrativeIntro: [
+          { char: "narrator", text: "Dr. Patel's clinical team compiles the necessary documentation to initiate a formal administrative appeal." },
+          { char: "priya", text: "To secure approval on appeal, we must bundle: 1) Your historical pharmacy records proving 6 months of sulfasalazine trial, 2) Diagnostic laboratory panels showing severe ongoing inflammation, and 3) A signed Letter of Medical Necessity outlining why alternative treatments are contraindicated." },
+          { char: "priya", text: "This complete packet is transmitted directly back to StarCare Health's appeals department for clinical review." }
+        ],
+        choices: [
+          {
+            text: "Review the Letter of Medical Necessity.",
+            userLine: "Let's review Dr. Patel's Letter of Medical Necessity to ensure it emphasizes the risk of permanent joint erosion.",
+            reaction: [
+              { char: "priya", text: "The letter is highly detailed, highlighting that delaying therapy puts you at immediate risk of irreversible joint cartilage destruction. Let's submit and wait for the determination." }
+            ]
+          },
+          {
+            text: "Transmit the formal appeal packet.",
+            userLine: "The clinical records and pharmacy logs are verified. Let's transmit the appeal packet electronically to speed up review.",
+            reaction: [
+              { char: "priya", text: "Packet transmitted! The electronic portal logs our submission instantly. Now, the payer's clinical review team evaluates the new evidence." }
+            ]
+          }
+        ]
+      },
+      {
+        sceneId: 7,
+        title: "Approval",
+        nodeId: "node-7",
+        paStatus: "Approved",
+        paRef: "AUTH-88219A",
+        trialFirst: "completed",
+        trialDoc: "completed",
+        narrativeIntro: [
+          { char: "narrator", text: "StarCare Health reviews the clinical appeal and issues an official Prior Authorization Approval." },
+          { char: "priya", text: "Incredible news, Rahul! The appeal was successful. StarCare Health has overturned the initial denial and approved the Humira prior authorization." },
+          { char: "priya", text: "They have issued a unique Prior Authorization Reference Number: AUTH-88219A. This approval is saved on file, meaning no repeat PA is required for Humira for the next 12 months." },
+          { char: "rahul", text: "What an absolute relief! I can finally schedule my first dose. This has been a complex process." }
+        ],
+        choices: [
+          {
+            text: "Reflect on patient responsibilities.",
+            userLine: "This taught me how important it is as a patient to track my own drug history and keep records of past treatments.",
+            reaction: [
+              { char: "priya", text: "Absolutely, Rahul. Active patient documentation helps the clinical team resolve these checks much faster. Let's summarize the overall takeaways." }
+            ]
+          },
+          {
+            text: "Analyze health system workflows at scale.",
+            userLine: "If this takes 2+ hours for one patient, how do large hospital networks manage thousands of these cases?",
+            reaction: [
+              { char: "priya", text: "Large health systems use dedicated administrative teams and tracking metrics to coordinate this workload efficiently. Let's look at the broader takeaways." }
+            ]
+          }
+        ]
+      },
+      {
+        sceneId: 8,
+        title: "Takeaways",
+        nodeId: "node-8",
+        paStatus: "Approved",
+        paRef: "AUTH-88219A",
+        trialFirst: "completed",
+        trialDoc: "completed",
+        narrativeIntro: [
+          { char: "narrator", text: "The simulation concludes with dual perspectives on prior authorization." },
+          { char: "rahul", text: "From a patient perspective, prior authorization represents a significant hurdle. Staying informed, tracking medication trial history, and collaborating closely with clinic staff is vital to avoid prolonged treatment delays." },
+          { char: "priya", text: "From an operational perspective, healthcare systems must actively track metrics like overall Denial Rates, Appeal Success Rates, and Administrative Resolution Time to optimize patient access and reduce administrative burn." }
+        ],
+        choices: [
+          {
+            text: "Review the workflow journey.",
+            userLine: "Let's review the complete journey from diagnosis to approval.",
+            reaction: [
+              { char: "narrator", text: "Workflow Summary: Scene 1: Visit & Rx issued | Scene 2: Provider transmits PA | Scene 3: PA evaluated for disease progression risk | Scene 4: Internal review check | Scene 5: Initial denial due to missing trials | Scene 6: Appeal packet compiled | Scene 7: Successful approval and authorization reference issued | Scene 8: Lessons analyzed." }
+            ]
+          },
+          {
+            text: "Restart the simulation.",
+            userLine: "I would like to restart the simulation to review the clinical and system checkpoints once more.",
+            reaction: [
+              { char: "narrator", text: "Restarting simulation. Loading Scene 1..." },
+              { char: "system-action", text: "RESTART_GAME" }
+            ]
+          }
+        ]
+      }
+    ];
+
+    /* ==========================================================================
+       2. Application State Management
+       ========================================================================= */
+    let currentSceneIndex = 0;
+
+    // Run when the app finishes loading
+    window.addEventListener("DOMContentLoaded", () => {
+      loadScene(0);
+    });
+
+    function restartSimulation() {
+      currentSceneIndex = 0;
+      const chatFeed = document.getElementById("chat-feed");
+      
+      // Clear all children from the chat feed
+      while (chatFeed.firstChild) {
+        chatFeed.removeChild(chatFeed.firstChild);
+      }
+      
+      // Reset visual timeline nodes
+      for (let i = 1; i <= 8; i++) {
+        const node = document.getElementById(`node-${i}`);
+        if (node) {
+          node.className = "";
+        }
+      }
+
+      loadScene(0);
+    }
+
+    /* ==========================================================================
+       3. Dynamic DOM Generation (createElement & appendChild)
+       ========================================================================== */
+    function createBubble(character, text) {
+      const chatFeed = document.getElementById("chat-feed");
+      
+      // Outer wrapper element
+      const wrapper = document.createElement("div");
+      wrapper.className = "flex items-start mb-4 space-x-3 w-full transition-all duration-300 opacity-0 transform translate-y-2";
+      
+      if (character === "rahul") {
+        // Left-aligned Patient chat bubble
+        wrapper.classList.add("justify-start");
+        
+        const avatar = document.createElement("div");
+        avatar.className = "flex-shrink-0 w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-xl shadow-sm border border-blue-200";
+        avatar.textContent = "👦";
+        
+        const contentBox = document.createElement("div");
+        contentBox.className = "max-w-md";
+        
+        const nameLabel = document.createElement("div");
+        nameLabel.className = "text-[10px] font-bold text-slate-500 mb-1 ml-1";
+        nameLabel.textContent = "Rahul (Patient)";
+        
+        const bubble = document.createElement("div");
+        bubble.className = "bg-white border border-slate-200 text-slate-800 p-3.5 rounded-2xl rounded-tl-none shadow-sm text-sm leading-relaxed";
+        bubble.textContent = text;
+        
+        contentBox.appendChild(nameLabel);
+        contentBox.appendChild(bubble);
+        wrapper.appendChild(avatar);
+        wrapper.appendChild(contentBox);
+        
+      } else if (character === "priya") {
+        // Right-aligned Specialist chat bubble
+        wrapper.className = "flex items-start mb-4 space-x-3 w-full justify-end flex-row-reverse space-x-reverse";
+        
+        const avatar = document.createElement("div");
+        avatar.className = "flex-shrink-0 w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-xl shadow-sm border border-indigo-200";
+        avatar.textContent = "👧";
+        
+        const contentBox = document.createElement("div");
+        contentBox.className = "max-w-md flex flex-col items-end";
+        
+        const nameLabel = document.createElement("div");
+        nameLabel.className = "text-[10px] font-bold text-slate-500 mb-1 mr-1";
+        nameLabel.textContent = "Priya (Specialist)";
+        
+        const bubble = document.createElement("div");
+        bubble.className = "bg-indigo-600 text-white p-3.5 rounded-2xl rounded-tr-none shadow-sm text-sm leading-relaxed";
+        bubble.textContent = text;
+        
+        contentBox.appendChild(nameLabel);
+        contentBox.appendChild(bubble);
+        wrapper.appendChild(contentBox);
+        wrapper.appendChild(avatar);
+        
+      } else if (character === "narrator") {
+        // Centered italic narrator note
+        wrapper.className = "flex justify-center w-full my-6 px-4";
+        
+        const note = document.createElement("div");
+        note.className = "text-center text-xs italic text-slate-500 max-w-lg leading-relaxed border-t border-b border-slate-100 py-3";
+        note.textContent = text;
+        wrapper.appendChild(note);
+        
+      } else if (character === "doctor") {
+        // Centered italic doctor diagnostic text
+        wrapper.className = "flex justify-center w-full my-4 px-4";
+        
+        const note = document.createElement("div");
+        note.className = "text-center text-sm italic text-blue-900 font-medium max-w-lg bg-blue-50/50 rounded-xl p-4 border border-blue-100 leading-relaxed shadow-sm";
+        note.textContent = text;
+        wrapper.appendChild(note);
+      }
+      
+      // Append element to parent
+      chatFeed.appendChild(wrapper);
+      
+      // Trigger subtle animation delay
+      setTimeout(() => {
+        wrapper.classList.remove("opacity-0", "translate-y-2");
+      }, 50);
+
+      // Scroll view to bottom
+      chatFeed.scrollTop = chatFeed.scrollHeight;
+    }
+
+    /* ==========================================================================
+       4. Scene Progression & State Update Handlers
+       ========================================================================== */
+    function loadScene(sceneIndex) {
+      if (sceneIndex >= STORY_SCENES.length) return;
+      
+      currentSceneIndex = sceneIndex;
+      const scene = STORY_SCENES[sceneIndex];
+
+      // Update Side Panel Clinical Indicators
+      document.getElementById("pa-status-badge").textContent = scene.paStatus;
+      document.getElementById("pa-ref-label").textContent = scene.paRef;
+      
+      const badge = document.getElementById("pa-status-badge");
+      badge.className = "inline-block mt-1 px-2.5 py-1 rounded-full text-[10px] font-bold";
+      if (scene.paStatus === "Approved") {
+        badge.classList.add("bg-green-100", "text-green-800");
+      } else if (scene.paStatus === "Denied") {
+        badge.classList.add("bg-red-100", "text-red-800");
+      } else if (scene.paStatus === "In Process" || scene.paStatus === "Evaluating" || scene.paStatus === "Submitted" || scene.paStatus === "Reviewing" || scene.paStatus === "Appealing") {
+        badge.classList.add("bg-amber-100", "text-amber-800");
+      } else {
+        badge.classList.add("bg-slate-100", "text-slate-600");
+      }
+
+      // Update Step Therapy Trial List
+      const trial1 = document.getElementById("trial-first-line");
+      const icon1 = document.getElementById("trial-icon-1");
+      const trial2 = document.getElementById("trial-documentation");
+      const icon2 = document.getElementById("trial-icon-2");
+
+      if (scene.trialFirst === "verifying" || scene.trialFirst === "pending" || scene.trialFirst === "checking") {
+        trial1.className = "flex items-center gap-1.5 text-amber-600 font-medium";
+        icon1.textContent = "⏳";
+      } else if (scene.trialFirst === "failed") {
+        trial1.className = "flex items-center gap-1.5 text-red-600 font-semibold";
+        icon1.textContent = "❌";
+      } else if (scene.trialFirst === "completed" || scene.trialFirst === "validated") {
+        trial1.className = "flex items-center gap-1.5 text-green-700 font-semibold";
+        icon1.textContent = "✅";
+      }
+
+      if (scene.trialDoc === "verifying" || scene.trialDoc === "pending" || scene.trialDoc === "checking" || scene.trialDoc === "assembling") {
+        trial2.className = "flex items-center gap-1.5 text-amber-600 font-medium";
+        icon2.textContent = "⏳";
+      } else if (scene.trialDoc === "missing") {
+        trial2.className = "flex items-center gap-1.5 text-red-600 font-semibold";
+        icon2.textContent = "❌";
+      } else if (scene.trialDoc === "completed") {
+        trial2.className = "flex items-center gap-1.5 text-green-700 font-semibold";
+        icon2.textContent = "✅";
+      }
+
+      // Progress Tracker Updates
+      const stepPct = ((sceneIndex + 1) / 8) * 100;
+      document.getElementById("progress-indicator-bar").style.width = `${stepPct}%`;
+      document.getElementById("progress-percentage").textContent = `Scene ${sceneIndex + 1} of 8`;
+
+      // Highlight active scene node in progress track
+      for (let i = 1; i <= 8; i++) {
+        const node = document.getElementById(`node-${i}`);
+        if (node) {
+          if (i === sceneIndex + 1) {
+            node.className = "font-bold text-blue-400 border-b-2 border-blue-400 pb-1";
+          } else if (i < sceneIndex + 1) {
+            node.className = "text-green-400 font-medium";
+          } else {
+            node.className = "text-slate-400";
+          }
+        }
+      }
+
+      // Append Scene Introductory Dialogues/Narrative
+      scene.narrativeIntro.forEach(item => {
+        createBubble(item.char, item.text);
+      });
+
+      // Clear previous choice buttons and build new options
+      const choicesContainer = document.getElementById("choices-container");
+      choicesContainer.innerHTML = "";
+
+      scene.choices.forEach((choice, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "w-full text-left bg-slate-50 hover:bg-slate-100 text-slate-800 font-semibold border border-slate-200 hover:border-slate-300 rounded-xl p-3.5 text-xs transition-all duration-200 hover:shadow-sm flex items-center justify-between group";
+        
+        const textSpan = document.createElement("span");
+        textSpan.className = "pr-2";
+        textSpan.textContent = choice.text;
+        
+        const arrowSpan = document.createElement("span");
+        arrowSpan.className = "text-blue-500 font-bold transition-transform group-hover:translate-x-1";
+        arrowSpan.textContent = "→";
+
+        btn.appendChild(textSpan);
+        btn.appendChild(arrowSpan);
+
+        btn.addEventListener("click", () => handleUserChoiceSelection(choice));
+        choicesContainer.appendChild(btn);
+      });
+    }
+
+    function handleUserChoiceSelection(choice) {
+      // Temporarily clear active choice buttons to prevent duplicate execution
+      document.getElementById("choices-container").innerHTML = "";
+
+      // Append selected choice as a Patient bubble (since choices represent the player advocating for Rahul)
+      createBubble("rahul", choice.userLine);
+
+      // Append reaction dialogues
+      choice.reaction.forEach((react, idx) => {
+        setTimeout(() => {
+          // Check if system command restart is embedded
+          if (react.text === "RESTART_GAME") {
+            restartSimulation();
+            return;
+          }
+          createBubble(react.char, react.text);
+        }, (idx + 1) * 600);
+      });
+
+      // Advance stage with deliberate animation delay
+      const progressDelay = (choice.reaction.length + 1) * 750;
+      setTimeout(() => {
+        const nextIdx = currentSceneIndex + 1;
+        if (nextIdx < STORY_SCENES.length) {
+          loadScene(nextIdx);
+        }
+      }, progressDelay);
+    }
+  </script>
+</body>
+</html>
