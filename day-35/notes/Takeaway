@@ -1,0 +1,22 @@
+
+
+Underneath the drag-and-drop and confetti, the game is training a handful of real prompt-engineering instincts:
+
+**1. Specificity beats vagueness — but has a ceiling**
+The "Choose the Best Prompt" round is the core lesson: it puts a Weak, Optimized, and Over-Engineered prompt side by side so you *feel* the difference, not just read about it. Weak prompts produce generic mush ("There was a sword. A blacksmith found it."). Over-engineered prompts — stuffed with contradictory instructions, fake credentials ("as the world's greatest author"), and impossible constraints — actually confuse the model just as much, producing bloated or incoherent output. The lesson: good prompting is a *peak*, not a slope. More detail helps until it doesn't.
+
+**2. Irrelevant instructions are worse than no instructions**
+"Clean the Prompt" forces you to actively identify and discard distractor blocks — things like "write a 20-verse epic" when you asked for 4 lines, or "make it comedic" when the tone should be chilling. This mirrors a real failure mode: people pad prompts with leftover or conflicting instructions from earlier drafts, and the model tries to honor all of them, diluting the result.
+
+**3. The right blocks aren't just "more info" — they're the *right categories* of info**
+"Build the Prompt" isn't about grabbing every plausible-sounding block. It's testing whether you recognize the recurring anatomy of a good prompt: role/context, subject, constraint (length/format), and tone. Every scenario reinforces the same skeleton in a different creative domain.
+
+**4. Precision constraints (length, format, POV) are load-bearing, not decorative**
+Several "Prompt Principles" (Constraint, Precision, Format) hammer the same point from different angles: telling the model *exactly* how much and in what shape you want output isn't fussy — it's often the single highest-leverage instruction you can give.
+
+**5. Tone needs to be named, not implied**
+The villain monologue scenario exists specifically to show that if you don't explicitly say "calm and calculating, not shouty," the model defaults to cliché (screaming, cackling). Emotional register is invisible unless stated.
+
+## The Takeaway
+
+A great prompt isn't the longest one or the most "creative" one — it's the one that gives the model just enough *structural* information (who, what, tone, length, format) to remove ambiguity, and no more. The gap between your Weak Prompt and Optimized Prompt output in every single round is the whole game in miniature: same idea, wildly different result, purely because of how precisely the request was framed.
