@@ -1,0 +1,19 @@
+## 🧩 Prompt Puzzle — Master AI Prompting Through Play
+
+Here's what I built for you: a **Creative Writing / Beginner** edition of the prompt-engineering trainer, packed into a single offline HTML file.
+
+**How it plays:**
+- **6 randomized scenarios** pulled from a pool of 6, each cycling through the three challenge types in rotation
+- **Build the Prompt** — drag correct blocks (character, tone, length, constraints) into a dropzone while dodging distractor blocks that would weaken the output
+- **Clean the Prompt** — click to strip out irrelevant/junk instructions from a cluttered prompt
+- **Choose the Best Prompt** — pick between a Weak, Optimized, and Over-Engineered version of the same request, and see why "more words" isn't the same as "better prompt"
+
+**Scenarios cover:** fantasy story openings, birthday poems, mystery character descriptions, tense dialogue scenes, midnight-coffee-shop micro-fiction, and villain monologues — each teaching a distinct principle (Specificity, Constraint, Role & Context, Format, Precision, Tone Calibration).
+
+**Scoring tracks:** Accuracy, Time, Moves, Wrong Placements, Hints Used, and an Optimization Bonus for flawless rounds — with live floating score pop-ups and confetti on perfect rounds.
+
+**The final report** gives you a Prompt Score, a Rank (from 🌱 Novice to 🏆 Grandmaster), a "Prompt DNA" radar-style breakdown (Specificity, Clarity, Efficiency, Creativity Fit, Optimization), personalized feedback, your next milestone, and a final optimized prompt + its output as a takeaway.
+
+Everything's self-contained — no CDN dependencies, pure HTML/CSS/JS — so it opens and runs from a double-click, no internet required. Hit **Replay** any time for a fresh shuffled set of scenarios.
+
+Want me to bump the difficulty up, switch domains, or add more scenarios to the pool for extra variety on replay?
