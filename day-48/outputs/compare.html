@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E-Class vs 5 Series — Mid-Luxury Sedan Decision Tool</title>
+<style>
+  :root{
+    --ink:#14171c;
+    --panel:#1b1f26;
+    --panel-2:#20252d;
+    --paper:#eef0ee;
+    --steel:#8b93a1;
+    --line:#333a45;
+    --brass:#c7a15a;
+    --brass-dim:#8f7844;
+    --merc-a:#7fb3c9;
+    --merc-b:#4f7f96;
+    --bmw:#5b7fc4;
+    --good:#6fae7a;
+    --warn:#d9a441;
+    --bad:#c9695f;
+    --radius:2px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--ink);
+    color:var(--paper);
+    font-family:'Iowan Old Style','Palatino Linotype',Georgia,'Times New Roman',serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .mono{font-family:'SF Mono','Courier New',ui-monospace,monospace;}
+  a{color:var(--brass);}
+
+  /* ===== Header / Masthead ===== */
+  .masthead{
+    border-bottom:1px solid var(--line);
+    padding:28px 32px 20px;
+    max-width:1180px;
+    margin:0 auto;
+  }
+  .masthead-top{
+    display:flex; justify-content:space-between; align-items:baseline;
+    font-family:'SF Mono','Courier New',ui-monospace,monospace;
+    font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--steel);
+    margin-bottom:14px;
+  }
+  h1{
+    font-family:Georgia,'Iowan Old Style',serif;
+    font-weight:400;
+    font-size:clamp(30px,4.4vw,50px);
+    letter-spacing:-0.01em;
+    margin:0 0 8px;
+    color:var(--paper);
+  }
+  h1 em{ font-style:italic; color:var(--brass); }
+  .subhead{
+    color:var(--steel);
+    font-size:15.5px;
+    max-width:640px;
+    margin:0;
+  }
+  .verdict-line{
+    margin-top:2px;
+    font-size:15.5px;
+    color:var(--paper);
+  }
+  .verdict-line .name{ color:var(--brass); font-weight:600; }
+
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 32px 80px; }
+
+  /* ===== Layout grid ===== */
+  .layout{
+    display:grid;
+    grid-template-columns:300px 1fr;
+    gap:36px;
+    margin-top:34px;
+  }
+  @media (max-width:900px){
+    .layout{ grid-template-columns:1fr; }
+  }
+
+  /* ===== Weights panel ===== */
+  .panel-title{
+    font-family:'SF Mono','Courier New',ui-monospace,monospace;
+    font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--steel);
+    margin:0 0 16px;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .weights{
+    position:sticky; top:24px;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:22px 20px;
+  }
+  .weight-row{ margin-bottom:20px; }
+  .weight-row:last-of-type{ margin-bottom:8px; }
+  .weight-row label{
+    display:flex; justify-content:space-between; align-items:baseline;
+    font-size:14.5px; color:var(--paper); margin-bottom:8px;
+  }
+  .weight-row .wval{
+    font-family:'SF Mono','Courier New',ui-monospace,monospace;
+    font-size:12.5px; color:var(--brass);
+  }
+  input[type=range]{
+    -webkit-appearance:none; appearance:none;
+    width:100%; height:2px; background:var(--line); outline:none; border-radius:2px;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none; appearance:none;
+    width:15px; height:15px; border-radius:50%;
+    background:var(--brass); cursor:pointer; border:2px solid var(--ink);
+    box-shadow:0 0 0 1px var(--brass);
+  }
+  input[type=range]::-moz-range-thumb{
+    width:13px; height:13px; border-radius:50%;
+    background:var(--brass); cursor:pointer; border:2px solid var(--ink);
+  }
+  .presets{ display:flex; flex-wrap:wrap; gap:6px; margin-top:18px; }
+  .preset-btn{
+    background:transparent; border:1px solid var(--line); color:var(--steel);
+    font-family:'SF Mono',monospace; font-size:10.5px; letter-spacing:.05em;
+    padding:6px 10px; border-radius:20px; cursor:pointer;
+    transition:all .15s;
+  }
+  .preset-btn:hover, .preset-btn.active{ border-color:var(--brass); color:var(--brass); }
+  .reset-link{
+    display:block; margin-top:14px; font-family:'SF Mono',monospace; font-size:10.5px;
+    color:var(--steel); text-decoration:underline; cursor:pointer; background:none; border:none; padding:0;
+  }
+  .reset-link:hover{ color:var(--brass); }
+
+  /* ===== Ranking cards ===== */
+  .rank-card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    margin-bottom:14px;
+    padding:20px 22px;
+    display:grid;
+    grid-template-columns:44px 1fr auto;
+    gap:18px;
+    align-items:center;
+    transition:border-color .2s, transform .2s;
+  }
+  .rank-card.top{ border-color:var(--brass); background:linear-gradient(180deg,#232016,var(--panel) 60%); }
+  .rank-num{
+    font-family:Georgia,serif; font-size:30px; color:var(--line); font-style:italic;
+  }
+  .rank-card.top .rank-num{ color:var(--brass); }
+  .rank-main .make{ font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--steel); font-family:'SF Mono',monospace;}
+  .rank-main .model{ font-size:21px; margin:2px 0 5px; }
+  .rank-main .tagline{ font-size:12.5px; color:var(--steel); }
+  .rank-score{ text-align:right; min-width:96px; }
+  .rank-score .num{ font-family:'SF Mono',monospace; font-size:26px; color:var(--paper); }
+  .rank-card.top .rank-score .num{ color:var(--brass); }
+  .rank-score .lbl{ font-size:10px; color:var(--steel); letter-spacing:.1em; text-transform:uppercase; }
+  .score-bar-track{ height:4px; background:var(--line); border-radius:3px; margin-top:8px; overflow:hidden; }
+  .score-bar-fill{ height:100%; background:var(--brass); border-radius:3px; transition:width .3s ease; }
+  @media (max-width:640px){
+    .rank-card{ grid-template-columns:32px 1fr; }
+    .rank-score{ grid-column:1/-1; text-align:left; margin-top:6px; }
+  }
+
+  /* ===== Comparison table ===== */
+  .section-title{
+    font-family:Georgia,serif; font-size:24px; margin:56px 0 4px; color:var(--paper);
+  }
+  .section-sub{ color:var(--steel); font-size:14px; margin:0 0 22px; }
+  .est-note{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:'SF Mono',monospace; font-size:10px; color:var(--warn);
+    border:1px solid var(--warn); border-radius:20px; padding:2px 8px;
+    margin-left:8px; vertical-align:middle;
+  }
+  table.spec{
+    width:100%; border-collapse:collapse; font-size:14.5px;
+  }
+  table.spec th{
+    text-align:left; padding:12px 14px; font-family:'SF Mono',monospace;
+    font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--steel);
+    border-bottom:1px solid var(--line);
+  }
+  table.spec td{ padding:14px; border-bottom:1px solid var(--line); vertical-align:top; }
+  table.spec tr:last-child td{ border-bottom:none; }
+  table.spec td.crit{ color:var(--steel); font-size:13px; width:150px; }
+  table.spec .best{ color:var(--good); font-weight:600; }
+  .flag{ color:var(--warn); font-size:11px; margin-left:6px; }
+  .source-tag{ display:block; font-size:11px; color:var(--steel); margin-top:3px; font-family:'SF Mono',monospace;}
+
+  /* ===== Sources panel ===== */
+  .toggle-panel{
+    border:1px solid var(--line); border-radius:var(--radius); margin-top:22px; background:var(--panel);
+  }
+  .toggle-head{
+    padding:18px 22px; display:flex; justify-content:space-between; align-items:center;
+    cursor:pointer; user-select:none;
+  }
+  .toggle-head h3{ font-family:Georgia,serif; font-weight:400; font-size:19px; margin:0; }
+  .toggle-head .chev{ color:var(--brass); font-family:monospace; transition:transform .2s; }
+  .toggle-head.open .chev{ transform:rotate(90deg); }
+  .toggle-body{ max-height:0; overflow:hidden; transition:max-height .3s ease; }
+  .toggle-body.open{ max-height:2400px; }
+  .toggle-inner{ padding:0 22px 22px; border-top:1px solid var(--line); }
+  .toggle-inner p{ color:var(--steel); font-size:14px; }
+  .src-list{ list-style:none; padding:0; margin:14px 0; }
+  .src-list li{
+    padding:10px 0; border-bottom:1px solid var(--line); font-size:13.5px;
+    display:flex; justify-content:space-between; gap:14px;
+  }
+  .src-list li:last-child{ border-bottom:none; }
+  .src-list .src-name{ color:var(--paper); }
+  .src-list .src-used{ color:var(--steel); font-size:12px; text-align:right; min-width:150px; }
+  .conflict-box{
+    background:var(--panel-2); border-left:3px solid var(--warn); padding:14px 16px; margin:16px 0; font-size:13.5px; color:var(--paper);
+  }
+  .conflict-box b{ color:var(--warn); }
+
+  footer{
+    margin-top:60px; padding-top:20px; border-top:1px solid var(--line);
+    color:var(--steel); font-size:12px; font-family:'SF Mono',monospace;
+  }
+
+  .empty-state{ text-align:center; padding:60px 20px; color:var(--steel); }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="masthead-top">
+    <span>Compare &amp; Decide · India, mid-luxury sedan</span>
+    <span id="updated-tag">Data current as of Jul 2026</span>
+  </div>
+  <h1>E-Class <em>vs</em> 5 Series</h1>
+  <p class="subhead">A weighted, sourced comparison for buyers cross-shopping the Mercedes-Benz E-Class against the BMW 5 Series in India — built to be adjusted, not just read.</p>
+</div>
+
+<div class="wrap">
+
+  <div class="layout">
+
+    <!-- WEIGHTS PANEL -->
+    <div>
+      <div class="weights">
+        <div class="panel-title">Your priorities</div>
+
+        <div class="weight-row">
+          <label>Price <span class="wval" id="w-price-val">25%</span></label>
+          <input type="range" min="0" max="100" value="25" id="w-price">
+        </div>
+        <div class="weight-row">
+          <label>Fuel efficiency <span class="wval" id="w-fuel-val">25%</span></label>
+          <input type="range" min="0" max="100" value="25" id="w-fuel">
+        </div>
+        <div class="weight-row">
+          <label>Safety rating <span class="wval" id="w-safety-val">25%</span></label>
+          <input type="range" min="0" max="100" value="25" id="w-safety">
+        </div>
+        <div class="weight-row">
+          <label>Warranty coverage <span class="wval" id="w-warranty-val">25%</span></label>
+          <input type="range" min="0" max="100" value="25" id="w-warranty">
+        </div>
+
+        <div class="panel-title" style="margin-top:22px;">Quick presets</div>
+        <div class="presets">
+          <button class="preset-btn" data-preset="value">Value buyer</button>
+          <button class="preset-btn" data-preset="safety">Safety-first</button>
+          <button class="preset-btn" data-preset="running">Low running cost</button>
+          <button class="preset-btn" data-preset="equal">Equal weight</button>
+        </div>
+        <button class="reset-link" id="reset-btn">Reset to equal weighting</button>
+      </div>
+    </div>
+
+    <!-- RANKING -->
+    <div>
+      <div class="panel-title">Live ranking <span id="weight-check" class="mono" style="color:var(--steel); text-transform:none; letter-spacing:0;"></span></div>
+      <div id="ranking-list"></div>
+    </div>
+
+  </div>
+
+  <!-- COMPARISON TABLE -->
+  <h2 class="section-title">Criterion by criterion</h2>
+  <p class="section-sub">Ex-showroom Delhi pricing, ARAI/Euro NCAP-sourced figures, and India warranty terms as published. <span class="est-note">⚠ estimate</span> marks a figure that is a range-derived or cross-market estimate rather than a variant-specific published number.</p>
+
+  <table class="spec" id="spec-table"></table>
+
+  <!-- SOURCES PANEL -->
+  <div class="toggle-panel">
+    <div class="toggle-head" id="sources-toggle">
+      <h3>Sources</h3>
+      <span class="chev">▸</span>
+    </div>
+    <div class="toggle-body" id="sources-body">
+      <div class="toggle-inner">
+        <p>Every figure above is drawn from one of the sources below, current as of July 2026. Where a source only published a range, that is disclosed in the table with the ⚠ estimate flag.</p>
+        <ul class="src-list" id="src-list"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESEARCH METHODOLOGY PANEL -->
+  <div class="toggle-panel">
+    <div class="toggle-head" id="method-toggle">
+      <h3>How this was researched</h3>
+      <span class="chev">▸</span>
+    </div>
+    <div class="toggle-body" id="method-body">
+      <div class="toggle-inner">
+        <p><b style="color:var(--paper)">The scope changed mid-research.</b> The brief originally asked for the BMW 520i and 520d. As of July 2026, BMW India sells the current-generation (G60, launched July 2024) 5 Series in a single configuration: the <b style="color:var(--paper)">530Li M Sport petrol</b>, long-wheelbase, no diesel offered. The 520i/520d names belong to the previous generation or to overseas markets and are not on sale in India today. Rather than inventing pricing or mileage for discontinued trims, this comparison uses the 530Li as BMW's actual current offering, set against the Mercedes-Benz E 200 (petrol) and E 220d (diesel), both of which remain on sale.</p>
+
+        <div class="conflict-box">
+          <b>Price conflicts resolved:</b> Ex-showroom prices for both cars vary by ₹2–4 lakh across CarDekho, ZigWheels, Autocar India and CarWale, largely because of city-specific RTO/GST timing and dealer-reported "starting" prices. This tool uses each source's most recently updated (July 2026) Delhi ex-showroom figure, since it's the most consistent basis across all three cars.
+        </div>
+
+        <div class="conflict-box">
+          <b>Fuel efficiency is not variant-split for the E-Class:</b> ARAI/company-claimed mileage for the E-Class is published by most Indian outlets as a single "12–15 kmpl" band covering all engines, not broken out per E 200 / E 220d. This tool assigns the petrol E 200 the lower end (12 kmpl) and the diesel E 220d the upper end (15 kmpl), consistent with team-bhp's reported 15 kmpl figure and typical petrol/diesel spread — but treat both as ⚠ estimates, not ARAI-certified per-variant numbers.
+        </div>
+
+        <div class="conflict-box">
+          <b>BMW's Euro NCAP score was measured on the electric i5, not the 530Li petrol:</b> Euro NCAP's 2023/24 five-star test of the G60-generation 5 Series body was conducted on the i5 eDrive40 electric variant, since that's the configuration Euro NCAP selected that cycle. The overall 5-star rating and body structure apply across the G60 range, but the exact percentage breakdown (89% Adult / 85% Child / 86% VRU / 78% Safety Assist) reflects the electric car's weight distribution and battery-pack structure, not the petrol 530Li specifically. This is flagged in the table.
+        </div>
+
+        <p>Safety ratings for the Mercedes-Benz E-Class (W214) come from Euro NCAP's own 2024 test and datasheet, where it was named Euro NCAP's overall "Best Performer 2024" — the highest score of any car tested that year, applicable to the same bodyshell sold in India.</p>
+
+        <p>Warranty terms come directly from Mercedes-Benz India's and BMW India's own after-sales pages, plus corroborating consumer-guide summaries (Spinny, CarWale, Team-BHP). Both brands offer extended-warranty add-ons beyond their standard term; only the standard, no-cost factory term is scored, with the extension ceiling noted for context.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer id="footer-note">Loading…</footer>
+</div>
+
+<script>
+// ======================= DATA =======================
+// All figures sourced; see Sources panel. estimate:true flags a
+// range-derived or cross-configuration figure rather than a
+// variant-specific published number.
+const cars = [
+  {
+    id: 'e200',
+    make: 'Mercedes-Benz',
+    model: 'E 200',
+    tagline: 'Petrol · 2.0L turbo mild-hybrid · 204 PS',
+    price: { value: 8000000, display: '₹80.00 lakh', estimate:false,
+      source: 'ZigWheels / Autocar India, ex-showroom Delhi, updated Jul 2026' },
+    fuel: { value: 12, display: '12 kmpl (ARAI, est. split)', estimate:true,
+      source: 'CarDekho — E-Class ARAI range 12–15 kmpl (not variant-split); petrol assigned lower end' },
+    safety: { value: 88.25, display: '5★ Euro NCAP — Best Performer 2024', estimate:false,
+      breakdown:'Adult 92% · Child 90% · VRU 84% · Safety Assist 87%',
+      source: 'Euro NCAP official 2024 test & datasheet (W214 bodyshell)' },
+    warranty: { value: 3, display: '3 yrs standard (ext. to 6 yrs)', estimate:false,
+      source: 'Mercedes-Benz India Advance Assurance Programme' }
+  },
+  {
+    id: 'e220d',
+    make: 'Mercedes-Benz',
+    model: 'E 220d',
+    tagline: 'Diesel · 2.0L turbo · 197 bhp · 440 Nm',
+    price: { value: 8200000, display: '₹82.00 lakh', estimate:false,
+      source: 'CarDekho, ex-showroom Delhi, updated Jul 2026' },
+    fuel: { value: 15, display: '15 kmpl (ARAI, est. split)', estimate:true,
+      source: 'Team-BHP (15 kmpl reported) / CarDekho ARAI range 12–15 kmpl; diesel assigned upper end' },
+    safety: { value: 88.25, display: '5★ Euro NCAP — Best Performer 2024', estimate:false,
+      breakdown:'Adult 92% · Child 90% · VRU 84% · Safety Assist 87%',
+      source: 'Euro NCAP official 2024 test & datasheet (shared W214 bodyshell)' },
+    warranty: { value: 3, display: '3 yrs standard (ext. to 6 yrs)', estimate:false,
+      source: 'Mercedes-Benz India Advance Assurance Programme' }
+  },
+  {
+    id: '530li',
+    make: 'BMW',
+    model: '530Li M Sport',
+    tagline: 'Petrol · 2.0L TwinPower turbo MHEV · 258 PS · sole variant sold in India',
+    price: { value: 7660000, display: '₹76.60 lakh', estimate:false,
+      source: 'CarDekho, ex-showroom Delhi, updated Jul 2026' },
+    fuel: { value: 15.7, display: '15.7 kmpl (ARAI)', estimate:false,
+      source: 'CarWale / ZigWheels / CarDekho — ARAI-claimed, consistent across sources' },
+    safety: { value: 84.5, display: '5★ Euro NCAP (G60 platform, 2023/24 test)', estimate:true,
+      breakdown:'Adult 89% · Child 85% · VRU 86% · Safety Assist 78%',
+      source: 'Euro NCAP / BMWBLOG — tested as i5 eDrive40 EV variant on shared G60 body' },
+    warranty: { value: 2, display: '2 yrs standard (ext. to 10 yrs)', estimate:false,
+      source: 'BMW India official warranty page / Team-BHP' }
+  }
+];
+
+// ======================= HELPERS =======================
+function fmtINR(v){ return '₹' + (v/100000).toFixed(2) + ' lakh'; }
+
+function normalizedScores(){
+  // price & lower-is-better? No — for price, LOWER is better; invert.
+  const prices = cars.map(c=>c.price.value);
+  const minP = Math.min(...prices), maxP = Math.max(...prices);
+  const fuels = cars.map(c=>c.fuel.value);
+  const minF = Math.min(...fuels), maxF = Math.max(...fuels);
+  const safeties = cars.map(c=>c.safety.value);
+  const minS = Math.min(...safeties), maxS = Math.max(...safeties);
+  const warr = cars.map(c=>c.warranty.value);
+  const minW = Math.min(...warr), maxW = Math.max(...warr);
+
+  return cars.map(c=>{
+    const priceScore = maxP===minP ? 100 : 100 * (maxP - c.price.value) / (maxP - minP);
+    const fuelScore = maxF===minF ? 100 : 100 * (c.fuel.value - minF) / (maxF - minF);
+    const safetyScore = maxS===minS ? 100 : 100 * (c.safety.value - minS) / (maxS - minS);
+    const warrantyScore = maxW===minW ? 100 : 100 * (c.warranty.value - minW) / (maxW - minW);
+    return { id:c.id, priceScore, fuelScore, safetyScore, warrantyScore };
+  });
+}
+
+function getWeights(){
+  const p = parseInt(document.getElementById('w-price').value,10);
+  const f = parseInt(document.getElementById('w-fuel').value,10);
+  const s = parseInt(document.getElementById('w-safety').value,10);
+  const w = parseInt(document.getElementById('w-warranty').value,10);
+  const total = p+f+s+w;
+  return { p, f, s, w, total };
+}
+
+function render(){
+  const weights = getWeights();
+  document.getElementById('w-price-val').textContent = weights.p + '%';
+  document.getElementById('w-fuel-val').textContent = weights.f + '%';
+  document.getElementById('w-safety-val').textContent = weights.s + '%';
+  document.getElementById('w-warranty-val').textContent = weights.w + '%';
+
+  const checkEl = document.getElementById('weight-check');
+  if (weights.total === 0){
+    checkEl.textContent = '(all weights at zero — showing unweighted order)';
+  } else {
+    checkEl.textContent = '(weights sum to ' + weights.total + '%, normalized automatically)';
+  }
+
+  const norm = normalizedScores();
+  const wp = weights.total===0 ? 25 : weights.p;
+  const wf = weights.total===0 ? 25 : weights.f;
+  const ws = weights.total===0 ? 25 : weights.s;
+  const ww = weights.total===0 ? 25 : weights.w;
+  const wTotal = wp+wf+ws+ww || 1;
+
+  const results = norm.map(n=>{
+    const car = cars.find(c=>c.id===n.id);
+    const composite = (n.priceScore*wp + n.fuelScore*wf + n.safetyScore*ws + n.warrantyScore*ww) / wTotal;
+    return { car, composite };
+  }).sort((a,b)=>b.composite - a.composite);
+
+  const listEl = document.getElementById('ranking-list');
+  listEl.innerHTML = '';
+
+  if (!cars.length){
+    listEl.innerHTML = '<div class="empty-state">No vehicles configured for this comparison.</div>';
+    return;
+  }
+
+  results.forEach((r, idx)=>{
+    const div = document.createElement('div');
+    div.className = 'rank-card' + (idx===0 ? ' top' : '');
+    div.innerHTML = `
+      <div class="rank-num mono">${idx+1}</div>
+      <div class="rank-main">
+        <div class="make">${r.car.make}</div>
+        <div class="model">${r.car.model}</div>
+        <div class="tagline">${r.car.tagline}</div>
+      </div>
+      <div class="rank-score">
+        <div class="num">${r.composite.toFixed(1)}</div>
+        <div class="lbl">match score</div>
+        <div class="score-bar-track"><div class="score-bar-fill" style="width:${r.composite}%"></div></div>
+      </div>
+    `;
+    listEl.appendChild(div);
+  });
+}
+
+// ======================= TABLE =======================
+function renderTable(){
+  const table = document.getElementById('spec-table');
+  const rows = [
+    { key:'price', label:'Price (ex-showroom)' },
+    { key:'fuel', label:'Fuel efficiency' },
+    { key:'safety', label:'Safety rating' },
+    { key:'warranty', label:'Warranty' }
+  ];
+
+  let html = '<tr><th>Criterion</th>' + cars.map(c=>`<th>${c.make} ${c.model}</th>`).join('') + '</tr>';
+
+  rows.forEach(r=>{
+    html += '<tr><td class="crit">' + r.label + '</td>';
+    // find best for this row (only for numeric highlight, doesn't affect price direction UI, just informational)
+    cars.forEach(c=>{
+      const d = c[r.key];
+      html += `<td>${d.display}${d.estimate ? '<span class="flag">⚠ estimate</span>' : ''}
+        ${d.breakdown ? '<span class="source-tag">'+d.breakdown+'</span>' : ''}
+        <span class="source-tag">Source: ${d.source}</span></td>`;
+    });
+    html += '</tr>';
+  });
+
+  table.innerHTML = html;
+}
+
+// ======================= SOURCES LIST =======================
+function renderSources(){
+  const seen = new Set();
+  const list = document.getElementById('src-list');
+  cars.forEach(c=>{
+    ['price','fuel','safety','warranty'].forEach(k=>{
+      const src = c[k].source;
+      const key = src;
+      if (!seen.has(key)){
+        seen.add(key);
+        const li = document.createElement('li');
+        li.innerHTML = `<span class="src-name">${src}</span><span class="src-used">${c.make} ${c.model} — ${k}</span>`;
+        list.appendChild(li);
+      }
+    });
+  });
+}
+
+// ======================= PRESETS =======================
+const presets = {
+  value:    { p:55, f:25, s:10, w:10 },
+  safety:   { p:10, f:10, s:60, w:20 },
+  running:  { p:20, f:50, s:15, w:15 },
+  equal:    { p:25, f:25, s:25, w:25 }
+};
+document.querySelectorAll('.preset-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const p = presets[btn.dataset.preset];
+    document.getElementById('w-price').value = p.p;
+    document.getElementById('w-fuel').value = p.f;
+    document.getElementById('w-safety').value = p.s;
+    document.getElementById('w-warranty').value = p.w;
+    render();
+  });
+});
+document.getElementById('reset-btn').addEventListener('click', ()=>{
+  document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('w-price').value = 25;
+  document.getElementById('w-fuel').value = 25;
+  document.getElementById('w-safety').value = 25;
+  document.getElementById('w-warranty').value = 25;
+  render();
+});
+
+['w-price','w-fuel','w-safety','w-warranty'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', ()=>{
+    document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('active'));
+    render();
+  });
+});
+
+// ======================= TOGGLES =======================
+function wireToggle(headId, bodyId){
+  const head = document.getElementById(headId);
+  const body = document.getElementById(bodyId);
+  head.addEventListener('click', ()=>{
+    head.classList.toggle('open');
+    body.classList.toggle('open');
+  });
+}
+wireToggle('sources-toggle','sources-body');
+wireToggle('method-toggle','method-body');
+
+// ======================= INIT =======================
+try{
+  renderTable();
+  renderSources();
+  render();
+  document.getElementById('footer-note').textContent =
+    'Built as a decision-support tool, not financial or purchase advice. Prices, mileage and safety data change frequently — verify current figures with an authorised Mercedes-Benz or BMW dealer before purchase. Data compiled July 2026.';
+} catch(e){
+  document.getElementById('ranking-list').innerHTML =
+    '<div class="empty-state">Something went wrong loading the comparison. Please refresh the page.</div>';
+  document.getElementById('footer-note').textContent = 'Error: ' + e.message;
+}
+</script>
+
+</body>
+</html>
