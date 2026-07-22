@@ -1,0 +1,22 @@
+Report
+
+**Scope note**
+- Brief originally specified BMW 520i/520d. As of July 2026, BMW India sells only one 5 Series variant — the **530Li M Sport petrol** (long-wheelbase). No 520i, no diesel option exists in the current-gen India lineup. Rather than fabricate figures for discontinued/non-India trims, the comparison substitutes the 530Li as BMW's real current offering against Mercedes' E 200 and E 220d.
+
+**Conflict 1 — Price**
+- Ex-showroom prices varied ₹2–4 lakh across CarDekho, ZigWheels, Autocar India, and CarWale, mainly due to city-specific RTO/GST timing and differing "starting price" definitions.
+- Resolution: used each source's most recently updated (July 2026) **Delhi ex-showroom** figure for all three cars, for a consistent basis.
+
+**Conflict 2 — Fuel efficiency not variant-split (E-Class)**
+- Indian sources publish E-Class ARAI mileage as one blended "12–15 kmpl" band covering all engines — not broken out per E 200 vs E 220d.
+- Resolution: assigned E 200 (petrol) the lower end, **12 kmpl**; E 220d (diesel) the upper end, **15 kmpl**, consistent with Team-BHP's reported 15 kmpl figure and typical petrol/diesel spread.
+- Flagged ⚠ estimate in the table — not ARAI-certified per-variant numbers.
+
+**Conflict 3 — BMW's Euro NCAP score measured on a different powertrain**
+- The G60-generation 5 Series' 5-star Euro NCAP test (2023/24) was conducted on the **i5 eDrive40 electric variant**, not the petrol 530Li.
+- The 5-star rating and body structure carry over across the range, but the percentage breakdown (89% Adult / 85% Child / 86% VRU / 78% Safety Assist) reflects the EV's weight distribution and battery structure — not the 530Li specifically.
+- Flagged ⚠ estimate accordingly.
+
+**Not a conflict, but stated for context**
+- Mercedes-Benz E-Class (W214) Euro NCAP score is a direct, same-bodyshell test result — no substitution involved — and it was Euro NCAP's outright "Best Performer 2024" (highest overall score of any car tested that year).
+- Warranty terms (Mercedes: 3 yrs standard/ext. to 6; BMW: 2 yrs standard/ext. to 10) came straight from each brand's own India after-sales pages, cross-checked against Spinny/Team-BHP — no discrepancies found there.
