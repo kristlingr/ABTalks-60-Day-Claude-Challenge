@@ -1,0 +1,49 @@
+Interview findings (inputs that shaped the build)
+
+Role: Data/AI/Analytics specialist, within Software/tech
+Primary AI use cases: data analysis/dashboards/reports, building AI-powered tools/prototypes, coding & debugging
+Biggest bottleneck: iterating/debugging AI output that's "close but not right"
+Primary model: GPT/ChatGPT
+Experience level: Intermediate — comfortable with prompting, wants more structure/reuse
+Desired outcome: faster iteration loops (getting to correct output quicker), not just better organization
+Explicit request: include a Daily Tasks section for recurring work (standups, reviews, data pulls)
+
+Category structure derived from the above (5, not generic defaults)
+
+Data Analysis & Reporting
+AI Prototyping & Tools
+Coding & Debugging
+Iteration & Refinement — created specifically because "iterating on close-but-wrong output" was the stated #1 bottleneck; holds the "diagnose the gap before regenerating" and "compare two outputs" workflows
+Daily Recurring Tasks
+
+Seed content
+
+10 pre-built workflows, 2 per category, each with: editable {{variable}} template, example use, best practices, tags, favorite/copy actions
+Iteration category workflows directly target the stated bottleneck rather than being generic filler
+
+Core interactive systems built
+
+Prompt Builder: 9 modular blocks (role, objective, context, constraints, reasoning strategy, output format, tone, examples, quality checks) — each with a plain-language "what it does / why it matters" description shown both in the picker and once added, live-updating preview, copy, save-as-workflow
+Loop Builder: converts any base prompt into a self-evaluating loop via goal, evaluation criteria, improvement strategy (dropdown), stop conditions, and safety rules — with the term "autonomous loop" explicitly defined in-UI on first appearance
+Daily Tasks: recurring task tracker with frequency + optional link to a saved workflow
+
+"Unmistakable purpose" requirements — how each was satisfied
+
+Persistent explainer banner on Dashboard, dismissible only via its own close button, describing the tool and every section in plain language
+Always-visible "What is this?" button in both the sidebar and top bar, reopens the full explainer modal anytime
+Plain nav labels throughout (Dashboard, Workflows, Prompt Builder, Loop Builder, Daily Tasks, Favorites) — no invented jargon
+Empty states and subtitles written as plain descriptions of purpose (e.g. "Your saved AI prompt workflows, at a glance"), not decorative copy
+
+SaaS-polish features included
+
+Dark/light theme toggle, responsive layout (collapsing sidebar on mobile)
+Keyboard shortcuts: / search, n new workflow, g d/w/p/l navigate, t theme, ? shortcuts help
+3-step onboarding modal on first load (skippable, won't reappear)
+Full CRUD (create/edit/duplicate/favorite/search/filter) on workflows, backed by localStorage
+Import/export as JSON for portability across browsers/machines
+
+Known trade-offs / things not exhaustively covered
+
+Seed workflows are illustrative starting points, not an exhaustive library — the design intent (per the brief) is that the Prompt Builder + Loop Builder generate the "thousands of variations," not a large static prompt list
+No external libraries/fonts used — typography relies on system font stacks styled via CSS custom properties, per the "no external dependencies" constraint
+All data is local-only (localStorage); there's no sync across devices/browsers by design
